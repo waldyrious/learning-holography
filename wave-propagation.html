@@ -8,12 +8,12 @@
     <a href="index.html">&larr; back</a>
     <h2>Wave propagation</h2>
     <p>Below are two charged particles, represented by green circles.
-       Each charge affects the electrical field.</p>
+       Each charge affects the electrical field around it.</p>
     <p>At 5 seconds into the animation,
        an external force starts oscillating the first particle.
        This causes changes in its electrical field to propagate outward,
        at the speed of light (seen here slowed down).</p>
-    <p>When these changes reach the second particle (10 seconds later),
+    <p>When these changes reach the second particle (5 seconds later),
        they stimulate it into an identical motion pattern.
        The propagation distance makes such motion to occur with a slight delay
        compared to the original particle's.</p>
@@ -44,10 +44,10 @@
                    considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
         </circle>
         <circle cx="500" cy="0" r="10">
-          <animate attributeName="cy" begin="15s" dur="2s" repeatCount="indefinite"
+          <animate attributeName="cy" begin="10s" dur="2s" repeatCount="indefinite"
                    calcMode="spline" values="0; -50;" keyTimes="0; 1"
                    keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="17s" dur="6s" repeatCount="indefinite"
+          <animate attributeName="cy" begin="12s" dur="6s" repeatCount="indefinite"
                    calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
                    keySplines=".364 0 .637 1; .364 0 .637 1" />
         </circle>
@@ -60,90 +60,90 @@
       <rect x="-25" y="-74" width="550" height="148" fill="white" stroke="black"/>
       <g fill="green" stroke="black">
         <circle cx="0" cy="0" r="10">
-          <animate attributeName="cy" begin="5.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="7.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="50" cy="0" r="10">
-          <animate attributeName="cy" begin="6.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="8.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="100" cy="0" r="10">
-          <animate attributeName="cy" begin="7.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="9.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="150" cy="0" r="10">
-          <animate attributeName="cy" begin="8.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="10.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="200" cy="0" r="10">
-          <animate attributeName="cy" begin="9.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="11.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="250" cy="0" r="10">
-          <animate attributeName="cy" begin="10.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="12.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="300" cy="0" r="10">
-          <animate attributeName="cy" begin="11.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="13.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="350" cy="0" r="10">
-          <animate attributeName="cy" begin="12.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="14.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="400" cy="0" r="10">
-          <animate attributeName="cy" begin="13.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="15.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="450" cy="0" r="10">
-          <animate attributeName="cy" begin="14.0s" dur="2s" repeatCount="indefinite"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="16.0s" dur="6s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="500" cy="0" r="10">
           <animate attributeName="cy" begin="15.0s" dur="2s" repeatCount="indefinite"
                    calcMode="spline" values="0; -50;" keyTimes="0; 1"
                    keySplines=".364 0 .637 1" />
           <animate attributeName="cy" begin="17.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="50" cy="0" r="10">
+          <animate attributeName="cy" begin="15.5s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="17.5s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="100" cy="0" r="10">
+          <animate attributeName="cy" begin="16.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="18.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="150" cy="0" r="10">
+          <animate attributeName="cy" begin="16.5s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="18.5s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="200" cy="0" r="10">
+          <animate attributeName="cy" begin="17.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="19.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="250" cy="0" r="10">
+          <animate attributeName="cy" begin="17.5s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="19.5s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="300" cy="0" r="10">
+          <animate attributeName="cy" begin="18.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="20.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="350" cy="0" r="10">
+          <animate attributeName="cy" begin="18.5s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="20.5s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="400" cy="0" r="10">
+          <animate attributeName="cy" begin="19.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="21.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="450" cy="0" r="10">
+          <animate attributeName="cy" begin="19.5s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="21.5s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="500" cy="0" r="10">
+          <animate attributeName="cy" begin="20.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="22.0s" dur="6s" repeatCount="indefinite"
                    calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
                    keySplines=".364 0 .637 1; .364 0 .637 1" />
         </circle>
