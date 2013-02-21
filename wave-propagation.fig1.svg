@@ -7,34 +7,39 @@
   <!ENTITY keyTimesInit "0; 1">
   <!ENTITY keyTimesLoop "0; .5; 1">
   <!ENTITY sineSpline ".364 0 .637 1">
-]>
+]><!--
+============ Explanation for the "sineSpline" entity defined above =============
+  Animation interpolation using the spline method is explained here:
+http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-InterpolationKeysplines
+  A cubic spline can simulate a sine curve, specifically
+the fraction between the lowest point, -π/2 (±2π) and the highest point, π/2 (±2π)
+by having the vertex points at (-π/2, 1) and (π/2, -1).
+(remember that in svg the y coordinate is positive in the down direction)
+and the control points at (π/2-2, 1) and (-π/2+2, -1).
+  To make these more readable, we can shift the whole thing
+π/2 to the right and get endpoints (0,1) & (π,-1)
+and control points (π-2,1) & (2,-1).
+  To apply this to the keySplines space,
+where the endpoints are fixed at (0, 0) and (1, 1),
+we need to further normalize the control points to (0.364, 0) and (0.637, 1),
+considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -75 550 150">
+  <!-- the rectangle below has to be 2px shorter than the viewbox
+  for the border to be visible. This may be a bug in SVG rendering,
+  especially since horizontal width doesn't need any such workaround
+  for the lateral borders to show up. -->
   <rect x="-25" y="-74" width="550" height="148" stroke="black" fill="white"/>
   <g fill="green" stroke="black">
     <circle cx="0" cy="0" r="10">
       <!-- the first <animate> is to accelerate smoothly from zero,
       rather than pick up the actual speed that would be present
-      at the rest position -->
+      at the middle position during cyclic movement. -->
       <animate attributeName="cy" begin="click" dur="&durInit;" id="fig1a"
                calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
                keySplines="&sineSpline;" />
       <animate attributeName="cy" begin="fig1a.end" dur="&durLoop;" repeatCount="indefinite"
                calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
                keySplines="&sineSpline;; &sineSpline;" />
-               <!-- animation interpolation using the spline method is explained here:
-               http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-InterpolationKeysplines
-                 A cubic spline can simulate a sine curve, specifically
-               the fraction between the lowest point, -π/2 (±2π) and the highest point, π/2 (±2π)
-               by having the vertex points at (-π/2, 1) and (π/2, -1).
-               (remember that in svg the y coordinate is positive in the down direction)
-               and the control points at (π/2-2, 1) and (-π/2+2, -1).
-                 To make these more readable, we can shift the whole thing
-               π/2 to the right and get endpoints (0,1) & (π,-1)
-               and control points (π-2,1) & (2,-1).
-                 To apply this to the keySplines space,
-               where the endpoints are fixed at (0, 0) and (1, 1),
-               we need to further normalize the control points to (0.364, 0) and (0.637, 1),
-               considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
     </circle>
     <circle cx="500" cy="0" r="10">
       <animate attributeName="cy" begin="fig1a.begin+5s" dur="&durInit;" id="fig1b"
