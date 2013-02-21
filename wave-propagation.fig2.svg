@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+  <!ENTITY durInit "1s">
+  <!ENTITY durLoop "3s">
+  <!ENTITY valuesInit "0; -50">
+  <!ENTITY valuesLoop "-50; 50; -50">
+  <!ENTITY keyTimesInit "0; 1">
+  <!ENTITY keyTimesLoop "0; .5; 1">
+  <!ENTITY sineSpline ".364 0 .637 1">
+  <!ENTITY delay "0.25s">
+]>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -75 550 150">
+  <rect x="-25" y="-74" width="550" height="148" fill="white" stroke="black"/>
+  <g fill="green" stroke="black">
+    <circle cx="0" cy="0" r="10">
+      <animate attributeName="cy" begin="click" dur="&durInit;" id="fig2a"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2a.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="50" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2a.begin+&delay;" dur="&durInit;" id="fig2b"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2b.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="100" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2b.begin+&delay;" dur="&durInit;" id="fig2c"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2c.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="150" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2c.begin+&delay;" dur="&durInit;" id="fig2d"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2d.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="200" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2d.begin+&delay;" dur="&durInit;" id="fig2e"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2e.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="250" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2e.begin+&delay;" dur="&durInit;" id="fig2f"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2f.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="300" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2f.begin+&delay;" dur="&durInit;" id="fig2g"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2g.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="350" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2g.begin+&delay;" dur="&durInit;" id="fig2h"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2h.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="400" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2h.begin+&delay;" dur="&durInit;" id="fig2i"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2i.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="450" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2i.begin+&delay;" dur="&durInit;" id="fig2j"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2j.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+    <circle cx="500" cy="0" r="10">
+      <animate attributeName="cy" begin="fig2j.begin+&delay;" dur="&durInit;" id="fig2k"
+               calcMode="spline" values="&valuesInit;" keyTimes="&keyTimesInit;"
+               keySplines="&sineSpline;" />
+      <animate attributeName="cy" begin="fig2k.end" dur="&durLoop;" repeatCount="indefinite"
+               calcMode="spline" values="&valuesLoop;" keyTimes="&keyTimesLoop;"
+               keySplines="&sineSpline;; &sineSpline;" />
+    </circle>
+  </g>
+</svg>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Wave propagation</title>
+    <title>Wave propagation | Holography Tutorial</title>
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
@@ -17,141 +17,13 @@
        they stimulate it into an identical motion pattern.
        The propagation distance makes such motion to occur with a slight delay
        compared to the original particle's.</p>
-    <svg width="30em" height="100px"
-         xmlns="http://www.w3.org/2000/svg" viewbox="-25 -75 550 150">
-      <rect x="-25" y="-74" width="550" height="148" stroke="black" fill="white"/>
-      <g fill="green" stroke="black">
-        <circle cx="0" cy="0" r="10">
-          <!-- the first <animate> is to accelerate smoothly from zero,
-          rather than pick up the actual speed that would be present
-          at the rest position -->
-          <animate attributeName="cy" begin="5s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="6s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-                   <!-- animation interpolation using the spline method is explained here:
-                   http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-InterpolationKeysplines
-                     A cubic spline can simulate a sine curve, specifically
-                   the fraction between the lowest point, -π/2 (±2π) and the highest point, π/2 (±2π)
-                   by having the vertex points at (-π/2, 1) and (π/2, -1).
-                   (remember that in svg the y coordinate is positive in the down direction)
-                   and the control points at (π/2-2, 1) and (-π/2+2, -1).
-                     To make these more readable, we can shift the whole thing
-                   π/2 to the right and get endpoints (0,1) & (π,-1)
-                   and control points (π-2,1) & (2,-1).
-                     To apply this to the keySplines space,
-                   where the endpoints are fixed at (0, 0) and (1, 1),
-                   we need to further normalize the control points to (0.364, 0) and (0.637, 1),
-                   considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
-        </circle>
-        <circle cx="500" cy="0" r="10">
-          <animate attributeName="cy" begin="10s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="11s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-    </svg>
+    <object width="350px" type="image/svg+xml"
+             data="wave-propagation.fig1.svg">Fig. 1</object>
     <p>The wave "effect" caused by this propagation delay is clear
        once we observe what happens when several more particles
        are added to this setup:</p>
-    <svg width="30em" height="100px"
-         xmlns="http://www.w3.org/2000/svg" viewbox="-25 -75 550 150">
-      <rect x="-25" y="-74" width="550" height="148" fill="white" stroke="black"/>
-      <g fill="green" stroke="black">
-        <circle cx="0" cy="0" r="10">
-          <animate attributeName="cy" begin="15.00s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="16.00s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="50" cy="0" r="10">
-          <animate attributeName="cy" begin="15.25s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="16.25s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="100" cy="0" r="10">
-          <animate attributeName="cy" begin="15.50s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="16.50s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="150" cy="0" r="10">
-          <animate attributeName="cy" begin="15.75s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="16.75s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="200" cy="0" r="10">
-          <animate attributeName="cy" begin="16.00s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="17.00s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="250" cy="0" r="10">
-          <animate attributeName="cy" begin="16.25s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="17.25s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="300" cy="0" r="10">
-          <animate attributeName="cy" begin="16.50s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="17.50s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="350" cy="0" r="10">
-          <animate attributeName="cy" begin="16.75s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="17.75s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="400" cy="0" r="10">
-          <animate attributeName="cy" begin="17.00s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="18.00s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="450" cy="0" r="10">
-          <animate attributeName="cy" begin="17.25s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="18.25s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-        <circle cx="500" cy="0" r="10">
-          <animate attributeName="cy" begin="17.50s" dur="1s"
-                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                   keySplines=".364 0 .637 1" />
-          <animate attributeName="cy" begin="18.50s" dur="3s" repeatCount="indefinite"
-                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                   keySplines=".364 0 .637 1; .364 0 .637 1" />
-        </circle>
-      </g>
-    </svg>
+    <object width="350px" type="image/svg+xml"
+             data="wave-propagation.fig2.svg">Fig. 2</object>
     <p>Essentially, charged particles "drag" each other along,
        and the closer they are,
        the faster the influence of one reaches the other.</p>
