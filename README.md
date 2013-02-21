@@ -1,3 +1,5 @@
+Access the current version of the tutorial here: **http://waldir.github.com/holography-tutorial**
+
 This repository will contain some notes, diagrams and animations
 aimed at helping laymen understand the theoretical basis of holography.
 
