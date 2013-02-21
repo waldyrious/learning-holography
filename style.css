@@ -30,11 +30,3 @@ a:focus {
 p {
   white-space: pre-line;
 }
-
-/* there seems to be a bottom margin in svg elements.
- * the size is slightly different in Firefox and Chrome.
- * maybe this should be reported to normalize.css
- */
-svg {
-  margin-bottom: -0.35em;
-}
