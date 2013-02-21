@@ -1,60 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Wave propagation</title>
+    <title>Holography Tutorial</title>
     <link href="https://raw.github.com/necolas/normalize.css/master/normalize.css"
           rel="stylesheet" />
     <style>body {max-width:40em;} </style>
   </head>
   <body>
-    <p>
-      Below are two charged particles, represented by red circles.
-      Each charge affects the electrical field.
-    </p>
-    <p>
-      At 5 seconds into the animation,
-      an external force starts oscillating the first particle.
-      This causes changes in its electrical field to propagate outward,
-      at the speed of light (seen here slowed down).</p>
-    <p>
-      When these changes reach the second particle (10 seconds later),
-      they stimulate it into an identical motion pattern.
-      The propagation distance makes such motion to occur with a slight delay
-      compared to the original particle's.
-    </p>
-    <svg width="30em" height="100px"
-         xmlns="http://www.w3.org/2000/svg" viewbox="-25 -75 550 150">
-      <rect x="-25" y="-74" width="550" height="148" stroke="black" fill="white"/>
-      <circle cx="0" cy="0" r="10" fill="green" stroke="black">
-        <animate attributeName="cy" begin="5s" dur="1s" repeatCount="indefinite"
-                 calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                 keySplines=".364 0 .637 1" />
-        <animate attributeName="cy" begin="6s" dur="4s" repeatCount="indefinite"
-                 calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                 keySplines=".364 0 .637 1; .364 0 .637 1" />
-                 <!-- animation interpolation using the spline method is explained here:
-                 http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-InterpolationKeysplines
-                   A cubic spline can simulate a sine curve, specifically
-                 the fraction between the lowest point, -π/2 (±2π) and the highest point, π/2 (±2π)
-                 by having the vertex points at (-π/2, 1) and (π/2, -1).
-                 (remember that in svg the y coordinate is positive in the down direction)
-                 and the control points at (π/2-2, 1) and (-π/2+2, -1).
-                   To make these more readable, we can shift the whole thing
-                 π/2 to the right and get endpoints (0,1) & (π,-1)
-                 and control points (π-2,1) & (2,-1).
-                   To apply this to the keySplines space,
-                 where the endpoints are fixed at (0, 0) and (1, 1),
-                 we need to further normalize the control points to (0.364, 0) and (0.637, 1),
-                 considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
-      </circle>
-      <circle cx="500" cy="0" r="10" fill="green" stroke="black">
-        <animate attributeName="cy" begin="15s" dur="1s" repeatCount="indefinite"
-                 calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                 keySplines=".364 0 .637 1" />
-        <animate attributeName="cy" begin="16s" dur="4s" repeatCount="indefinite"
-                 calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                 keySplines=".364 0 .637 1; .364 0 .637 1" />
-      </circle>
-    </svg>
+    <h1>Holography Tutorial</h1>
+    <ol>
+      <li>
+        <a href="wave-propagation.html">Wave propagation</a>:
+        Basic concepts of wave motion
+      </li>
+    </ol>
   </body>
 </html>
