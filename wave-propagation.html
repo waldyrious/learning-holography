@@ -20,36 +20,134 @@
     <svg width="30em" height="100px"
          xmlns="http://www.w3.org/2000/svg" viewbox="-25 -75 550 150">
       <rect x="-25" y="-74" width="550" height="148" stroke="black" fill="white"/>
-      <circle cx="0" cy="0" r="10" fill="green" stroke="black">
-        <animate attributeName="cy" begin="5s" dur="1s" repeatCount="indefinite"
-                 calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                 keySplines=".364 0 .637 1" />
-        <animate attributeName="cy" begin="6s" dur="4s" repeatCount="indefinite"
-                 calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                 keySplines=".364 0 .637 1; .364 0 .637 1" />
-                 <!-- animation interpolation using the spline method is explained here:
-                 http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-InterpolationKeysplines
-                   A cubic spline can simulate a sine curve, specifically
-                 the fraction between the lowest point, -π/2 (±2π) and the highest point, π/2 (±2π)
-                 by having the vertex points at (-π/2, 1) and (π/2, -1).
-                 (remember that in svg the y coordinate is positive in the down direction)
-                 and the control points at (π/2-2, 1) and (-π/2+2, -1).
-                   To make these more readable, we can shift the whole thing
-                 π/2 to the right and get endpoints (0,1) & (π,-1)
-                 and control points (π-2,1) & (2,-1).
-                   To apply this to the keySplines space,
-                 where the endpoints are fixed at (0, 0) and (1, 1),
-                 we need to further normalize the control points to (0.364, 0) and (0.637, 1),
-                 considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
-      </circle>
-      <circle cx="500" cy="0" r="10" fill="green" stroke="black">
-        <animate attributeName="cy" begin="15s" dur="1s" repeatCount="indefinite"
-                 calcMode="spline" values="0; -50;" keyTimes="0; 1"
-                 keySplines=".364 0 .637 1" />
-        <animate attributeName="cy" begin="16s" dur="4s" repeatCount="indefinite"
-                 calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
-                 keySplines=".364 0 .637 1; .364 0 .637 1" />
-      </circle>
+      <g fill="green" stroke="black">
+        <circle cx="0" cy="0" r="10">
+          <animate attributeName="cy" begin="5s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="7s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+                   <!-- animation interpolation using the spline method is explained here:
+                   http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-InterpolationKeysplines
+                     A cubic spline can simulate a sine curve, specifically
+                   the fraction between the lowest point, -π/2 (±2π) and the highest point, π/2 (±2π)
+                   by having the vertex points at (-π/2, 1) and (π/2, -1).
+                   (remember that in svg the y coordinate is positive in the down direction)
+                   and the control points at (π/2-2, 1) and (-π/2+2, -1).
+                     To make these more readable, we can shift the whole thing
+                   π/2 to the right and get endpoints (0,1) & (π,-1)
+                   and control points (π-2,1) & (2,-1).
+                     To apply this to the keySplines space,
+                   where the endpoints are fixed at (0, 0) and (1, 1),
+                   we need to further normalize the control points to (0.364, 0) and (0.637, 1),
+                   considering that 0.364 ~= π-2/π and 0.637 ~= 2/π. -->
+        </circle>
+        <circle cx="500" cy="0" r="10">
+          <animate attributeName="cy" begin="15s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="17s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+    </svg>
+    <p>The wave "effect" caused by this propagation delay is clear
+       once we observe what happens when several more particles
+       are added to this setup:</p>
+    <svg width="30em" height="100px"
+         xmlns="http://www.w3.org/2000/svg" viewbox="-25 -75 550 150">
+      <rect x="-25" y="-74" width="550" height="148" fill="white" stroke="black"/>
+      <g fill="green" stroke="black">
+        <circle cx="0" cy="0" r="10">
+          <animate attributeName="cy" begin="5.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="7.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="50" cy="0" r="10">
+          <animate attributeName="cy" begin="6.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="8.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="100" cy="0" r="10">
+          <animate attributeName="cy" begin="7.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="9.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="150" cy="0" r="10">
+          <animate attributeName="cy" begin="8.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="10.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="200" cy="0" r="10">
+          <animate attributeName="cy" begin="9.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="11.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="250" cy="0" r="10">
+          <animate attributeName="cy" begin="10.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="12.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="300" cy="0" r="10">
+          <animate attributeName="cy" begin="11.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="13.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="350" cy="0" r="10">
+          <animate attributeName="cy" begin="12.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="14.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="400" cy="0" r="10">
+          <animate attributeName="cy" begin="13.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="15.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="450" cy="0" r="10">
+          <animate attributeName="cy" begin="14.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="16.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+        <circle cx="500" cy="0" r="10">
+          <animate attributeName="cy" begin="15.0s" dur="2s" repeatCount="indefinite"
+                   calcMode="spline" values="0; -50;" keyTimes="0; 1"
+                   keySplines=".364 0 .637 1" />
+          <animate attributeName="cy" begin="17.0s" dur="6s" repeatCount="indefinite"
+                   calcMode="spline" values="-50; 50; -50" keyTimes="0; .5; 1"
+                   keySplines=".364 0 .637 1; .364 0 .637 1" />
+        </circle>
+      </g>
     </svg>
   </body>
 </html>
