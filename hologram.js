@@ -31,6 +31,7 @@ function draw(canvas, pixelSize, nextPixelSize){
 		// the dynamic range of the image (max intensity = locations
 		// where all point object waves interfere constructively)
 		ctx.globalCompositeOperation = "lighter";
+		var start = new Date();
 		hologramCenterX = canvas.width * pixelSize / 2;
 		hologramCenterY = canvas.height * pixelSize / 2;
 		for(pt=0; pt<obj.length; pt++) {
@@ -67,6 +68,9 @@ function draw(canvas, pixelSize, nextPixelSize){
 				}
 			}
 		}
+		var now = new Date();
+		var elapsed = document.getElementById("time-" + canvas.id);
+		elapsed.textContent = (now - start)/1000 + ' s'
 		if (nextPixelSize){
 			zoomedSize = canvas.width * nextPixelSize / pixelSize;
 			console.log(zoomedSize);
@@ -111,7 +115,8 @@ function run(){
 		var par = document.createElement('p');
 		par.innerHTML = 'resolution: <span class="right">'+ dpi +' dpi</span><br>'
 			+ 'hologram pixel size: <span class="right">'+ res_um +' µm</span><br>'
-			+ 'hologram size: <span class="right">'+size_cm+' cm</span>';
+			+ 'hologram size: <span class="right">'+ size_cm +' cm</span><br>'
+			+ 'processing time: <span class="right" id="time-'+ cnv.id +'"></span><br>';
 		div.appendChild(par);
 		document.getElementsByTagName("body")[0].appendChild(div);
 		//draw hologram
