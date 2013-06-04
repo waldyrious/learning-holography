@@ -38,3 +38,8 @@ p {
 embed {
   margin-bottom: -0.35em;
 }
+
+.bold {
+  font-weight: bold;
+  line-height: 1em; /* Apparently this font expands vertically if boldened */
+}

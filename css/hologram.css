@@ -1,15 +1,16 @@
-﻿canvas, img {
+#js-cgh ﻿canvas,
+#js-cgh img {
 	border: 1px solid silver;
 }
-span {
+#js-cgh span.right {
 	display: inline-block;
 	float: right;
 }
-canvas {
+#js-cgh canvas {
 	display: none;
 	background-color: black;
 }
-div {
+#js-cgh div {
 	float: left;
 	margin: 0.5em;
 	padding: 0.5em;
