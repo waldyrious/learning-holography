@@ -49,3 +49,7 @@ embed {
   color: grey;
   padding-left: 2em;
 }
+
+.note a {
+  color: SlateGray;
+}
