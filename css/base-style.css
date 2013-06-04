@@ -2,7 +2,7 @@
 @import url("http://fonts.googleapis.com/css?family=Crimson+Text:400,700,400italic");
 
 body {
-  max-width:40em;
+  max-width: 40em;
   font-family: 'Crimson Text', serif;
   padding: 1em;
 }
@@ -48,6 +48,7 @@ embed {
   font-style: italic;
   color: grey;
   padding-left: 2em;
+  display: inline-block;
 }
 
 .note a {
