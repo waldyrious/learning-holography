@@ -43,3 +43,9 @@ embed {
   font-weight: bold;
   line-height: 1em; /* Apparently this font expands vertically if boldened */
 }
+
+.note {
+  font-style: italic;
+  color: grey;
+  padding-left: 2em;
+}
