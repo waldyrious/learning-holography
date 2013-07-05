@@ -12,7 +12,7 @@
 	<p><b>Goal:</b> investigate the effect of point sources emitting same-wavelength light
 	at different phases.</p>
 	<p><label for="angle">Angle of the incident light:</label><span id="angleTxt"></span></p>
-	<p><input type="range" name="angle" id="angle" value="0" min="-90" max="90" onchange="refresh()"></p>
+	<p><input type="range" name="angle" id="angle" value="20.6" min="-90" max="90" step="0.1" onchange="refresh()"></p>
 	<canvas width="500" height="500" id="draw">
 	<script type="text/javascript">
 	var cnv = document.getElementById("draw"),
@@ -40,10 +40,15 @@
 	function drawPlanarWave() {
 
 		ctx.save();
+		
+		ctx.strokeStyle = "Silver";
 		// the angle is inverted to make it more intuitive to manipulate
 		ctx.rotate(-angle*deg2rad);
 
 		ctx.beginPath();
+
+		// Draw a set of horizontal lines (which, in a rotated coordinate system,
+		// end up becoming rotated parallel lines)
 		for (i=0; i<cnvRad; i+=wavLen) {
 			ctx.moveTo(-cnvRad, i); ctx.lineTo( cnvRad, i);
 			if (i == 0) { continue; } // don't draw the central line twice
@@ -53,9 +58,9 @@
 		// Draw arrow showing the direction of propagation
 		ctx.moveTo( 0, 0); //start at the origin
 		ctx.lineTo( 0, wavLen*1.5);
-		ctx.lineTo(-3, wavLen*1.5 - 5);
+		ctx.lineTo(-3, wavLen*1.5 - 7);
 		ctx.moveTo( 0, wavLen*1.5);
-		ctx.lineTo( 3, wavLen*1.5 - 5);
+		ctx.lineTo( 3, wavLen*1.5 - 7);
 
 		ctx.stroke();
 
