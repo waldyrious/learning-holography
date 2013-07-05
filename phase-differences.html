@@ -71,6 +71,37 @@
 		for (var pt = 0; pt < points.length; pt++) {
 			var x = points[pt].x,
 				y = points[pt].y;
+			// Assuming phase of incoming planar wave (incident light) is zero at (0,0),
+			// calculate the distance of each point to (0,0), along the propagation direction
+			// since the propagation direction is "up" (in the rotated reference frame of the planar wave),
+			// we can rotate the points by the same angle in the reverse direction.
+			// The new y coordinate of the rotated point is the distance
+			// along the rotaded Y axis of the plane wave reference system.
+			// For this, we use the rotation formula y' = x*sin(θ) + y*cos(θ).
+			// Note that the angle isn't inverted because the other transformation
+			// already uses the inverted angle.
+			var dist = x*Math.sin(angle*deg2rad) + y*Math.cos(angle*deg2rad);
+			// Now get the phase. Normally this would be simply dist % wavLen,
+			// but the % operator essentially "caps" the dist / wavLen line
+			// (which is the pure 45º line of dist scaled down by 1/wavLen)
+			// to the -wavLen --> wavLen range. This means the left side of the graph
+			// is below the x axis, capped at -wavLen, and the right side is above,
+			// capped at wavLen. We want to do the following:
+			/*
+				           ^                               ^
+				           |                               |
+				           | /| /| /|               /| /| /| /| /| /|
+				___________|/_|/_|/_|_   ---->    _/_|/_|/_|/_|/_|/_|_
+				 /| /| /| /|                               |
+				/ |/ |/ |/ |                               |
+				           |                               |
+			*/
+			// to achieve that, we first add wavLen to make the wole curve above 0,
+			// and then we use % again to cap the wavLen --> 2*wavLen part that
+			// results in the right-hand side.
+			// Finally, we subtract that from wavLen, to get the growing with the
+			// planar waves' propagation direction (+Y')
+			var phase = wavLen - ( wavLen + dist % wavLen ) % wavLen;
 
 			// Draw the point itself
 			ctx.beginPath();
@@ -78,9 +109,9 @@
     		ctx.fill();
 
 			// Draw the circular waves emanating from it
-			for (rad=wavLen; rad<cnvRad*2; rad+=wavLen) {
+			for (rad=0; rad<cnvRad*2; rad+=wavLen) {
 				ctx.beginPath();
-		    	ctx.arc(x, y, rad, 0, tau, false);
+		    	ctx.arc(x, y, rad+phase, 0, tau, false);
 	    		ctx.stroke();
 			}
 		}
