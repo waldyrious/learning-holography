@@ -30,6 +30,7 @@
 		wavLen = dh/10,
 		cnvRad = distanceToOrigin(diagramCanvas.width, diagramCanvas.height) / 2,
 		angle = document.getElementById("angle").value,
+		boxSize = dw < dh? dw/5 : dh/5,
 		points = [
 			{ x:-dw/3, y: -dh/2, phase: 0 },
 			{ x: dw/3, y: -3*dh/4, phase: 0 }
@@ -44,7 +45,7 @@
 
 	hologram.globalCompositeOperation = "lighter";
 
-	function refresh(){
+	function refresh() {
 		diagram.clearRect(-dw/2, 0, dw, -dh);
 		hologram.clearRect(-hw/2, 0, hw, -hh);
 		angle = document.getElementById("angle").value;
@@ -74,9 +75,6 @@
 			diagram.moveTo(-cnvRad*2,-i); diagram.lineTo( cnvRad*2,-i);
 		}
 
-		// Draw arrow showing the direction of propagation
-
-
 		diagram.stroke();
 
 		diagram.restore();
@@ -84,25 +82,25 @@
 
 	function drawPlanarWaveDirectionBox() {
 		
-
 		diagram.save();
 
-		boxSize = dw < dh? dw/5 : dh/5;
 		diagram.fillStyle   = "White";
 		diagram.strokeStyle = "Silver";
 		diagram.fillRect(  -dw/2,   -dh,   boxSize, boxSize);
 		diagram.strokeRect(-dw/2+1, -dh+1, boxSize, boxSize)
 
+		// center the coordinate system in the box
 		diagram.translate(-dw/2 + boxSize/2, -dh + boxSize/2);
+		// rotate the coordinate system
 		diagram.rotate(-angle*deg2rad);
 
+		// Draw a vertical arrow
 		diagram.beginPath();
 		diagram.moveTo( 0,-boxSize/3);
 		diagram.lineTo( 0, boxSize/3);
 		diagram.lineTo(-3, boxSize/3 - 7);
 		diagram.moveTo( 0, boxSize/3);
 		diagram.lineTo( 3, boxSize/3 - 7);
-
 		diagram.stroke();
 
 		diagram.restore();
