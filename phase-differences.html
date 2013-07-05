@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Interactive two-point interference</title>
+	<style>
+	canvas { border: 1px dashed rgba(255,0,0,0.3); display: block; }
+	#angle { width: 500px; }
+	</style>
+</head>
+<body onload="refresh()">
+	<p><b>Goal:</b> investigate the effect of point sources emitting same-wavelength light
+	at different phases.</p>
+	<p><label for="angle">Angle of the incident light:</label></p>
+	<p><input type="range" name="angle" id="angle" value="0" min="-90" max="90" onchange="refresh()"></p>
+	<canvas width="500" height="500" id="draw">
+	<script type="text/javascript">
+	var cnv = document.getElementById("draw"),
+	    ctx = cnv.getContext('2d'),
+	    w = cnv.width,
+	    h = cnv.height,
+		tau = Math.PI*2,
+		wavLen = h/10,
+		cnvRad = Math.sqrt( Math.pow(cnv.width,2) + Math.pow(cnv.height,2) ) / 2;
+
+	ctx.translate(w/2, h/2);
+
+	function refresh(){
+		ctx.clearRect( -w/2, -h/2, w, h );
+		drawPlanarWave();
+		drawCircularWaves();
+	}
+
+	function drawPlanarWave() {
+		var angle = document.getElementById("angle").value,
+			deg2rad = tau/360;
+
+		ctx.save();
+		ctx.rotate(angle*deg2rad);
+
+		ctx.beginPath();
+		for (i=-cnvRad; i<cnvRad; i+=wavLen) {
+			ctx.moveTo(-cnvRad, i);
+			ctx.lineTo( cnvRad, i);
+		}
+		ctx.stroke();
+
+		ctx.restore();
+	}
+
+	function drawCircularWaves() {
+		var points = [
+			{ x:-w/3, y: 0 },
+			{ x: w/3, y: -h/4 }
+		];
+
+		for (var pt = 0; pt < points.length; pt++) {
+			ctx.beginPath();
+	    	ctx.arc(points[pt].x, points[pt].y, 5, 0, tau, false);
+    		ctx.fill();
+			for (rad=wavLen; rad<cnvRad; rad+=wavLen) {
+				ctx.beginPath();
+		    	ctx.arc(points[pt].x, points[pt].y, rad, 0, tau, false);
+	    		ctx.stroke();
+			}
+		}
+	}
+	</script>
+</body>
+</html>
