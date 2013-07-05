@@ -50,6 +50,7 @@
 		angle = document.getElementById("angle").value;
 		drawPlanarWave();
 		drawCircularWaves();
+		drawPlanarWaveDirectionBox();
 		drawHologram();
 		// Update the text with the current angle value
 		document.getElementById("angleTxt").textContent = ' ' + angle + 'º';
@@ -74,7 +75,28 @@
 		}
 
 		// Draw arrow showing the direction of propagation
-		diagram.moveTo( 0,-wavLen*1.5); //start at the center
+
+
+		diagram.stroke();
+
+		diagram.restore();
+	}
+
+	function drawPlanarWaveDirectionBox() {
+		
+
+		diagram.save();
+
+		diagram.fillStyle   = "White";
+		diagram.strokeStyle = "Silver";
+		diagram.fillRect(  -dw/2,   -dh,   dw/5, dh/5);
+		diagram.strokeRect(-dw/2+1, -dh+1, dw/5, dh/5)
+
+		diagram.translate(-dw/2 + dw/10, -9*dh/10);
+		diagram.rotate(-angle*deg2rad);
+
+		diagram.beginPath();
+		diagram.moveTo( 0,-dh); //start at the center
 		diagram.lineTo( 0, 0);
 		diagram.lineTo(-3,-7);
 		diagram.moveTo( 0, 0);
