@@ -11,7 +11,7 @@
 <body onload="refresh()">
 	<p><b>Goal:</b> investigate the effect of point sources emitting same-wavelength light
 	at different phases.</p>
-	<p><label for="angle">Angle of the incident light:</label></p>
+	<p><label for="angle">Angle of the incident light:</label><span id="angleTxt"></span></p>
 	<p><input type="range" name="angle" id="angle" value="0" min="-90" max="90" onchange="refresh()"></p>
 	<canvas width="500" height="500" id="draw">
 	<script type="text/javascript">
@@ -20,25 +20,28 @@
 	    w = cnv.width,
 	    h = cnv.height,
 		tau = Math.PI*2,
+		deg2rad = tau/360,
 		wavLen = h/10,
-		cnvRad = Math.sqrt( Math.pow(cnv.width,2) + Math.pow(cnv.height,2) ) / 2;
+		cnvRad = distanceToOrigin(cnv.width, cnv.height) / 2,
+		angle = document.getElementById("angle").value;
 
 	ctx.translate(w/2, h/2); // make coordinate origin be at the center of the canvas
 	ctx.scale(1,-1); // make the y axis grow upwards
 
 	function refresh(){
 		ctx.clearRect( -w/2, -h/2, w, h );
+		angle = document.getElementById("angle").value;
 		drawPlanarWave();
 		drawCircularWaves();
+		// Update the text with the current angle value
+		document.getElementById("angleTxt").textContent = ' ' + angle + 'º';
 	}
 
 	function drawPlanarWave() {
-		// the angle is inverted to make it more intuitive to manipulate
-		var angle = document.getElementById("angle").value * -1,
-			deg2rad = tau/360;
 
 		ctx.save();
-		ctx.rotate(angle*deg2rad);
+		// the angle is inverted to make it more intuitive to manipulate
+		ctx.rotate(-angle*deg2rad);
 
 		ctx.beginPath();
 		for (i=0; i<cnvRad; i+=wavLen) {
@@ -66,15 +69,25 @@
 		];
 
 		for (var pt = 0; pt < points.length; pt++) {
+			var x = points[pt].x,
+				y = points[pt].y;
+
+			// Draw the point itself
 			ctx.beginPath();
-	    	ctx.arc(points[pt].x, points[pt].y, 5, 0, tau, false);
+	    	ctx.arc(x, y, 5, 0, tau, false);
     		ctx.fill();
+
+			// Draw the circular waves emanating from it
 			for (rad=wavLen; rad<cnvRad*2; rad+=wavLen) {
 				ctx.beginPath();
-		    	ctx.arc(points[pt].x, points[pt].y, rad, 0, tau, false);
+		    	ctx.arc(x, y, rad, 0, tau, false);
 	    		ctx.stroke();
 			}
 		}
+	}
+
+	function distanceToOrigin(x, y) {
+		return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
 	}
 	</script>
 </body>
