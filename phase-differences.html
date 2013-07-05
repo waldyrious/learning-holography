@@ -17,6 +17,7 @@
 	<canvas width="500" height="50" id="hologram"></canvas>
 	<canvas width="500" height="500" id="diagram"></canvas>
 	<script type="text/javascript">
+	"use strict"
 	var diagramCanvas = document.getElementById("diagram"),
 	    diagram = diagramCanvas.getContext('2d'),
 		hologramCanvas = document.getElementById("hologram"),
@@ -62,6 +63,7 @@
 		diagram.save();
 		
 		diagram.strokeStyle = "Silver";
+
 		// the angle is inverted to make it more intuitive to manipulate
 		diagram.rotate(-angle*deg2rad);
 
@@ -69,7 +71,7 @@
 
 		// Draw a set of horizontal lines (which, in a rotated coordinate system,
 		// end up becoming rotated parallel lines)
-		for (i=0; i<cnvRad*2; i+=wavLen) {
+		for (var i=0; i<cnvRad*2; i+=wavLen) {
 			diagram.moveTo(-cnvRad*2, i); diagram.lineTo( cnvRad*2, i);
 			if (i == 0) { continue; } // don't draw the central line twice
 			diagram.moveTo(-cnvRad*2,-i); diagram.lineTo( cnvRad*2,-i);
@@ -149,7 +151,7 @@
     		diagram.fill();
 
 			// Draw the circular waves emanating from it
-			for (rad=0; rad<cnvRad*2; rad+=wavLen) {
+			for (var rad=0; rad<cnvRad*2; rad+=wavLen) {
 				diagram.beginPath();
 		    	diagram.arc(x, y, rad + points[pt].phase, 0, tau, false);
 	    		diagram.stroke();
