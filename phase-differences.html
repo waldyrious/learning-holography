@@ -39,10 +39,19 @@
 		ctx.rotate(angle*deg2rad);
 
 		ctx.beginPath();
-		for (i=-cnvRad; i<cnvRad; i+=wavLen) {
-			ctx.moveTo(-cnvRad, i);
-			ctx.lineTo( cnvRad, i);
+		for (i=0; i<cnvRad; i+=wavLen) {
+			ctx.moveTo(-cnvRad, i); ctx.lineTo( cnvRad, i);
+			if (i == 0) { continue; } // don't draw the central line twice
+			ctx.moveTo(-cnvRad,-i); ctx.lineTo( cnvRad,-i);
 		}
+
+		// Draw arrow showing the direction of propagation
+		ctx.moveTo( 0, 0); //start at the origin
+		ctx.lineTo( 0, -wavLen*1.5);
+		ctx.lineTo(-3, -wavLen*1.5 + 5);
+		ctx.moveTo( 0, -wavLen*1.5);
+		ctx.lineTo( 3, -wavLen*1.5 + 5);
+
 		ctx.stroke();
 
 		ctx.restore();
