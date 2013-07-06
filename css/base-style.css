@@ -1,9 +1,10 @@
 @import url("normalize.css");
-@import url("http://fonts.googleapis.com/css?family=Crimson+Text:400,700,400italic");
 
 body {
   max-width: 40em;
-  font-family: 'Crimson Text', serif;
+  font-family: serif;
+  font-size: 95%;
+  line-height: 1.5;
   padding: 1em;
 }
 
@@ -37,11 +38,6 @@ p {
  */
 embed {
   margin-bottom: -0.35em;
-}
-
-.bold {
-  font-weight: bold;
-  line-height: 1em; /* Apparently this font expands vertically if boldened */
 }
 
 .note {
