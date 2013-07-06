@@ -170,7 +170,8 @@ function drawCircularWaves() {
 
 function drawHologram() {
 	var intensity = 0,
-		scaledIntensity = 0;
+		scaledIntensity = 0,
+		totalIntensity = [];
 	
 	for (var pt = -1; pt < points.length; pt++) {
 		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
@@ -192,6 +193,7 @@ function drawHologram() {
 			// to allow summing intensity contributions of all waves
 			// and still have the final intensity values range from 0 to 1
 			scaledIntensity = intensity / numWaves;
+			totalIntensity[holo_x] = (totalIntensity[holo_x] || 0) + scaledIntensity;
 			// Convert range 0-1 to an integer in the range 0-255
 			var intRGB = Math.round(scaledIntensity * 255);
 			
@@ -205,6 +207,12 @@ function drawHologram() {
 				curves.fillRect(holo_x, hh*intensity, 1, 1);
 			}
 		}
+	}
+	curves.fillStyle = "black";
+	for (var curves_x = -cw/2; curves_x < cw/2; curves_x++) {
+		curves.beginPath();
+		curves.arc(curves_x, hh*totalIntensity[curves_x], 1, 0, tau, true);
+		curves.fill();
 	}
 }
 
