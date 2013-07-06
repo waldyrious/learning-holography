@@ -5,7 +5,7 @@
 	<title>Interactive two-point interference</title>
 	<style>
 	canvas { border: 1px dashed rgba(255,0,0,0.3); display: block; }
-	#hologram { border-bottom: none; }
+	#hologram, #curves { border-bottom: none; }
 	#angle { width: 20em; vertical-align: middle; }
 	</style>
 </head>
@@ -18,9 +18,10 @@
 		<span id="angleTxt"></span>
 	</p>
 	<p>
-		<label for="curves">Display intensity curves:</label>
-		<input type="checkbox" name="curves" id="curves" onchange="refresh()">
+		<label for="show-curves">Show individual intensity curves:</label>
+		<input type="checkbox" name="show-curves" id="show-curves" onchange="refresh()">
 	</p>
+	<canvas width="500" height="50" id="curves"></canvas>
 	<canvas width="500" height="50" id="hologram"></canvas>
 	<canvas width="500" height="500" id="diagram"></canvas>
 	<script type="text/javascript" src="phase-differences.js"></script>

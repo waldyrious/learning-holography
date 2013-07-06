@@ -3,10 +3,14 @@ var diagramCanvas = document.getElementById("diagram"),
     diagram = diagramCanvas.getContext('2d'),
 	hologramCanvas = document.getElementById("hologram"),
 	hologram = hologramCanvas.getContext('2d'),
+	curvesCanvas = document.getElementById("curves"),
+	curves = curvesCanvas.getContext('2d'),
     dw = diagramCanvas.width,
     dh = diagramCanvas.height,
     hw = hologramCanvas.width,
     hh = hologramCanvas.height,
+    cw = curvesCanvas.width,
+    ch = curvesCanvas.height,
 	tau = Math.PI*2,
 	deg2rad = tau/360,
 	wavLen = dh/10,
@@ -23,17 +27,20 @@ var diagramCanvas = document.getElementById("diagram"),
 // center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
 hologram.translate(dw/2, hh);
+curves.translate(cw/2, ch);
 // make the y axis grow upwards
 diagram.scale(1,-1);
 hologram.scale(1,-1);
+curves.scale(1,-1);
 
 hologram.globalCompositeOperation = "lighter";
 
 function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
+	curves.clearRect(-cw/2, 0, cw, ch);
 	angle = document.getElementById("angle").value;
-	displayCurves = document.getElementById("curves").checked;
+	displayCurves = document.getElementById("show-curves").checked;
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
@@ -194,9 +201,10 @@ function drawHologram() {
 
 			if (displayCurves) {
 				// Draw intensity profiles
-				hologram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
-				hologram.fillRect(holo_x, hh*intensity, 1, 1);
+				curves.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
+				curves.fillRect(holo_x, hh*intensity, 1, 1);
 			}
+		}
 	}
 }
 
