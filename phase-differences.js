@@ -141,20 +141,28 @@ function drawCircularWaves() {
 }
 
 function drawHologram() {
-	for (var pt = 0; pt < points.length; pt++) {
+	var intensity = 0;
+	for (var pt = -1; pt < points.length; pt++) {
 		var x = points[pt].x,
 		    y = points[pt].y;
 		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
-			var radius = distanceToOrigin(holo_x-x, y);
-			var intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
+			if(pt==-1) {
+				// Paint the reference wave
+				intensity = Math.cos(tau * holo_x * Math.sin(angle*deg2rad)/wavLen);
+			} else {
+				var radius = distanceToOrigin(holo_x-x, y);
+				intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
+			}
 			// Normalize values from [-1;1] range to [0;1]
 			intensity = (intensity + 1) / 2;
-			// Divide by number of points to allow summing values for all points
+			// Divide by number of points (plus ref wave)
+			// to allow summing values for all points
 			// and have the final image values to range from 0 to 1
-			intensity /= points.length;
+			intensity /= points.length + 1;
 			// Convert range 0-1 to an integer in the range 0-255
 			var intRGB = Math.round(intensity * 255);
 
+			// Paint the object wave
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
 			hologram.fillRect(holo_x, 0, 1, -hh);
 		}
