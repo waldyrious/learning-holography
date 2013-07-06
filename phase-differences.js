@@ -16,7 +16,8 @@ var diagramCanvas = document.getElementById("diagram"),
 	points = [
 		{ x:-dw/3, y: -dh/2, phase: 0 },
 		{ x: dw/3, y: -3*dh/4, phase: 0 }
-	];
+	],
+	numWaves = points.length + 1;
 
 // center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
@@ -42,8 +43,11 @@ function refresh() {
 function drawPlanarWave() {
 
 	diagram.save();
-	
-	diagram.strokeStyle = "Silver";
+
+	// Red. using hsl format to match other waves
+	// TODO: only display colors if user chooses to do so.
+	// Otherwise use "silver"
+	diagram.strokeStyle = "hsl(0, 100%, 80%)";
 
 	// the angle is inverted to make it more intuitive to manipulate
 	diagram.rotate(-angle*deg2rad);
@@ -81,6 +85,7 @@ function drawPlanarWaveDirectionBox() {
 	diagram.rotate(-angle*deg2rad);
 
 	// Draw a vertical arrow
+	diagram.strokeStyle = "hsl(0, 100%, 80%)";
 	diagram.beginPath();
 	diagram.moveTo( 0,-boxSize/3);
 	diagram.lineTo( 0, boxSize/3);
@@ -93,6 +98,8 @@ function drawPlanarWaveDirectionBox() {
 }
 
 function drawCircularWaves() {
+
+	diagram.save();
 
 	for (var pt = 0; pt < points.length; pt++) {
 		var x = points[pt].x,
@@ -129,6 +136,11 @@ function drawCircularWaves() {
 		// planar waves' propagation direction (+Y')
 		points[pt].phase = wavLen - ( wavLen + dist % wavLen ) % wavLen;
 
+		// Spread the colors around the hue circle according to the number of
+		// points we have. The ref. wave keeps the 0º (red)
+		diagram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
+		diagram.strokeStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 75%)";
+
 		// Draw the point itself
 		diagram.beginPath();
     	diagram.arc(x, y, 5, 0, tau, false);
@@ -141,12 +153,12 @@ function drawCircularWaves() {
     		diagram.stroke();
 		}
 	}
+	diagram.restore();
 }
 
 function drawHologram() {
 	var intensity = 0,
-		scaledIntensity = 0,
-		numWaves = points.length + 1;
+		scaledIntensity = 0;
 	
 	for (var pt = -1; pt < points.length; pt++) {
 		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
@@ -174,7 +186,8 @@ function drawHologram() {
 			// Paint the calculated intensity into the current hologram pixel
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
 			hologram.fillRect(holo_x, 0, 1, hh);
-			// Draw intensity profile
+
+			// Draw intensity profiles
 			hologram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
 			hologram.fillRect(holo_x, hh*intensity, 1, 1);
 		}
