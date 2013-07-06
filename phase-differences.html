@@ -2,24 +2,28 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Interactive two-point interference</title>
+	<title>Phase differences | Holography Tutorial</title>
+	<link rel="stylesheet" type="text/css" href="css/base-style.css">
 	<style>
 	canvas { border: 1px dashed rgba(255,0,0,0.3); display: block; }
-	#hologram, #curves { border-bottom: none; }
-	#angle { width: 20em; vertical-align: middle; }
+	canvas#hologram, canvas#curves { border-bottom: none; }
+	#angle-slider { width: 20em; vertical-align: middle; }
 	</style>
 </head>
 <body onload="refresh()">
-	<p><b>Goal:</b> investigate the effect of point sources emitting same-wavelength light
+	<a href="index.html">&larr; back</a>
+	<h2>Phase differences demo</h2>
+	<p><b>Goal:</b> investigate the effect
+	of point sources emitting same-wavelength light
 	at different phases.</p>
-	<p>
-		<label for="angle">Angle of the incident light:</label>
-		<input type="range" name="angle" id="angle" value="20.6" min="-90" max="90" step="0.1" onchange="refresh()">
-		<span id="angleTxt"></span>
+	<p><!--
+		--><label for="angle">Angle of the incident light: </label><!--
+		--><input type="range" name="angle" id="angle-slider" value="20.6" min="-90" max="90" step="0.1" onchange="refresh()"><!--
+		--><span id="angle-text"></span>
 	</p>
-	<p>
-		<label for="show-curves">Show individual intensity curves:</label>
-		<input type="checkbox" name="show-curves" id="show-curves" onchange="refresh()">
+	<p><!--
+		--><label for="show-curves">Show individual intensity curves: </label><!--
+		--><input type="checkbox" name="show-curves" id="show-curves" onchange="refresh()">
 	</p>
 	<canvas width="500" height="50" id="curves"></canvas>
 	<canvas width="500" height="50" id="hologram"></canvas>

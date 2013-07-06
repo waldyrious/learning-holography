@@ -15,7 +15,7 @@ var diagramCanvas = document.getElementById("diagram"),
 	deg2rad = tau/360,
 	wavLen = dh/10,
 	cnvRad = distanceToOrigin(diagramCanvas.width, diagramCanvas.height) / 2,
-	angle = document.getElementById("angle").value,
+	angle = document.getElementById("angle-slider").value,
 	boxSize = dw < dh? dw/5 : dh/5,
 	points = [
 		{ x:-dw/3, y: -dh/2, phase: 0 },
@@ -39,14 +39,14 @@ function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
-	angle = document.getElementById("angle").value;
+	angle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
 	drawHologram();
 	// Update the text with the current angle value
-	document.getElementById("angleTxt").textContent = ' ' + angle + 'º';
+	document.getElementById("angle-text").textContent = ' ' + angle + 'º';
 }
 
 function drawPlanarWave() {
