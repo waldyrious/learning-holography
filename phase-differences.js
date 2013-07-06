@@ -144,7 +144,10 @@ function drawCircularWaves() {
 }
 
 function drawHologram() {
-	var intensity = 0;
+	var intensity = 0,
+		scaledIntensity = 0,
+		numWaves = points.length + 1;
+	
 	for (var pt = -1; pt < points.length; pt++) {
 		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 			if(pt==-1) { // Calculate the intensity of the reference wave
@@ -164,15 +167,16 @@ function drawHologram() {
 			// Divide by number of points (plus ref wave)
 			// to allow summing intensity contributions of all waves
 			// and still have the final intensity values range from 0 to 1
-			intensity /= points.length + 1;
+			scaledIntensity = intensity / numWaves;
 			// Convert range 0-1 to an integer in the range 0-255
-			var intRGB = Math.round(intensity * 255);
+			var intRGB = Math.round(scaledIntensity * 255);
 			
 			// Paint the calculated intensity into the current hologram pixel
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
 			hologram.fillRect(holo_x, 0, 1, hh);
-			hologram.fillStyle = "Red";
-			hologram.fillRect(holo_x, hh*intensity*(points.length+1), 1, 1);
+			// Draw intensity profile
+			hologram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
+			hologram.fillRect(holo_x, hh*intensity, 1, 1);
 		}
 	}
 }
