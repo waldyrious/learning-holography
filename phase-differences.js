@@ -20,7 +20,7 @@ var diagramCanvas = document.getElementById("diagram"),
 
 // center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
-hologram.translate(dw/2, 0);
+hologram.translate(dw/2, hh);
 // make the y axis grow upwards
 diagram.scale(1,-1);
 hologram.scale(1,-1);
@@ -29,7 +29,7 @@ hologram.globalCompositeOperation = "lighter";
 
 function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
-	hologram.clearRect(-hw/2, 0, hw, -hh);
+	hologram.clearRect(-hw/2, 0, hw, hh);
 	angle = document.getElementById("angle").value;
 	drawPlanarWave();
 	drawCircularWaves();
@@ -170,9 +170,9 @@ function drawHologram() {
 			
 			// Paint the calculated intensity into the current hologram pixel
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
-			hologram.fillRect(holo_x, 0, 1, -hh);
+			hologram.fillRect(holo_x, 0, 1, hh);
 			hologram.fillStyle = "Red";
-			hologram.fillRect(holo_x, -hh*intensity*(points.length+1), 1, 1);
+			hologram.fillRect(holo_x, hh*intensity*(points.length+1), 1, 1);
 		}
 	}
 }
