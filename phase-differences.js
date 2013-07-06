@@ -171,6 +171,8 @@ function drawHologram() {
 			// Paint the calculated intensity into the current hologram pixel
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
 			hologram.fillRect(holo_x, 0, 1, -hh);
+			hologram.fillStyle = "Red";
+			hologram.fillRect(holo_x, -hh*intensity*(points.length+1), 1, 1);
 		}
 	}
 }
