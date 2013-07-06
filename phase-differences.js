@@ -17,8 +17,9 @@ var diagramCanvas = document.getElementById("diagram"),
 		{ x:-dw/3, y: -dh/2, phase: 0 },
 		{ x: dw/3, y: -3*dh/4, phase: 0 }
 	],
-	numWaves = points.length + 1;
-
+	numWaves = points.length + 1,
+	displayCurves = false;
+	
 // center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
 hologram.translate(dw/2, hh);
@@ -32,6 +33,7 @@ function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	angle = document.getElementById("angle").value;
+	displayCurves = document.getElementById("curves").checked;
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
@@ -44,10 +46,11 @@ function drawPlanarWave() {
 
 	diagram.save();
 
-	// Red. using hsl format to match other waves
-	// TODO: only display colors if user chooses to do so.
-	// Otherwise use "silver"
-	diagram.strokeStyle = "hsl(0, 100%, 80%)";
+	// If user chooses to show the intensity profiles
+	// (which implies color-coding the curves and the waves to match them)
+	// paint as red, using the HSL format to match the code for the other waves
+	// Otherwise paint as "silver" (light grey)
+	diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Silver";
 
 	// the angle is inverted to make it more intuitive to manipulate
 	diagram.rotate(-angle*deg2rad);
@@ -85,7 +88,7 @@ function drawPlanarWaveDirectionBox() {
 	diagram.rotate(-angle*deg2rad);
 
 	// Draw a vertical arrow
-	diagram.strokeStyle = "hsl(0, 100%, 80%)";
+	if (displayCurves) { diagram.strokeStyle = "hsl(0, 100%, 80%)"; }
 	diagram.beginPath();
 	diagram.moveTo( 0,-boxSize/3);
 	diagram.lineTo( 0, boxSize/3);
@@ -138,8 +141,10 @@ function drawCircularWaves() {
 
 		// Spread the colors around the hue circle according to the number of
 		// points we have. The ref. wave keeps the 0º (red)
-		diagram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
-		diagram.strokeStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 75%)";
+		if (displayCurves) {
+			diagram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
+			diagram.strokeStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 75%)";
+		}
 
 		// Draw the point itself
 		diagram.beginPath();
@@ -187,10 +192,11 @@ function drawHologram() {
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
 			hologram.fillRect(holo_x, 0, 1, hh);
 
-			// Draw intensity profiles
-			hologram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
-			hologram.fillRect(holo_x, hh*intensity, 1, 1);
-		}
+			if (displayCurves) {
+				// Draw intensity profiles
+				hologram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
+				hologram.fillRect(holo_x, hh*intensity, 1, 1);
+			}
 	}
 }
 
