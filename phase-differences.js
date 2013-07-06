@@ -53,8 +53,11 @@ function drawPlanarWave() {
 	// Draw a set of horizontal lines (which, in a rotated coordinate system,
 	// end up becoming rotated parallel lines)
 	for (var i=0; i<cnvRad*2; i+=wavLen) {
+		// Draw horizontal lines upwards from the center of the coordinate system
 		diagram.moveTo(-cnvRad*2, i); diagram.lineTo( cnvRad*2, i);
-		if (i == 0) { continue; } // don't draw the central line twice
+		// Don't draw the central line twice
+		if (i == 0) { continue; }
+		// Draw horizontal lines downwards from the center of the coordinate system
 		diagram.moveTo(-cnvRad*2,-i); diagram.lineTo( cnvRad*2,-i);
 	}
 
@@ -143,26 +146,29 @@ function drawCircularWaves() {
 function drawHologram() {
 	var intensity = 0;
 	for (var pt = -1; pt < points.length; pt++) {
-		var x = points[pt].x,
-		    y = points[pt].y;
 		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
-			if(pt==-1) {
-				// Paint the reference wave
+			if(pt==-1) { // Calculate the intensity of the reference wave
+				// We know — because we define it that way in drawPlanarWave() —
+				// that the the reference wave has zero phase at x=0
+				// (since we draw a horizontal line at y=0 and the others growing
+				// from there, while the coordinate system is rotated around (0,0))
+				// See (handmade for now) diagram for explanation of the derivation
+				// of the formula below. TODO: describe it textually as well.
 				intensity = Math.cos(tau * holo_x * Math.sin(angle*deg2rad)/wavLen);
-			} else {
-				var radius = distanceToOrigin(holo_x-x, y);
+			} else { // Calculate the intensity of the current point's object wave
+				var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
 				intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
 			}
-			// Normalize values from [-1;1] range to [0;1]
+			// Normalize intensity values from cosine's [-1;1] range to [0;1]
 			intensity = (intensity + 1) / 2;
 			// Divide by number of points (plus ref wave)
-			// to allow summing values for all points
-			// and have the final image values to range from 0 to 1
+			// to allow summing intensity contributions of all waves
+			// and still have the final intensity values range from 0 to 1
 			intensity /= points.length + 1;
 			// Convert range 0-1 to an integer in the range 0-255
 			var intRGB = Math.round(intensity * 255);
-
-			// Paint the object wave
+			
+			// Paint the calculated intensity into the current hologram pixel
 			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
 			hologram.fillRect(holo_x, 0, 1, -hh);
 		}
