@@ -39,7 +39,7 @@ function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
-	angle = document.getElementById("angle-slider").value;
+	angle = Math.round(document.getElementById("angle-slider").value*10)/10;
 	displayCurves = document.getElementById("show-curves").checked;
 	drawPlanarWave();
 	drawCircularWaves();
