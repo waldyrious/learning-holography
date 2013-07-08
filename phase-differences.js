@@ -23,7 +23,9 @@ var diagramCanvas = document.getElementById("diagram"),
 		{ x: dw/3, y: -3*dh/4, phase: 0 }
 	],
 	numWaves = points.length + 1,
-	displayCurves = false;
+	displayCurves = false,
+	animate = false,
+	animateTimeoutID = 0;
 	
 // center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
@@ -42,6 +44,20 @@ function refresh() {
 	curves.clearRect(-cw/2, 0, cw, ch);
 	refAngle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
+	animate = document.getElementById("animate").checked;
+	if(animate) {
+		refPhase = (refPhase + 0.01) % 1;
+		document.getElementById("phase-slider").value = refPhase;
+	} else {
+		// Needs to be explicitly converted to a number otherwise it is considered a string
+		refPhase = Number(document.getElementById("phase-slider").value);
+		// Timeout has to be cleared otherwise there's an extra iteration
+		// after the last step (I don't know why)
+		if(animateTimeoutID) {
+			window.clearTimeout(animateTimeoutID);
+			animateTimeoutID = 0;
+		}
+	}
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
@@ -49,6 +65,10 @@ function refresh() {
 	// Update the text with the current slider values
 	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
 	document.getElementById("phase-text").textContent = ' +' + Math.round(100*refPhase) +'%';
+	// animate
+	if(animate) {
+		animateTimeoutID = window.setTimeout(refresh, 10);
+	}
 }
 
 function drawPlanarWave() {
