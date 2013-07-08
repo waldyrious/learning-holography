@@ -15,7 +15,8 @@ var diagramCanvas = document.getElementById("diagram"),
 	deg2rad = tau/360,
 	wavLen = dh/10,
 	cnvRad = distanceToOrigin(diagramCanvas.width, diagramCanvas.height) / 2,
-	angle = document.getElementById("angle-slider").value,
+	refAngle = document.getElementById("angle-slider").value,
+	refPhase = document.getElementById("phase-slider").value,
 	boxSize = dw < dh? dw/5 : dh/5,
 	points = [
 		{ x:-dw/3, y: -dh/2, phase: 0 },
@@ -39,14 +40,15 @@ function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
-	angle = Math.round(document.getElementById("angle-slider").value*10)/10;
+	refAngle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
 	drawHologram();
-	// Update the text with the current angle value
-	document.getElementById("angle-text").textContent = ' ' + angle + 'º';
+	// Update the text with the current slider values
+	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
+	document.getElementById("phase-text").textContent = ' +' + Math.round(100*refPhase) +'%';
 }
 
 function drawPlanarWave() {
@@ -60,7 +62,7 @@ function drawPlanarWave() {
 	diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Silver";
 
 	// the angle is inverted to make it more intuitive to manipulate
-	diagram.rotate(-angle*deg2rad);
+	diagram.rotate(-refAngle*deg2rad);
 
 	diagram.beginPath();
 
@@ -68,11 +70,13 @@ function drawPlanarWave() {
 	// end up becoming rotated parallel lines)
 	for (var i=0; i<cnvRad*2; i+=wavLen) {
 		// Draw horizontal lines upwards from the center of the coordinate system
-		diagram.moveTo(-cnvRad*2, i); diagram.lineTo( cnvRad*2, i);
+		diagram.moveTo(-cnvRad*2, i+refPhase*wavLen);
+		diagram.lineTo( cnvRad*2, i+refPhase*wavLen);
 		// Don't draw the central line twice
 		if (i == 0) { continue; }
 		// Draw horizontal lines downwards from the center of the coordinate system
-		diagram.moveTo(-cnvRad*2,-i); diagram.lineTo( cnvRad*2,-i);
+		diagram.moveTo(-cnvRad*2,-i+refPhase*wavLen);
+		diagram.lineTo( cnvRad*2,-i+refPhase*wavLen);
 	}
 
 	diagram.stroke();
@@ -92,7 +96,7 @@ function drawPlanarWaveDirectionBox() {
 	// center the coordinate system in the box
 	diagram.translate(-dw/2 + boxSize/2, -dh + boxSize/2);
 	// rotate the coordinate system
-	diagram.rotate(-angle*deg2rad);
+	diagram.rotate(-refAngle*deg2rad);
 
 	// Draw a vertical arrow
 	if (displayCurves) { diagram.strokeStyle = "hsl(0, 100%, 80%)"; }
@@ -119,11 +123,17 @@ function drawCircularWaves() {
 		// since the propagation direction is "up" (in the rotated reference frame of the planar wave),
 		// we can rotate the points by the same angle in the reverse direction.
 		// The new y coordinate of the rotated point is the distance
-		// along the rotaded Y axis of the plane wave reference system.
+		// along the rotated Y axis of the plane wave reference system.
 		// For this, we use the rotation formula y' = x*sin(θ) + y*cos(θ).
 		// Note that the angle isn't inverted because the other transformation
 		// already uses the inverted angle.
-		var dist = x*Math.sin(angle*deg2rad) + y*Math.cos(angle*deg2rad);
+		var dist = x*Math.sin(refAngle*deg2rad) + y*Math.cos(refAngle*deg2rad);
+		// Of course, if we *don't* assume the planar (reference) wave's phase
+		// is zero at (0,0), the distance to the zero phase will have to take into
+		// account the phase of the reference wave at (0,0).
+		// TODO: perhaps the diagrams I made to reason about this will help
+		// explain this better.
+		dist -= refPhase*wavLen;
 		// Now get the phase. Normally this would be simply dist % wavLen,
 		// but the % operator essentially "caps" the dist / wavLen line
 		// (which is the pure 45º line of dist scaled down by 1/wavLen)
@@ -182,7 +192,7 @@ function drawHologram() {
 				// from there, while the coordinate system is rotated around (0,0))
 				// See (handmade for now) diagram for explanation of the derivation
 				// of the formula below. TODO: describe it textually as well.
-				intensity = Math.cos(tau * holo_x * Math.sin(angle*deg2rad)/wavLen);
+				intensity = Math.cos(tau * holo_x * Math.sin(refAngle*deg2rad)/wavLen);
 			} else { // Calculate the intensity of the current point's object wave
 				var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
 				intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
@@ -202,16 +212,19 @@ function drawHologram() {
 			hologram.fillRect(holo_x, 0, 1, hh);
 
 			if (displayCurves) {
-				// Draw intensity profiles
+				// Draw intensity profile for the current wave
 				curves.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
-				curves.fillRect(holo_x, hh*intensity, 1, 1);
+				curves.fillRect(holo_x, (hh-1)*intensity, 1, 1);
 			}
 		}
 	}
+	// Draw main intensity curve
 	curves.fillStyle = "black";
 	for (var curves_x = -cw/2; curves_x < cw/2; curves_x++) {
 		curves.beginPath();
-		curves.arc(curves_x, hh*totalIntensity[curves_x], 1, 0, tau, true);
+		// Note that a circle with radius 1 has diameter 2,
+		// so this line will be thicker than the others.
+		curves.arc(curves_x, (hh-1)*totalIntensity[curves_x], 1, 0, tau, true);
 		curves.fill();
 	}
 }
