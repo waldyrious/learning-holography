@@ -212,7 +212,7 @@ function drawHologram() {
 				// from there, while the coordinate system is rotated around (0,0))
 				// See (handmade for now) diagram for explanation of the derivation
 				// of the formula below. TODO: describe it textually as well.
-				intensity = Math.cos(tau * holo_x * Math.sin(refAngle*deg2rad)/wavLen);
+				intensity = Math.cos( tau * ( holo_x * Math.sin( refAngle * deg2rad ) / wavLen - refPhase ) );
 			} else { // Calculate the intensity of the current point's object wave
 				var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
 				intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
