@@ -1,46 +1,48 @@
 "use strict"
+
+// Get canvas-related values needed for their manipulation
 var diagramCanvas = document.getElementById("diagram"),
     diagram = diagramCanvas.getContext('2d'),
-	hologramCanvas = document.getElementById("hologram"),
-	hologram = hologramCanvas.getContext('2d'),
-	curvesCanvas = document.getElementById("curves"),
-	curves = curvesCanvas.getContext('2d'),
-    dw = diagramCanvas.width,
-    dh = diagramCanvas.height,
-    hw = hologramCanvas.width,
-    hh = hologramCanvas.height,
-    cw = curvesCanvas.width,
-    ch = curvesCanvas.height,
-	tau = Math.PI*2,
-	deg2rad = tau/360,
-	wavLen = dh/10,
-	cnvRad = distanceToOrigin(diagramCanvas.width, diagramCanvas.height) / 2,
-	refAngle = document.getElementById("angle-slider").value,
-	refPhase = document.getElementById("phase-slider").value,
-	boxSize = dw < dh? dw/5 : dh/5,
-	points = [
-		{ x:-dw/3, y: -dh/2, phase: 0 },
-		{ x: dw/3, y: -3*dh/4, phase: 0 }
-	],
-	numWaves = points.length + 1,
-	displayCurves = false,
-	animate = false,
-	animateTimeoutID = 0,
-	phaseStep = 1/document.getElementById("phase-slider").step,
-	phaseSweep = Array(phaseStep),
-	hologramValues = Array(hw);
-	
-// center coordinate origin horizontally for both canvases
+    hologramCanvas = document.getElementById("hologram"),
+    hologram = hologramCanvas.getContext('2d'),
+    curvesCanvas = document.getElementById("curves"),
+    curves = curvesCanvas.getContext('2d'),
+    dw = diagramCanvas.width,  dh = diagramCanvas.height,
+    diagramRadius = distanceToOrigin(dw, dh) / 2,
+    hw = hologramCanvas.width, hh = hologramCanvas.height,
+    cw = curvesCanvas.width,   ch = curvesCanvas.height,
+    arrowBoxSize = dw < dh? dw/5 : dh/5;
+// Define shortcuts to make code more readable and less repetitive
+var tau = Math.PI*2,
+    deg2rad = tau/360;
+// Define properties that affect the hologram itself
+var wavLen = dh/10,
+    refAngle = document.getElementById("angle-slider").value,
+    refPhase = document.getElementById("phase-slider").value,
+    points = [
+    	{ x:-dw/3, y: -dh/2, phase: 0 },
+    	{ x: dw/3, y: -3*dh/4, phase: 0 }
+    ],
+    hologramValues = Array(hw);
+// Variables to control the appearance and behavior of the visualization
+var displayCurves = false,
+    animate = false;
+// Auxiliary variables
+var numWaves = points.length + 1,
+    animateTimeoutID = 0,
+    phaseStep = 1/document.getElementById("phase-slider").step,
+    phaseSweep = Array(phaseStep);
+
+// Center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
 hologram.translate(dw/2, hh);
 curves.translate(cw/2, ch);
-// make the y axis grow upwards
+// Make the y axis grow upwards
 diagram.scale(1,-1);
 hologram.scale(1,-1);
 curves.scale(1,-1);
 
-hologram.globalCompositeOperation = "lighter";
-
+// Update all canvases with content based on the new values of the various parameters
 function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
@@ -54,8 +56,8 @@ function refresh() {
 	} else {
 		// Needs to be explicitly converted to a number otherwise it is considered a string
 		refPhase = Number(document.getElementById("phase-slider").value);
-		// Timeout has to be cleared otherwise there's an extra iteration
-		// after the last step (I don't know why)
+		// Timeout has to be cleared when ceasing animation,
+		// otherwise there's an extra iteration after the last step (I don't know why)
 		if(animateTimeoutID) {
 			window.clearTimeout(animateTimeoutID);
 			animateTimeoutID = 0;
@@ -74,6 +76,7 @@ function refresh() {
 	}
 }
 
+// Draw the planar (reference) wave's wavefronts in the diagram canvas
 function drawPlanarWave() {
 
 	diagram.save();
@@ -91,15 +94,15 @@ function drawPlanarWave() {
 
 	// Draw a set of horizontal lines (which, in a rotated coordinate system,
 	// end up becoming rotated parallel lines)
-	for (var i=0; i<cnvRad*2; i+=wavLen) {
+	for (var i=0; i<diagramRadius*2; i+=wavLen) {
 		// Draw horizontal lines upwards from the center of the coordinate system
-		diagram.moveTo(-cnvRad*2, i+refPhase*wavLen);
-		diagram.lineTo( cnvRad*2, i+refPhase*wavLen);
+		diagram.moveTo(-diagramRadius*2, i+refPhase*wavLen);
+		diagram.lineTo( diagramRadius*2, i+refPhase*wavLen);
 		// Don't draw the central line twice
 		if (i == 0) { continue; }
 		// Draw horizontal lines downwards from the center of the coordinate system
-		diagram.moveTo(-cnvRad*2,-i+refPhase*wavLen);
-		diagram.lineTo( cnvRad*2,-i+refPhase*wavLen);
+		diagram.moveTo(-diagramRadius*2,-i+refPhase*wavLen);
+		diagram.lineTo( diagramRadius*2,-i+refPhase*wavLen);
 	}
 
 	diagram.stroke();
@@ -107,40 +110,44 @@ function drawPlanarWave() {
 	diagram.restore();
 }
 
+// Show a small box with an arrow showing the propagation direction of the reference wave
 function drawPlanarWaveDirectionBox() {
 	
 	diagram.save();
 
 	diagram.fillStyle   = "White";
-	diagram.strokeStyle = "Silver";
-	diagram.fillRect(  -dw/2,   -dh,   boxSize, boxSize);
-	diagram.strokeRect(-dw/2+1, -dh+1, boxSize, boxSize)
+	diagram.strokeStyle = "Black";
+	diagram.fillRect(  -dw/2,   -dh,   arrowBoxSize, arrowBoxSize);
+	diagram.strokeRect(-dw/2, -dh, arrowBoxSize, arrowBoxSize)
 
 	// center the coordinate system in the box
-	diagram.translate(-dw/2 + boxSize/2, -dh + boxSize/2);
+	diagram.translate(-dw/2 + arrowBoxSize/2, -dh + arrowBoxSize/2);
 	// rotate the coordinate system
 	diagram.rotate(-refAngle*deg2rad);
 
 	// Draw a vertical arrow
 	if (displayCurves) { diagram.strokeStyle = "hsl(0, 100%, 80%)"; }
 	diagram.beginPath();
-	diagram.moveTo( 0,-boxSize/3);
-	diagram.lineTo( 0, boxSize/3);
-	diagram.lineTo(-3, boxSize/3 - 7);
-	diagram.moveTo( 0, boxSize/3);
-	diagram.lineTo( 3, boxSize/3 - 7);
+	diagram.moveTo( 0,-arrowBoxSize/3);
+	diagram.lineTo( 0, arrowBoxSize/3);
+	diagram.lineTo(-3, arrowBoxSize/3 - 7);
+	diagram.moveTo( 0, arrowBoxSize/3);
+	diagram.lineTo( 3, arrowBoxSize/3 - 7);
 	diagram.stroke();
 
 	diagram.restore();
 }
 
+// Draw the object points
+// and their corresponding circular waves' wavefronts
+// in the diagram canvas
 function drawCircularWaves() {
 
 	diagram.save();
 
 	for (var pt = 0; pt < points.length; pt++) {
 		var x = points[pt].x,
-			y = points[pt].y;
+		    y = points[pt].y;
 		// Assuming phase of incoming planar wave (incident light) is zero at (0,0),
 		// calculate the distance of each point to (0,0), along the propagation direction
 		// since the propagation direction is "up" (in the rotated reference frame of the planar wave),
@@ -183,29 +190,32 @@ function drawCircularWaves() {
 		// points we have. The ref. wave keeps the 0º (red)
 		if (displayCurves) {
 			diagram.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
-			diagram.strokeStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 75%)";
+			diagram.strokeStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
 		}
 
 		// Draw the point itself
 		diagram.beginPath();
-    	diagram.arc(x, y, 5, 0, tau, false);
+		diagram.arc(x, y, 5, 0, tau, false);
 		diagram.fill();
 
 		// Draw the circular waves emanating from it
-		for (var rad=0; rad<cnvRad*2; rad+=wavLen) {
+		for (var rad=0; rad<diagramRadius*2; rad+=wavLen) {
 			diagram.beginPath();
-	    	diagram.arc(x, y, rad + points[pt].phase, 0, tau, false);
-    		diagram.stroke();
+			diagram.arc(x, y, rad + points[pt].phase, 0, tau, false);
+			diagram.stroke();
 		}
 	}
 	diagram.restore();
 }
 
+// Calculate the intensity values for each wave (including the reference wave),
+// obtain the interference (sum) values for each hologram pixel
+// and paint them
 function drawHologram() {
 	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],
-			totalIntensity = 0;
+		    totalIntensity = 0;
 
 		// Calculate the intensity of the reference wave
 		// We know — because we define it that way in drawPlanarWave() —
@@ -257,14 +267,18 @@ function drawHologram() {
 	phaseSweep[ Math.round(refPhase*phaseStep) ] = true;
 }
 
+// ## AUXILIARY FUNCTIONS ##
+
+// Create a new randomly positioned object point
 function generateNewPoint() {
 	return {
-		x: Math.random()*(dw-boxSize) - (dw-boxSize)/2,
-		y: Math.random()*(dh-boxSize) - (dh-boxSize/2),
+		x: Math.random()*(dw-arrowBoxSize) - (dw-arrowBoxSize)/2,
+		y: Math.random()*(dh-arrowBoxSize) - (dh-arrowBoxSize/2),
 		phase: 0
 	}
 }
 
+// Add a new point to the object
 function addPoint() {
 	document.getElementById("lessPts").disabled = false;
 	points.push( generateNewPoint() );
@@ -272,6 +286,7 @@ function addPoint() {
 	newHologram();
 }
 
+// Remove the last point of the object
 function removePoint() {
 	points.pop();
 	document.getElementById("lessPts").disabled = (points.length == 0);
@@ -279,16 +294,19 @@ function removePoint() {
 	newHologram();
 }
 
+// Only call refresh() if it isn't already scheduled
 function update() {
 	if(!animate) refresh();
 }
 
+// Reset cumulative hologram because conditions have changed
 function newHologram() {
 	phaseSweep = Array(50);
 	hologramValues = Array(hw);
 	update();
 }
 
+// Convert a value bewtween 0 and 1 to a grayscale color code
 function unitFractionToHexColor(val) {
 	// Convert range 0-1 to an integer in the range 0-255 and then to the hex format
 	var greyHexValue = Math.round(val * 255).toString(16);
@@ -298,6 +316,10 @@ function unitFractionToHexColor(val) {
 	return "#" + Array(4).join(greyHexValue);
 }
 
+// Draw a pixel in the "curves" canvas,
+// corresponding to a given wave's intensity at that point.
+// As the hologram is scanned by the hologram drawing code,
+// this gets called for each pixel, and te points end up forming a intensity curve
 function drawIntensityCurve(waveIndex, xCoord, intensity) {
 	var pointDiameter;
 	if( waveIndex == -1 ) {
@@ -316,6 +338,7 @@ function drawIntensityCurve(waveIndex, xCoord, intensity) {
 	curves.fill();
 }
 
+// Calculate a distance using the Euclidean distance formula
 function distanceToOrigin(x, y) {
 	return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
 }
