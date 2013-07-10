@@ -16,7 +16,7 @@ var diagramCanvas = document.getElementById("diagram"),
 var tau = Math.PI*2,
     deg2rad = tau/360;
 // Define properties that affect the hologram itself
-var wavLen = dh/10,
+var wavLen = 50,
     refAngle = document.getElementById("angle-slider").value,
     refPhase = document.getElementById("phase-slider").value,
     points = [
