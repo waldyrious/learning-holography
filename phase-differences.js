@@ -25,7 +25,10 @@ var diagramCanvas = document.getElementById("diagram"),
 	numWaves = points.length + 1,
 	displayCurves = false,
 	animate = false,
-	animateTimeoutID = 0;
+	animateTimeoutID = 0,
+	phaseStep = 1/document.getElementById("phase-slider").step,
+	phaseSweep = Array(phaseStep),
+	hologramValues = Array(hw);
 	
 // center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
@@ -199,55 +202,59 @@ function drawCircularWaves() {
 }
 
 function drawHologram() {
-	var intensity = 0,
-		scaledIntensity = 0,
-		totalIntensity = [],
-		horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
-	
-	for (var pt = -1; pt < points.length; pt++) {
-		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
-			if(pt==-1) { // Calculate the intensity of the reference wave
-				// We know — because we define it that way in drawPlanarWave() —
-				// that the the reference wave has zero phase at x=0
-				// (since we draw a horizontal line at y=0 and the others growing
-				// from there, while the coordinate system is rotated around (0,0))
-				// See (handmade for now) diagram for explanation of the derivation
-				// of the formula below. TODO: describe it textually as well.
-				intensity = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
-			} else { // Calculate the intensity of the current point's object wave
-				var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
-				intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
-			}
-			// Normalize intensity values from cosine's [-1;1] range to [0;1]
-			intensity = (intensity + 1) / 2;
-			// Divide by number of points (plus ref wave)
-			// to allow summing intensity contributions of all waves
-			// and still have the final intensity values range from 0 to 1
-			scaledIntensity = intensity / numWaves;
-			totalIntensity[holo_x] = (totalIntensity[holo_x] || 0) + scaledIntensity;
-			// Convert range 0-1 to an integer in the range 0-255
-			var intRGB = Math.round(scaledIntensity * 255);
-			
-			// Paint the calculated intensity into the current hologram pixel
-			hologram.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
-			hologram.fillRect(holo_x, 0, 1, hh);
+	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
+	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
+		var perWaveIntensity = [],
+			totalIntensity = 0;
 
+		// Calculate the intensity of the reference wave
+		// We know — because we define it that way in drawPlanarWave() —
+		// that the the reference wave has zero phase at x=0
+		// (since we draw a horizontal line at y=0 and the others growing
+		// from there, while the coordinate system is rotated around (0,0))
+		// See (handmade for now) diagram for explanation of the derivation
+		// of the formula below. TODO: describe it textually as well.
+		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
+		if (displayCurves) {
+			drawIntensityCurve(points.length, holo_x, totalIntensity);
+		}
+
+		// Calculate the intensity of the current point's object wave
+		for (var pt = 0; pt < points.length; pt++) {
+			var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
+			perWaveIntensity[pt] = Math.cos((radius - points[pt].phase) * tau/wavLen);
+			totalIntensity += perWaveIntensity[pt];
+			// Draw intensity profile for the current wave
 			if (displayCurves) {
-				// Draw intensity profile for the current wave
-				curves.fillStyle = "hsl(" + 360*((pt+1)/numWaves) + ", 100%, 50%)";
-				curves.fillRect(holo_x, (hh-1)*intensity, 1, 1);
+				// Normalize intensity values from cosine's [-1;1] range to [0;1]
+				drawIntensityCurve(pt, holo_x, perWaveIntensity[pt] );
 			}
 		}
+
+		// Divide by number of points (plus ref wave)
+		// to allow summing intensity contributions of all waves
+		// and still have the final intensity values range from 0 to 1
+		// Also, take the absolute value, since what we care about is
+		// whether there is wave activity at this point, and by how much
+		totalIntensity = Math.abs(totalIntensity/numWaves);
+
+		// Paint the calculated intensity into the current (instantaneous) hologram pixel
+		hologram.fillStyle = unitFractionToHexColor(totalIntensity);
+		hologram.fillRect(holo_x, 0, 1, hh/2);
+
+		// Calculate values for cumulative (final) hologram
+		if( !phaseSweep[ Math.round(refPhase*phaseStep) ] ) {
+			hologramValues[holo_x] = (hologramValues[holo_x]||0) + totalIntensity/phaseStep;
+		}
+		// Paint the calculated intensity into the current (cumulative) hologram pixel
+		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_x]);
+		hologram.fillRect(holo_x, hh/2, 1, hh);
+
+		// Draw main intensity curve
+		drawIntensityCurve(-1, holo_x, totalIntensity);
 	}
-	// Draw main intensity curve
-	curves.fillStyle = "black";
-	for (var curves_x = -cw/2; curves_x < cw/2; curves_x++) {
-		curves.beginPath();
-		// Note that a circle with radius 1 has diameter 2,
-		// so this line will be thicker than the others.
-		curves.arc(curves_x, (hh-1)*totalIntensity[curves_x], 1, 0, tau, true);
-		curves.fill();
-	}
+	// Mark this phase value as done, so it isn't calculated again
+	phaseSweep[ Math.round(refPhase*phaseStep) ] = true;
 }
 
 function generateNewPoint() {
@@ -262,18 +269,51 @@ function addPoint() {
 	document.getElementById("lessPts").disabled = false;
 	points.push( generateNewPoint() );
 	numWaves++;
-	update();
+	newHologram();
 }
 
 function removePoint() {
 	points.pop();
 	document.getElementById("lessPts").disabled = (points.length == 0);
 	numWaves--;
-	update();
+	newHologram();
 }
 
 function update() {
 	if(!animate) refresh();
+}
+
+function newHologram() {
+	phaseSweep = Array(50);
+	hologramValues = Array(hw);
+	update();
+}
+
+function unitFractionToHexColor(val) {
+	// Convert range 0-1 to an integer in the range 0-255 and then to the hex format
+	var greyHexValue = Math.round(val * 255).toString(16);
+	// pad with zero if it has only one digit (#333 != #030303)
+	if (greyHexValue.length==1) greyHexValue = '0' + greyHexValue;
+	// prefix with number sign and repeat the hex string 3 times (for RGB)
+	return "#" + Array(4).join(greyHexValue);
+}
+
+function drawIntensityCurve(waveIndex, xCoord, intensity) {
+	var pointDiameter;
+	if( waveIndex == -1 ) {
+		pointDiameter =  2;
+		curves.fillStyle = "black";
+	} else {
+		pointDiameter = 1;
+		// Spread the colors around the hue circle according to the number of
+		// points we have. The ref. wave keeps the 360º (red)
+		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
+		// Normalize intensity values from cosine's [-1;1] range to [0;1]
+		intensity = (intensity+1)/2;
+	}
+	curves.beginPath();
+	curves.arc(xCoord, (hh-1)*intensity, pointDiameter/2, 0, tau, true);
+	curves.fill();
 }
 
 function distanceToOrigin(x, y) {
