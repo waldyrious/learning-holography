@@ -29,7 +29,8 @@ a:focus {
  * http://rhodesmill.org/brandon/2012/one-sentence-per-line/
  */
 p {
-  white-space: pre-line;
+  /*white-space: pre-line;*/
+  text-align: justify;
 }
 
 /* there seems to be a bottom margin in svg elements.
@@ -42,11 +43,26 @@ embed {
 
 .note {
   font-style: italic;
-  color: grey;
-  padding-left: 2em;
-  display: inline-block;
+  color: #666;
+  padding-left:0.5em;
+  padding-right:0.5em;
+  margin-left: 2em;
+  margin-right: 2em;
+  border: 1px solid silver;
 }
 
-.note a {
+.gray {
+  color: gray;
+}
+
+.gray a {
   color: SlateGray;
+}
+
+.right {
+  text-align: right;
+}
+
+dt {
+  margin-top: 1em;
 }

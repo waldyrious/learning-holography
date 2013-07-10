@@ -1,38 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Holography Tutorial</title>
+	<title>Learning Holography</title>
 	<link href="css/base-style.css" rel="stylesheet">
 	<meta charset="utf-8">
 </head>
 <body>
-	<h1>Holography Tutorial</h1>
-	<ul>
-		<li>
-			<a href="wave-propagation.html">Wave propagation</a>:
+	<h1>Learning Holography</h1>
+
+	<dl>
+		<dt><a href="wave-propagation.html">Wave propagation</a></dt>
+		<dd>
 			A (simplified) visualization of how electromagnectic waves propagate
-		</li>
-		<li>
-			<a href="img/CGH.svg">CGH Venn diagram</a>:
+		</dd>
+
+		<dt><a href="cgh-venn-diagram.html">CGH Venn diagram</a></dt>
+		<dd>
 			An attempt at categorizing Computer-Generated Holography techniques
-		</li>
-		<li>
-			<a href="2d-hologram-viz.html">2D hologram visualization</a>:
+		</dd>
+
+		<dt><a href="2d-hologram-viz.html">2D hologram visualization</a></dt>
+		<dd>
 			A small interactive demo to play with various parameters that affect a hologram,
 			such as the reference wave angle, the number of points, etc.
 			Allows both inspection of an instantaneous interference pattern,
 			and the generation of the stable pattern that forms over time.
-		</li>
-		<li>
-			<a href="hologram.html">Javascript CGH</a>:
-			A naive implementation of a hologram encoder/decoder in Javascript<br>
-			<span class="note">
-				<span class="bold">Note:</span> the code is completely unoptimized
-				and generates the holograms through a brute-force approach.
-				It is highly recommended to <span class="bold">use Chrome to run it</span>.
-				Other browsers may freeze or even crash with this code. You've been warned!
-			</span>
-		</li>
-	</ul>
+			(Google Chrome recommended; I've tested it in Firefox too, but it's less responsive.)
+		</dd>
+
+		<dt><a href="hologram.html">Javascript CGH</a></dt>
+		<dd>
+			A naive implementation of a hologram encoder/decoder in Javascript
+			(work in progress).
+			<i>Note:</i> the code is completely unoptimized
+			and generates the holograms through a brute-force approach.
+			It is highly recommended to <b>use Chrome to run it</b>.
+			Other browsers may freeze or even crash with this code. You've been warned!
+		</dd>
+	</dl>
+
+	<hr>
+	<p class="right gray">CC-BY-SA &bull; <a href="about.html">about</a></p>
 </body>
 </html>

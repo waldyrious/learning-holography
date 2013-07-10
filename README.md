@@ -1,18 +1,13 @@
 This repository will contain some notes, diagrams and animations
-aimed at helping laymen understand the theoretical basis of holography.
-You can access the current version of the tutorial here:
-**http://waldir.github.com/holography-tutorial**
+I've been developing as aids to my study of holography
+and specifically comuter-generated holography (CGH).
+I hope they might help others who are curious about the topic. 
 
-Requirements for mathematics, physics or signal processing background
-will be kept as low as possible.
-The goal is to maintain a highly accessible resource
-for the curious layman.
+The live version is available here:
+**http://waldir.github.io/learning-holography**
 
-**Note:** I make no claim of scientific accuracy
-or otherwise correctness of this guide!
-I'm still learning myself :)
-Feel free to make suggestions or corrections,
-either via issue reports or pull requests.
+Any contributions or bug reports are welcome here on Github.
+Other feedback can be sent to `waldir@email.com`.
 
 ![Creative Commons License](http://i.creativecommons.org/l/by-sa/3.0/88x31.png "CC BY-SA")
 
