@@ -33,6 +33,9 @@
 		<input type="checkbox" name="show-curves" id="show-curves" onchange="refresh()">
 		<label for="animate">Animate: </label>
 		<input type="checkbox" name="animate" id="animate" onchange="refresh()">
+		<input type="button" id="lessPts" value="−" onclick="removePoint()">
+		pts
+		<input type="button" id="lessPts" value="+" onclick="addPoint()">
 	</div>
 	<canvas width="500" height="50" id="curves"></canvas>
 	<canvas width="500" height="50" id="hologram"></canvas>

@@ -249,6 +249,28 @@ function drawHologram() {
 	}
 }
 
+function generateNewPoint() {
+	return {
+		x: Math.random()*(dw-boxSize) - (dw-boxSize)/2,
+		y: Math.random()*(dh-boxSize) - (dh-boxSize/2),
+		phase: 0
+	}
+}
+
+function addPoint() {
+	document.getElementById("lessPts").disabled = false;
+	points.push( generateNewPoint() );
+	numWaves++;
+	refresh();
+}
+
+function removePoint() {
+	points.pop();
+	document.getElementById("lessPts").disabled = (points.length == 0);
+	numWaves--;
+	refresh();
+}
+
 function distanceToOrigin(x, y) {
 	return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
 }
