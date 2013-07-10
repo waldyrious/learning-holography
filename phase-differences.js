@@ -261,14 +261,18 @@ function addPoint() {
 	document.getElementById("lessPts").disabled = false;
 	points.push( generateNewPoint() );
 	numWaves++;
-	refresh();
+	update();
 }
 
 function removePoint() {
 	points.pop();
 	document.getElementById("lessPts").disabled = (points.length == 0);
 	numWaves--;
-	refresh();
+	update();
+}
+
+function update() {
+	if(!animate) refresh();
 }
 
 function distanceToOrigin(x, y) {
