@@ -334,7 +334,7 @@ function drawIntensityCurve(waveIndex, xCoord, intensity) {
 		intensity = (intensity+1)/2;
 	}
 	curves.beginPath();
-	curves.arc(xCoord, (hh-1)*intensity, pointDiameter/2, 0, tau, true);
+	curves.arc(xCoord, (ch-1)*intensity, pointDiameter/2, 0, tau, true);
 	curves.fill();
 }
 
