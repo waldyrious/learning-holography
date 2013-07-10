@@ -201,7 +201,8 @@ function drawCircularWaves() {
 function drawHologram() {
 	var intensity = 0,
 		scaledIntensity = 0,
-		totalIntensity = [];
+		totalIntensity = [],
+		horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
 	
 	for (var pt = -1; pt < points.length; pt++) {
 		for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
@@ -212,7 +213,7 @@ function drawHologram() {
 				// from there, while the coordinate system is rotated around (0,0))
 				// See (handmade for now) diagram for explanation of the derivation
 				// of the formula below. TODO: describe it textually as well.
-				intensity = Math.cos( tau * ( holo_x * Math.sin( refAngle * deg2rad ) / wavLen - refPhase ) );
+				intensity = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
 			} else { // Calculate the intensity of the current point's object wave
 				var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
 				intensity = Math.cos((radius - points[pt].phase) * tau/wavLen);
