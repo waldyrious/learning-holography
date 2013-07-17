@@ -214,7 +214,14 @@ function drawCircularWaves() {
 // obtain the interference (sum) values for each hologram pixel
 // and paint them
 function drawHologram() {
-	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
+	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad ),
+	    // Count how many phase states we have already calculated hologram values for
+	    // adapted from http://stackoverflow.com/q/6265940/
+	    filledPhases = phaseSweep.filter(Number).length,
+	    maxHologramValue = hologramValues[0] ? hologramValues.max() : 1,
+	    // Ratio we need to multiply the hologram to have the max increase be 1/phaseStep.
+	    // the max value will correspond to the greatest increase, so we use it as a limit.
+	    growthRatio = (maxHologramValue+(1/phaseSteps)) / maxHologramValue;
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],
 		    totalIntensity = 0,
@@ -262,6 +269,14 @@ function drawHologram() {
 		// Calculate values for cumulative (final) hologram
 		if( !phaseSweep[ Math.round(refPhase*phaseSteps) ] ) {
 			hologramValues[holo_index] = (hologramValues[holo_index]||0) + totalIntensity/phaseSteps;
+		}
+		// Gradually normalize intensity of cumulative hologram
+		// We make it grow at a pace of 1/phaseSteps,
+		// which is the maximum pace it could grow in the previous stage
+		// (i.e. when each phase value was being accumulated,
+		// assuming totalIntensity would total 1 for any given pixel)
+		else if(filledPhases == phaseSteps && maxHologramValue < 1-1/phaseSteps) {
+			hologramValues[holo_index] *= growthRatio;
 		}
 		// Paint the calculated intensity into the current (cumulative) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_index]);
