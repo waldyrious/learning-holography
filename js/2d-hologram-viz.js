@@ -30,8 +30,8 @@ var displayCurves = false,
 // Auxiliary variables
 var numWaves = points.length + 1,
     animateTimeoutID = 0,
-    phaseStep = 1/document.getElementById("phase-slider").step,
-    phaseSweep = Array(phaseStep);
+    phaseSteps = 1/document.getElementById("phase-slider").step,
+    phaseSweep = Array(phaseSteps);
 
 // Center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
@@ -255,8 +255,8 @@ function drawHologram() {
 		hologram.fillRect(holo_x, 0, 1, hh/2);
 
 		// Calculate values for cumulative (final) hologram
-		if( !phaseSweep[ Math.round(refPhase*phaseStep) ] ) {
-			hologramValues[holo_x] = (hologramValues[holo_x]||0) + totalIntensity/phaseStep;
+		if( !phaseSweep[ Math.round(refPhase*phaseSteps) ] ) {
+			hologramValues[holo_x] = (hologramValues[holo_x]||0) + totalIntensity/phaseSteps;
 		}
 		// Paint the calculated intensity into the current (cumulative) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_x]);
@@ -266,7 +266,7 @@ function drawHologram() {
 		drawIntensityCurve(-1, holo_x, totalIntensity);
 	}
 	// Mark this phase value as done, so it isn't calculated again
-	phaseSweep[ Math.round(refPhase*phaseStep) ] = true;
+	phaseSweep[ Math.round(refPhase*phaseSteps) ] = true;
 }
 
 // ## AUXILIARY FUNCTIONS ##
@@ -321,7 +321,7 @@ function unitFractionToHexColor(val) {
 // Draw a pixel in the "curves" canvas,
 // corresponding to a given wave's intensity at that point.
 // As the hologram is scanned by the hologram drawing code,
-// this gets called for each pixel, and te points end up forming a intensity curve
+// this gets called for each pixel, and the points end up forming a intensity curve
 function drawIntensityCurve(waveIndex, xCoord, intensity) {
 	var pointDiameter;
 	if( waveIndex == -1 ) {
