@@ -217,7 +217,12 @@ function drawHologram() {
 	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],
-		    totalIntensity = 0;
+		    totalIntensity = 0,
+		    // holo_index is used for the hologramValues array.			
+		    // Its value is calculated to make it go from 0 to hw
+		    // rather than from -hw/2 to hw/2
+		    // Otherwise calculating its maximum would be cumbersome.
+		    holo_index = holo_x+hw/2;
 
 		// Calculate the intensity of the reference wave
 		// We know — because we define it that way in drawPlanarWave() —
@@ -256,10 +261,10 @@ function drawHologram() {
 
 		// Calculate values for cumulative (final) hologram
 		if( !phaseSweep[ Math.round(refPhase*phaseSteps) ] ) {
-			hologramValues[holo_x] = (hologramValues[holo_x]||0) + totalIntensity/phaseSteps;
+			hologramValues[holo_index] = (hologramValues[holo_index]||0) + totalIntensity/phaseSteps;
 		}
 		// Paint the calculated intensity into the current (cumulative) hologram pixel
-		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_x]);
+		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_index]);
 		hologram.fillRect(holo_x, hh/2, 1, hh);
 
 		// Draw main intensity curve
@@ -343,4 +348,11 @@ function drawIntensityCurve(waveIndex, xCoord, intensity) {
 // Calculate a distance using the Euclidean distance formula
 function distanceToOrigin(x, y) {
 	return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
+}
+
+// Attention: only works for positive indexes!
+Array.prototype.max = function () {
+  return this.reduce(function (p, v) {
+    return ( p > v ? p : v );
+  });
 }
