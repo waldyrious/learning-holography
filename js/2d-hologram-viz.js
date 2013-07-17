@@ -199,7 +199,9 @@ function drawCircularWaves() {
 		diagram.fill();
 
 		// Draw the circular waves emanating from it
-		for (var rad=0; rad<diagramRadius*2; rad+=wavLen) {
+		var maxRad = Math.sqrt( Math.pow(dw/2+Math.abs(x),      2) +
+		                        Math.pow(dh/2+Math.abs(y+dh/2), 2));
+		for (var rad=0; rad<maxRad; rad+=wavLen) {
 			diagram.beginPath();
 			diagram.arc(x, y, rad + points[pt].phase, 0, tau, false);
 			diagram.stroke();
