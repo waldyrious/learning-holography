@@ -31,7 +31,8 @@ var displayCurves = false,
 var numWaves = points.length + 1,
     animateTimeoutID = 0,
     phaseSteps = 1/document.getElementById("phase-slider").step,
-    phaseSweep = Array(phaseSteps);
+    phaseSweep = Array(phaseSteps),
+	maxIntensity = 0;
 
 // Center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
@@ -218,7 +219,7 @@ function drawHologram() {
 	    // Count how many phase states we have already calculated hologram values for
 	    // adapted from http://stackoverflow.com/q/6265940/
 	    filledPhases = phaseSweep.filter(Number).length,
-	    maxHologramValue = hologramValues[0] ? hologramValues.max() : 1,
+	    maxHologramValue = (filledPhases == phaseSteps) ? hologramValues.max() : 1,
 	    // Ratio we need to multiply the hologram to have the max increase be 1/phaseStep.
 	    // the max value will correspond to the greatest increase, so we use it as a limit.
 	    growthRatio = (maxHologramValue+(1/phaseSteps)) / maxHologramValue;
@@ -261,6 +262,7 @@ function drawHologram() {
 		// Also, take the absolute value, since what we care about is
 		// whether there is wave activity at this point, and by how much
 		totalIntensity = Math.abs(totalIntensity/numWaves);
+		maxIntensity = Math.max(maxIntensity, totalIntensity);
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(totalIntensity);
@@ -275,15 +277,18 @@ function drawHologram() {
 		// which is the maximum pace it could grow in the previous stage
 		// (i.e. when each phase value was being accumulated,
 		// assuming totalIntensity would total 1 for any given pixel)
-		else if(filledPhases == phaseSteps && maxHologramValue < 1-1/phaseSteps) {
+		else if(filledPhases == phaseSteps && maxHologramValue < maxIntensity-1/phaseSteps) {
 			hologramValues[holo_index] *= growthRatio;
 		}
 		// Paint the calculated intensity into the current (cumulative) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_index]);
 		hologram.fillRect(holo_x, hh/2, 1, hh);
 
-		// Draw main intensity curve
-		drawIntensityCurve(-1, holo_x, totalIntensity);
+		// Draw cumulative version of main intensity curve
+		drawIntensityCurve(-2, holo_x, hologramValues[holo_index], "gray");
+
+		// Draw instantaneous version of main intensity curve
+		drawIntensityCurve(-1, holo_x, totalIntensity, "black");
 	}
 	// Mark this phase value as done, so it isn't calculated again
 	phaseSweep[ Math.round(refPhase*phaseSteps) ] = true;
@@ -325,6 +330,7 @@ function update() {
 function newHologram() {
 	phaseSweep = Array(50);
 	hologramValues = Array(hw);
+	maxIntensity = 0;
 	update();
 }
 
@@ -342,11 +348,11 @@ function unitFractionToHexColor(val) {
 // corresponding to a given wave's intensity at that point.
 // As the hologram is scanned by the hologram drawing code,
 // this gets called for each pixel, and the points end up forming a intensity curve
-function drawIntensityCurve(waveIndex, xCoord, intensity) {
+function drawIntensityCurve(waveIndex, xCoord, intensity, color) {
 	var pointDiameter;
-	if( waveIndex == -1 ) {
+	if( waveIndex < 0 ) {
 		pointDiameter =  2;
-		curves.fillStyle = "black";
+		curves.fillStyle = color || "black";
 	} else {
 		pointDiameter = 1;
 		// Spread the colors around the hue circle according to the number of
