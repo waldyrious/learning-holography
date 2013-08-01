@@ -232,7 +232,7 @@ function drawHologram() {
 		    // Otherwise calculating its maximum would be cumbersome.
 		    holo_index = holo_x+hw/2;
 
-		// Calculate the intensity of the reference wave
+		// Calculate the intensity of the reference wave.
 		// We know — because we define it that way in drawPlanarWave() —
 		// that the the reference wave has zero phase at x=0
 		// (since we draw a horizontal line at y=0 and the others growing
@@ -359,7 +359,9 @@ function drawIntensityCurve(waveIndex, xCoord, intensity, color) {
 		// points we have. The ref. wave keeps the 360º (red)
 		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
 		// Normalize intensity values from cosine's [-1;1] range to [0;1]
-		intensity = (intensity+1)/2;
+		// Also invert it for display, to make the crests of the curves canvas
+		// Visually touch the crests as seen from top-down in the diagram canvas
+		intensity = 1-(intensity+1)/2;
 	}
 	curves.beginPath();
 	curves.arc(xCoord, (ch-1)*intensity, pointDiameter/2, 0, tau, true);
