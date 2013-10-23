@@ -21,14 +21,14 @@ var wavLen = 50,
     refPhase = document.getElementById("phase-slider").value,
     points = [
     	{ x:-dw/3, y: -dh/2, phase: 0 },
-//    	{ x: dw/3, y: -3*dh/4, phase: 0 }
+    	{ x: dw/3, y: -3*dh/4, phase: 0 }
     ],
     hologramValues = Array(hw);
 // Variables to control the appearance and behavior of the visualization
 var displayCurves = false,
     animate = false;
 // Auxiliary variables
-var numWaves = points.length + 1,
+var numWaves = points.length + 1, // one wave per point source, plus the reference wave
     animateTimeoutID = 0,
     phaseSteps = 1/document.getElementById("phase-slider").step,
     phaseSweep = Array(phaseSteps),
@@ -233,13 +233,14 @@ function drawHologram() {
 		    holo_index = holo_x+hw/2;
 
 		// Calculate the intensity of the reference wave.
-		// We know — because we define it that way in drawPlanarWave() —
-		// that the the reference wave has zero phase at x=0
-		// (since we draw a horizontal line at y=0 and the others growing
-		// from there, while the coordinate system is rotated around (0,0))
-		// See (handmade for now) diagram for explanation of the derivation
-		// of the formula below. TODO: describe it textually as well.
+		//   We know — because we define it that way in drawPlanarWave() —
+		//   that the the reference wave has zero phase at x=0
+		//   (since we draw a horizontal line at y=0 and the others growing
+		//   from there, while the coordinate system is rotated around (0,0))
+		//   See (handmade for now) diagram for explanation of the derivation
+		//   of the formula below. TODO: describe it textually as well.
 		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
+		// Draw the intensity profile curve for the reference wave
 		if (displayCurves) {
 			drawIntensityCurve(points.length, holo_x, totalIntensity);
 		}
@@ -249,7 +250,7 @@ function drawHologram() {
 			var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
 			perWaveIntensity[pt] = Math.cos((radius - points[pt].phase) * tau/wavLen);
 			totalIntensity += perWaveIntensity[pt];
-			// Draw intensity profile for the current wave
+			// Draw the intensity profile curve for the current wave
 			if (displayCurves) {
 				// Normalize intensity values from cosine's [-1;1] range to [0;1]
 				drawIntensityCurve(pt, holo_x, perWaveIntensity[pt] );
