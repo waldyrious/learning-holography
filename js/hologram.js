@@ -88,16 +88,18 @@ function draw(canvas, pixelSize, nextPixelSize) {
 				}
 			}
 		}
+		// Measure calculation time for display
 		var now = new Date();
 		var elapsed = document.getElementById("time-" + canvas.id);
 		elapsed.textContent = (now - start) / 1000 + ' s';
+		// Draw square depicting area covered by the next resolution level
 		if (nextPixelSize) {
-			var zoomedSize = canvas.width * nextPixelSize / pixelSize;
-			console.log(zoomedSize);
+			var zoomedWidth = canvas.width * nextPixelSize / pixelSize;
+			var zoomedHeight = canvas.height * nextPixelSize / pixelSize;
 			ctx.strokeStyle = "red";
 			ctx.strokeRect(
-				canvas.width / 2 - zoomedSize / 2, canvas.height / 2 - zoomedSize / 2,
-				zoomedSize, zoomedSize
+				canvas.width/2 - zoomedWidth/2, canvas.height/2 - zoomedHeight/2,
+				zoomedWidth, zoomedHeight
 			);
 		}
 		var dataURL = canvas.toDataURL();
