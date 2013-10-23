@@ -66,16 +66,16 @@ function draw(canvas, pixelSize, nextPixelSize) {
 				// horizontal distance between current hologram pixel and current object point
 				var distX = hpx - opx;
 				for (var holo_y = 0; holo_y < canvas.height; holo_y++) { // Note: the e^x code is Math.exp(x);
-                                       // Calculate physical vertical coordinate of current hologram pixel
+					// Calculate physical vertical coordinate of current hologram pixel
 					var hpy = (holo_y + 0.5) * pixelSize;
-                                       // Calculate physical vertical coordinate of current object point
+					// Calculate physical vertical coordinate of current object point
 					var opy = hologramCenterY - obj[pt].y;
 					// vertical distance between current hologram pixel and current object point
 					var distY = hpy - opy;
-                                       // Use the Euclidean formula to calculate the distance between point and hologram pixel
+					// Use the Euclidean formula to calculate the distance between point and hologram pixel
 					var radius = Math.sqrt( Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2) );
-                                       // Divide by number of points to allow summing values for all points
-                                       // and still have the final image values range from 0 to 1
+					// Divide by number of points to allow summing values for all points
+					// and still have the final image values range from 0 to 1
 					//intensity = Math.abs(Math.cos(radius*k))/obj.length;
 					var intensity = (Math.cos(radius * k) + 1) / (2 * obj.length);
 					// Convert range 0-1 to an integer in the range 0-255
