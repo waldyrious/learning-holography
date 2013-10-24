@@ -167,10 +167,10 @@ function drawCircularWaves() {
 		dist -= refPhase*wavLen;
 		// Now get the phase. Normally this would be simply dist % wavLen,
 		// but the % operator essentially "caps" the dist / wavLen line
-		// (which is the pure 45º line of dist scaled down by 1/wavLen)
-		// to the -wavLen --> wavLen range. This means the left side of the graph
+		// (which is the pure 45º line of dist, scaled down by 1/wavLen)
+		// to the -wavLen --> +wavLen range. This means the left side of the graph
 		// is below the x axis, capped at -wavLen, and the right side is above,
-		// capped at wavLen. We want to do the following:
+		// capped at +wavLen. We want to do the following:
 		/*
 			           ^                               ^
 			           |                               |
@@ -180,11 +180,12 @@ function drawCircularWaves() {
 			/ |/ |/ |/ |                               |
 			           |                               |
 		*/
-		// to achieve that, we first add wavLen to make the wole curve above 0,
-		// and then we use % again to cap the wavLen --> 2*wavLen part that
-		// results in the right-hand side.
+		// to convert from the left image to the right one,
+		// we first add wavLen, to put the whole graph above 0,
+		// and then we use % again to bring the wavLen --> 2*wavLen part
+		// (in the right-hand side) down to the 0 --> wavLen range.
 		// Finally, we subtract that from wavLen, to get the growing with the
-		// planar waves' propagation direction (+Y')
+		// planar wave's propagation direction (+Y')
 		points[pt].phase = wavLen - ( wavLen + dist % wavLen ) % wavLen;
 
 		// Spread the colors around the hue circle according to the number of
@@ -199,9 +200,13 @@ function drawCircularWaves() {
 		diagram.arc(x, y, 5, 0, tau, false);
 		diagram.fill();
 
-		// Draw the circular waves emanating from it
+		// Draw the circular waves emanating from it:
+		// 1. Calculate the max radius we would need to draw
+		//    so we don't attempt to draw outside the canvas
 		var maxRad = Math.sqrt( Math.pow(dw/2+Math.abs(x),      2) +
 		                        Math.pow(dh/2+Math.abs(y+dh/2), 2));
+		// 2. Loop through each radius level
+		//    and draw the wavefronts for the current point
 		for (var rad=0; rad<maxRad; rad+=wavLen) {
 			diagram.beginPath();
 			diagram.arc(x, y, rad + points[pt].phase, 0, tau, false);
