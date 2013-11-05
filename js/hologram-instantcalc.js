@@ -24,8 +24,7 @@ var wavLen = 50,
     ],
     hologramValues = Array(hw);
 // Variables to control the appearance and behavior of the visualization
-var displayCurves = false,
-    animate = false;
+var displayCurves = false;
 // Auxiliary variables
 var numWaves = points.length + 1, // one wave per point source, plus the reference wave
 	maxIntensity = 0;
@@ -199,14 +198,7 @@ function drawCircularWaves() {
 // obtain the interference (sum) values for each hologram pixel
 // and paint them
 function drawHologram() {
-	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad ),
-	    // Count how many phase states we have already calculated hologram values for
-	    // adapted from http://stackoverflow.com/q/6265940/
-	    //filledPhases = phaseSweep.filter(Number).length,
-	    maxHologramValue = (hologramValues[0] != undefined) ? hologramValues.max() : 1;
-	    // Ratio we need to multiply the hologram to have the max increase be 1/phaseStep.
-	    // the max value will correspond to the greatest increase, so we use it as a limit.
-	    //growthRatio = (maxHologramValue+(1/phaseSteps)) / maxHologramValue;
+	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],
 		    totalIntensity = 0,
@@ -365,3 +357,4 @@ Array.prototype.max = function () {
     return ( p > v ? p : v );
   });
 }
+
