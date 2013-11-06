@@ -41,15 +41,21 @@ curves.scale(1,-1);
 
 // Update all canvases with content based on the new values of the various parameters
 function refresh() {
+	// Reset canvases and hologram values
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
 	hologramValues = Array(hw);
 	maxIntensity = 0;
+	// Check whether to display individual intensity curves for each wave.
+	// This affects both the diagram and curves canvases.
+	// Note: the curves canvas is filled in paintHologram().
 	displayCurves = document.getElementById("show-curves").checked;
+	// Update the diagram canvas with the updated content
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
+	// Update the hologram and the curves canvases.
 	paintHologram();
 }
 

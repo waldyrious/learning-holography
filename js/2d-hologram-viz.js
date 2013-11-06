@@ -45,17 +45,22 @@ curves.scale(1,-1);
 
 // Update all canvases with content based on the new values of the various parameters
 function refresh() {
+	// Reset canvases
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
+	// Get updated values from interactive controls
 	refAngle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
 	animate = document.getElementById("animate").checked;
 	if(animate) {
+		// Automatically step the phase if animation is running
 		refPhase = (refPhase + 0.01) % 1;
+		// Update phase label in interface with the new value
 		document.getElementById("phase-slider").value = refPhase;
 	} else {
-		// Needs to be explicitly converted to a number otherwise it is considered a string
+		// Get phase from slider. Needs to be explicitly converted to a number,
+		// otherwise it is considered a string
 		refPhase = Number(document.getElementById("phase-slider").value);
 		// Timeout has to be cleared when ceasing animation,
 		// otherwise there's an extra iteration after the last step (I don't know why)
@@ -64,14 +69,16 @@ function refresh() {
 			animateTimeoutID = 0;
 		}
 	}
+	// Update the diagram canvas with the updated content
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
+	// Update the hologram and the curves canvases.
 	paintHologram();
-	// Update the text with the current slider values
+	// Update the interface labels with the current slider values
 	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
 	document.getElementById("phase-text").textContent = ' +' + Math.round(100*refPhase) +'%';
-	// animate
+	// Schedule next call of refresh()
 	if(animate) {
 		animateTimeoutID = window.setTimeout(refresh, 10);
 	}
