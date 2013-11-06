@@ -11,7 +11,7 @@ var diagramCanvas = document.getElementById("diagram"),
     diagramRadius = distanceToOrigin(dw, dh) / 2,
     hw = hologramCanvas.width, hh = hologramCanvas.height,
     cw = curvesCanvas.width,   ch = curvesCanvas.height,
-    arrowBoxSize = dw < dh? dw/5 : dh/5;
+    arrowBoxSize = Math.round(dw < dh? dw/5 : dh/5);
 // Define shortcuts to make code more readable and less repetitive
 var tau = Math.PI*2,
     deg2rad = tau/360;
@@ -100,8 +100,8 @@ function drawPlanarWaveDirectionBox() {
 
 	diagram.fillStyle   = "White";
 	diagram.strokeStyle = "Black";
-	diagram.fillRect(  -dw/2,   -dh,   arrowBoxSize, arrowBoxSize);
-	diagram.strokeRect(-dw/2, -dh, arrowBoxSize, arrowBoxSize)
+	diagram.fillRect(  -dw/2-1, -dh-1, arrowBoxSize, arrowBoxSize);
+	diagram.strokeRect(-dw/2-1, -dh-1, arrowBoxSize, arrowBoxSize);
 
 	// center the coordinate system in the box
 	diagram.translate(-dw/2 + arrowBoxSize/2, -dh + arrowBoxSize/2);
