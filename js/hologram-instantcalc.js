@@ -50,7 +50,7 @@ function refresh() {
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
-	drawHologram();
+	paintHologram();
 	// Update the text with the current slider values
 	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
 }
@@ -197,7 +197,7 @@ function drawCircularWaves() {
 // Calculate the intensity values for each wave (including the reference wave),
 // obtain the interference (sum) values for each hologram pixel
 // and paint them
-function drawHologram() {
+function paintHologram() {
 	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],

@@ -67,7 +67,7 @@ function refresh() {
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
-	drawHologram();
+	paintHologram();
 	// Update the text with the current slider values
 	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
 	document.getElementById("phase-text").textContent = ' +' + Math.round(100*refPhase) +'%';
@@ -219,7 +219,7 @@ function drawCircularWaves() {
 // Calculate the intensity values for each wave (including the reference wave),
 // obtain the interference (sum) values for each hologram pixel
 // and paint them
-function drawHologram() {
+function paintHologram() {
 	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad ),
 	    // Count how many phase states we have already calculated hologram values for
 	    // adapted from http://stackoverflow.com/q/6265940/
