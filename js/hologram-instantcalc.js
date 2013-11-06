@@ -43,6 +43,8 @@ function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
+	hologramValues = Array(hw);
+	maxIntensity = 0;
 	refAngle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
 	drawPlanarWave();
@@ -286,7 +288,7 @@ function addPoint() {
 	document.getElementById("lessPts").disabled = false;
 	points.push( generateNewPoint() );
 	numWaves++;
-	newHologram();
+	refresh();
 }
 
 // Remove the last point of the object
@@ -294,14 +296,6 @@ function removePoint() {
 	points.pop();
 	document.getElementById("lessPts").disabled = (points.length == 0);
 	numWaves--;
-	newHologram();
-}
-
-// Reset cumulative hologram because conditions have changed
-function newHologram() {
-//	phaseSweep = Array(50);
-	hologramValues = Array(hw);
-	maxIntensity = 0;
 	refresh();
 }
 
