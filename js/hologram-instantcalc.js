@@ -45,8 +45,6 @@ function refresh() {
 	curves.clearRect(-cw/2, 0, cw, ch);
 	refAngle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
-	// Timeout has to be cleared when ceasing animation,
-	// otherwise there's an extra iteration after the last step (I don't know why)
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
