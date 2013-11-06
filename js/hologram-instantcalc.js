@@ -17,12 +17,13 @@ var tau = Math.PI*2,
     deg2rad = tau/360;
 // Define properties that affect the hologram itself
 var wavLen = 50,
-    refAngle = document.getElementById("angle-slider").value,
+    refAngle = 0,
     points = [
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
     ],
-    hologramValues = Array(hw);
+    hologramValues = Array(hw),
+    horizCycleLength;
 // Variables to control the appearance and behavior of the visualization
 var displayCurves = false;
 // Auxiliary variables
@@ -45,14 +46,11 @@ function refresh() {
 	curves.clearRect(-cw/2, 0, cw, ch);
 	hologramValues = Array(hw);
 	maxIntensity = 0;
-	refAngle = document.getElementById("angle-slider").value;
 	displayCurves = document.getElementById("show-curves").checked;
 	drawPlanarWave();
 	drawCircularWaves();
 	drawPlanarWaveDirectionBox();
 	paintHologram();
-	// Update the text with the current slider values
-	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
 }
 
 // Draw the planar (reference) wave's wavefronts in the diagram canvas
@@ -198,7 +196,7 @@ function drawCircularWaves() {
 // obtain the interference (sum) values for each hologram pixel
 // and paint them
 function paintHologram() {
-	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
+	// Scan each pixel-wide column of the hologram
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],
 		    totalIntensity = 0,
@@ -215,7 +213,7 @@ function paintHologram() {
 		//   from there, while the coordinate system is rotated around (0,0))
 		//   See (handmade for now) diagram for explanation of the derivation
 		//   of the formula below. TODO: describe it textually as well.
-//		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength ) );
+		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength ) );
 		// Draw the intensity profile curve for the reference wave
 		if (displayCurves) {
 			drawIntensityCurve(points.length, holo_x, totalIntensity);
@@ -296,6 +294,19 @@ function removePoint() {
 	points.pop();
 	document.getElementById("lessPts").disabled = (points.length == 0);
 	numWaves--;
+	refresh();
+}
+
+// Update angle of reference wave
+function setRefAngle(){
+	// Get the current angle
+	refAngle = document.getElementById("angle-slider").value;
+	// Update the angle label with the current slider value
+	document.getElementById("angle-text").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
+	// Calculate length of a cycle of the reference wave
+	// in the direction the hologram is set up (horizontal)
+	horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
+	// Update the canvases
 	refresh();
 }
 
