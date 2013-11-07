@@ -200,6 +200,8 @@ function drawCircularWaves() {
 function paintHologram() {
 	// Scan each pixel-wide column of the hologram
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
+		// Create array to hold individual wave values
+		// so we can graph them individually if desired
 		var perWaveIntensity = [],
 		    totalIntensity = 0;
 
