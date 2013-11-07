@@ -22,13 +22,11 @@ var wavLen = 50,
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
     ],
-    hologramValues = Array(hw),
     horizCycleLength;
 // Variables to control the appearance and behavior of the visualization
 var displayCurves = false;
 // Auxiliary variables
-var numWaves = points.length + 1, // one wave per point source, plus the reference wave
-	maxIntensity = 0;
+var numWaves = points.length + 1; // one wave per point source, plus the reference wave
 
 // Center coordinate origin horizontally for both canvases
 diagram.translate(dw/2, 0);
@@ -45,8 +43,6 @@ function refresh() {
 	diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw, hh);
 	curves.clearRect(-cw/2, 0, cw, ch);
-	hologramValues = Array(hw);
-	maxIntensity = 0;
 	// Check whether to display individual intensity curves for each wave.
 	// This affects both the diagram and curves canvases.
 	// Note: the curves canvas is filled in paintHologram().
@@ -205,12 +201,7 @@ function paintHologram() {
 	// Scan each pixel-wide column of the hologram
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		var perWaveIntensity = [],
-		    totalIntensity = 0,
-		    // holo_index is used for the hologramValues array.			
-		    // Its value is calculated to make it go from 0 to hw
-		    // rather than from -hw/2 to hw/2
-		    // Otherwise calculating its maximum would be cumbersome.
-		    holo_index = holo_x+hw/2;
+		    totalIntensity = 0;
 
 		// Calculate the intensity of the reference wave.
 		//   We know — because we define it that way in drawPlanarWave() —
@@ -243,32 +234,21 @@ function paintHologram() {
 		// Also, take the absolute value, since what we care about is
 		// whether there is wave activity at this point, and by how much
 		var normalizedIntensity = Math.abs(totalIntensity/numWaves);
-		maxIntensity = Math.max(maxIntensity, normalizedIntensity);
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
 		hologram.fillRect(holo_x, 0, 1, hh/2);
 
 		// Calculate values for cumulative (final) hologram
-//		if( !phaseSweep[ Math.round(refPhase*phaseSteps) ] ) {
-//			hologramValues[holo_index] = (hologramValues[holo_index]||0) + normalizedIntensity/phaseSteps;
-//		}
-		// Gradually normalize intensity of cumulative hologram
-		// We make it grow at a pace of 1/phaseSteps,
-		// which is the maximum pace it could grow in the previous stage
-		// (i.e. when each phase value was being accumulated,
-		// assuming totalIntensity would total 1 for any given pixel)
-//		else if(filledPhases == phaseSteps && maxHologramValue < maxIntensity-1/phaseSteps) {
-//			hologramValues[holo_index] *= growthRatio;
-//		}
+//		...
 		// Paint the calculated intensity into the current (cumulative) hologram pixel
-		hologram.fillStyle = unitFractionToHexColor(hologramValues[holo_index]);
+//		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
 		hologram.fillRect(holo_x, hh/2, 1, hh);
 
 		// Draw cumulative version of main intensity curve
 		// Two versions are drawn to account for its axial symmetry
-		drawIntensityCurve(-2, holo_x, hologramValues[holo_index], "#ccc");
-		drawIntensityCurve(-2, holo_x,-hologramValues[holo_index], "#ccc");
+		drawIntensityCurve(-2, holo_x, normalizedIntensity, "#ccc");
+		drawIntensityCurve(-2, holo_x,-normalizedIntensity, "#ccc");
 		// Draw instantaneous version of main intensity curve
 		drawIntensityCurve(-1, holo_x, totalIntensity/numWaves, "gray");
 	}
