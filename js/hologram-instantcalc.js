@@ -1,5 +1,9 @@
 "use strict"
 
+/*============================================================================*/
+/*                 INITIALIZE VARIABLES AND SETUP CANVASES                    */
+/*============================================================================*/
+
 // Get canvas-related values needed for their manipulation
 var diagramCanvas = document.getElementById("diagram"),
     diagram = diagramCanvas.getContext('2d'),
@@ -37,6 +41,10 @@ diagram.scale(1,-1);
 hologram.scale(1,-1);
 curves.scale(1,-1);
 
+/*============================================================================*/
+/*                         MASTER UPDATE FUNCTION                             */
+/*============================================================================*/
+
 // Update all canvases with content based on the new values of the various parameters
 function refresh() {
 	// Reset canvases and hologram values
@@ -54,6 +62,10 @@ function refresh() {
 	// Update the hologram and the curves canvases.
 	paintHologram();
 }
+
+/*============================================================================*/
+/*          FUNCTIONS TO DRAW THE VARIOUS ELEMENTS                         */
+/*============================================================================*/
 
 // Draw the planar (reference) wave's wavefronts in the diagram canvas
 function drawPlanarWave() {
@@ -89,7 +101,8 @@ function drawPlanarWave() {
 	diagram.restore();
 }
 
-// Show a small box with an arrow showing the propagation direction of the reference wave
+// Draw a small box in the corner of the diagram canvas,
+// containing an arrow showing the propagation direction of the reference wave
 function drawPlanarWaveDirectionBox() {
 	
 	diagram.save();
@@ -254,11 +267,40 @@ function paintHologram() {
 		// Draw instantaneous version of main intensity curve
 		drawIntensityCurve(-1, holo_x, totalIntensity/numWaves, "gray");
 	}
-	// Mark this phase value as done, so it isn't calculated again
-//	phaseSweep[ Math.round(refPhase*phaseSteps) ] = true;
 }
 
-// ## AUXILIARY FUNCTIONS ##
+// Draw a point (or rectangle) in the "curves" canvas,
+// corresponding to a given wave's intensity at that point.
+// As the hologram is scanned by the hologram drawing code,
+// this gets called for each hologram pixel,
+// and the points end up forming a intensity curve,
+// while the rectangles form an area (i.e a filled curve).
+function drawIntensityCurve(waveIndex, xCoord, intensity, color) {
+	if( waveIndex < 0 ) {
+		// Draw a filled area for the combined intensity curve and the cumulative one.
+		// The values are divided by two to convert the range from [-1;1] to [-0.5;0.5]
+		// This allows them to stem from the middle of the canvas up or downwards
+		// without overflowing. The inversion is to match the one in the else clause.
+		intensity = -intensity/2;
+		curves.fillStyle = color || "black";
+		curves.fillRect(xCoord, ch/2, 1, ch*intensity);
+	} else {
+		// Spread the colors around the hue circle according to the number of
+		// points we have. The reference wave keeps the 360º (red)
+		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
+		// Normalize intensity values from cosine's [-1;1] range to [0;1]
+		// Also invert it for display, to make the crests of the curves canvas
+		// visually touch the crests as seen from top-down in the diagram canvas
+		intensity = 1-(intensity+1)/2;
+		curves.beginPath();
+		curves.arc(xCoord, ch*intensity, 0.75, 0, tau, true);
+		curves.fill();
+	}
+}
+
+/*============================================================================*/
+/*                           AUXILIARY FUNCTIONS                              */
+/*============================================================================*/
 
 // Create a new randomly positioned object point
 function generateNewPoint() {
@@ -306,35 +348,6 @@ function unitFractionToHexColor(val) {
 	if (greyHexValue.length==1) greyHexValue = '0' + greyHexValue;
 	// prefix with number sign and repeat the hex string 3 times (for RGB)
 	return "#" + Array(4).join(greyHexValue);
-}
-
-// Draw a point (or rectangle) in the "curves" canvas,
-// corresponding to a given wave's intensity at that point.
-// As the hologram is scanned by the hologram drawing code,
-// this gets called for each hologram pixel,
-// and the points end up forming a intensity curve,
-// while the rectangles form an area (i.e a filled curve).
-function drawIntensityCurve(waveIndex, xCoord, intensity, color) {
-	if( waveIndex < 0 ) {
-		// Draw a filled area for the combined intensity curve and the cumulative one.
-		// The values are divided by two to convert the range from [-1;1] to [-0.5;0.5]
-		// This allows them to stem from the middle of the canvas up or downwards
-		// without overflowing. The inversion is to match the one in the else clause.
-		intensity = -intensity/2;
-		curves.fillStyle = color || "black";
-		curves.fillRect(xCoord, ch/2, 1, ch*intensity);
-	} else {
-		// Spread the colors around the hue circle according to the number of
-		// points we have. The reference wave keeps the 360º (red)
-		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
-		// Normalize intensity values from cosine's [-1;1] range to [0;1]
-		// Also invert it for display, to make the crests of the curves canvas
-		// visually touch the crests as seen from top-down in the diagram canvas
-		intensity = 1-(intensity+1)/2;
-		curves.beginPath();
-		curves.arc(xCoord, ch*intensity, 0.75, 0, tau, true);
-		curves.fill();
-	}
 }
 
 // Calculate a distance using the Euclidean distance formula
