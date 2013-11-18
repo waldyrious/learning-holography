@@ -26,6 +26,7 @@ var wavLen = 50,
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
     ],
+	k = tau/wavLen,
     horizCycleLength;
 // Variables to control the appearance and behavior of the visualization
 var displayCurves = false;
@@ -240,15 +241,19 @@ function paintHologram() {
 			drawIntensityCurve(points.length, holo_x, totalIntensity);
 		}
 
-		// Calculate the intensity of the current point's object wave
-		for (var pt = 0; pt < points.length; pt++) {
-			var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
-			perWaveIntensity[pt] = Math.cos((radius - points[pt].phase) * tau/wavLen);
-			totalIntensity += perWaveIntensity[pt];
+		// Calculate the intensity of the object wave at the current hologram pixel
+		for (var pt1 = 0; pt1 < points.length; pt1++) {
+			var radius1 = distanceToOrigin(holo_x-points[pt1].x, points[pt1].y);
+			for (var pt2 = 0; pt2 < points.length; pt2++) {
+				var radius2 = distanceToOrigin(holo_x-points[pt2].x, points[pt2].y);
+				var phaseDiff = Math.cos((radius1 - radius2) * k)/2;
+				totalIntensity += phaseDiff;
+			}
 			// Draw the intensity profile curve for the current wave
 			if (displayCurves) {
+				perWaveIntensity[pt1] = Math.cos((radius1 - points[pt1].phase) * k);
 				// Normalize intensity values from cosine's [-1;1] range to [0;1]
-				drawIntensityCurve(pt, holo_x, perWaveIntensity[pt] );
+				drawIntensityCurve(pt1, holo_x, perWaveIntensity[pt1] );
 			}
 		}
 
@@ -261,13 +266,7 @@ function paintHologram() {
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
-		hologram.fillRect(holo_x, 0, 1, hh/2);
-
-		// Calculate values for cumulative (final) hologram
-//		...
-		// Paint the calculated intensity into the current (cumulative) hologram pixel
-//		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
-		hologram.fillRect(holo_x, hh/2, 1, hh);
+		hologram.fillRect(holo_x, 0, 1, hh);
 
 		// Draw cumulative version of main intensity curve
 		// Two versions are drawn to account for its axial symmetry
