@@ -249,8 +249,17 @@ function paintHologram() {
 		//   that the the reference wave has zero phase at x=0
 		//   (since we draw a horizontal line at y=0 and the others growing
 		//   from there, while the coordinate system is rotated around (0,0))
-		//   See (handmade for now) diagram for explanation of the derivation
-		//   of the formula below. TODO: describe it textually as well.
+		//
+		//   |<-- horizCycleLength -->|            The intensity at holo_x==0
+		// ============================= hologram  will be cos(refPhase) = cos(0).
+		//   `-. ) refAngle          /   plane     As holo_x progresses within
+		//      `-.                 /              horizCycleLength, the intensity
+		//         `-.             /               will gradually make the cosine curve
+		// wavefront  `-.         / wavLen         until it reaches cos(tau) == cos(0).
+		// of reference  `-.     /             So we calculate the currently covered
+		//           wave   `-. /              fraction of horizCycleLength,
+		//                     `               then multiply the cycle number by tau
+		//                                     to get the result in radians, for cosine.
 		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
 		// Draw the intensity profile curve for the reference wave
 		if (displayCurves) {
