@@ -413,7 +413,7 @@ function update() {
 
 // Reset cumulative hologram because conditions have changed
 function newHologram() {
-	phaseSweep = Array(50);
+	phaseSweep = Array(phaseSteps);
 	hologramValues = Array(hw);
 	maxIntensity = 0;
 	update();
