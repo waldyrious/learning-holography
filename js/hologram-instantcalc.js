@@ -33,14 +33,16 @@ var displayCurves = false;
 // Auxiliary variables
 var numWaves = points.length + 1; // one wave per point source, plus the reference wave
 
-// Center coordinate origin horizontally for both canvases
-diagram.translate(dw/2, 0);
-hologram.translate(dw/2, hh);
-curves.translate(cw/2, ch);
-// Make the y axis grow upwards
-diagram.scale(1,-1);
+// Center coordinate origin horizontally for all canvases
+// And place it in the bottom of the canvas
+// for the hologram and the curves canvases
+ diagram.translate(dw/2, 0);
+hologram.translate(hw/2, hh);
+  curves.translate(cw/2, ch);
+// Reverse the y axis so it grows upwards
+ diagram.scale(1,-1);
 hologram.scale(1,-1);
-curves.scale(1,-1);
+  curves.scale(1,-1);
 
 /*============================================================================*/
 /*                         MASTER UPDATE FUNCTION                             */
@@ -48,12 +50,12 @@ curves.scale(1,-1);
 
 // Update all canvases with content based on the new values of the various parameters
 function refresh() {
-	// Reset canvases and hologram values
-	diagram.clearRect(-dw/2, 0, dw, -dh);
-	hologram.clearRect(-hw/2, 0, hw, hh);
-	curves.clearRect(-cw/2, 0, cw, ch);
-	// Check whether to display individual intensity curves for each wave.
-	// This affects both the diagram and curves canvases.
+	// Reset canvases
+	 diagram.clearRect(-dw/2, 0, dw, -dh);
+	hologram.clearRect(-hw/2, 0, hw,  hh);
+	  curves.clearRect(-cw/2, 0, cw,  ch);
+	// Check whether to display individual amplitude curves for each wave.
+	// This affects both the diagram and the curves canvases.
 	// Note: the curves canvas is filled in paintHologram().
 	displayCurves = document.getElementById("show-curves").checked;
 	// Update the diagram canvas with the updated content
@@ -65,26 +67,35 @@ function refresh() {
 }
 
 /*============================================================================*/
-/*          FUNCTIONS TO DRAW THE VARIOUS ELEMENTS                         */
+/*             FUNCTIONS TO DRAW THE VARIOUS ELEMENTS                         */
 /*============================================================================*/
 
 // Draw the planar (reference) wave's wavefronts in the diagram canvas
 function drawPlanarWave() {
 
+	// Store current transformations to restore later
 	diagram.save();
 
-	// If user chooses to show the intensity profiles
+	// If user chooses to show the amplitude profiles
 	// (which implies color-coding the curves and the waves to match them)
 	// paint as red, using the HSL format to match the code for the other waves
 	// Otherwise paint as "silver" (light grey)
 	diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Silver";
 
-	// the angle is inverted to make it more intuitive to manipulate
+	// Rotate the reference frame so we can draw the planar wavefronts as horizontal lines
+	// This rotation will be reversed once we're done drawing the reference wave.
+	// Normally the canvas rotation occurs in the clockwise direction,
+	// but since we reversed the y axis to make it point up,
+	// we need to invert the angle if we want a positive angle to rotate clockwise.
+	// (Technically this wouldn't matter, but since we'll control the angle with a slider
+	// it is more intuitive this way.)
 	diagram.rotate(-refAngle*deg2rad);
 
+	// Start storing the coordinates of the lines to be traced
+	// as a path composed of several segments
 	diagram.beginPath();
 
-	// Draw a set of horizontal lines (which, in a rotated coordinate system,
+	// Draw a set of horizontal lines (which, in our rotated coordinate system,
 	// end up becoming rotated parallel lines)
 	for (var i=0; i<diagramRadius*2; i+=wavLen) {
 		// Draw horizontal lines upwards from the center of the coordinate system
@@ -97,8 +108,10 @@ function drawPlanarWave() {
 		diagram.lineTo( diagramRadius*2,-i+wavLen);
 	}
 
+	// Actually paint the path described above
 	diagram.stroke();
 
+	// Restore the unrotated reference frame
 	diagram.restore();
 }
 
@@ -106,6 +119,8 @@ function drawPlanarWave() {
 // containing an arrow showing the propagation direction of the reference wave
 function drawPlanarWaveDirectionBox() {
 	
+	// Store current transformations and fill/stroke properties,
+	// to be restored to normal after we're done.
 	diagram.save();
 
 	diagram.fillStyle   = "White";
@@ -128,6 +143,7 @@ function drawPlanarWaveDirectionBox() {
 	diagram.lineTo( 3, arrowBoxSize/3 - 7);
 	diagram.stroke();
 
+	// Restore the canvas' reference frame and fill/stroke properties
 	diagram.restore();
 }
 
@@ -208,9 +224,9 @@ function drawCircularWaves() {
 	diagram.restore();
 }
 
-// Calculate the intensity values for each wave (including the reference wave),
-// obtain the interference (sum) values for each hologram pixel
-// and paint them
+// Calculate the amplitude values for each wave (including the reference wave),
+// obtain the interference values (sum of amplitudes) for each hologram pixel,
+// square it to get the intensity, and paint them
 function paintHologram() {
 	// Scan each pixel-wide column of the hologram
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
@@ -219,18 +235,18 @@ function paintHologram() {
 		var perWaveIntensity = [],
 		    totalIntensity = 0;
 
-		// Calculate the intensity of the reference wave.
+		// Calculate the amplitude of the reference wave at this pixel.
 		//   We know — because we define it that way in drawPlanarWave() —
 		//   that the the reference wave has zero phase at x=0
 		//   (since we draw a horizontal line at y=0 and the others growing
 		//   from there, while the coordinate system is rotated around (0,0))
 		//
-		//   |<-- horizCycleLength -->|            The intensity at holo_x==0
+		//   |<-- horizCycleLength -->|            The amplitude at x=0
 		// ============================= hologram  will be cos(refPhase) = cos(0).
-		//   `-. ) refAngle          /   plane     As holo_x progresses within
-		//      `-.                 /              horizCycleLength, the intensity
+		//   `-. ) refAngle          /   plane     As x progresses within
+		//      `-.                 /              horizCycleLength, the amplitude
 		//         `-.             /               will gradually make the cosine curve
-		// wavefront  `-.         / wavLen         until it reaches cos(tau) == cos(0).
+		// wavefront  `-.         / wavLen         until it reaches cos(tau) = cos(0).
 		// of reference  `-.     /             So we calculate the currently covered
 		//           wave   `-. /              fraction of horizCycleLength,
 		//                     `               then multiply the cycle number by tau
@@ -252,8 +268,7 @@ function paintHologram() {
 			// Draw the intensity profile curve for the current wave
 			if (displayCurves) {
 				perWaveIntensity[pt1] = Math.cos((radius1 - points[pt1].phase) * k);
-				// Normalize intensity values from cosine's [-1;1] range to [0;1]
-				drawIntensityCurve(pt1, holo_x, perWaveIntensity[pt1] );
+				drawIntensityCurve(pt1, holo_x, perWaveIntensity[pt1]);
 			}
 		}
 
@@ -369,4 +384,3 @@ Array.prototype.max = function () {
     return ( p > v ? p : v );
   });
 }
-

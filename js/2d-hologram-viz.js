@@ -1,5 +1,9 @@
 "use strict"
 
+/*============================================================================*/
+/*                 INITIALIZE VARIABLES AND SETUP CANVASES                    */
+/*============================================================================*/
+
 // Get canvas-related values needed for their manipulation
 var diagramCanvas = document.getElementById("diagram"),
     diagram = diagramCanvas.getContext('2d'),
@@ -34,23 +38,32 @@ var numWaves = points.length + 1, // one wave per point source, plus the referen
     phaseSweep = Array(phaseSteps),
 	maxIntensity = 0;
 
-// Center coordinate origin horizontally for both canvases
-diagram.translate(dw/2, 0);
-hologram.translate(dw/2, hh);
-curves.translate(cw/2, ch);
-// Make the y axis grow upwards
-diagram.scale(1,-1);
+// Center coordinate origin horizontally for all canvases
+// And place it in the bottom of the canvas
+// for the hologram and the curves canvases
+ diagram.translate(dw/2, 0);
+hologram.translate(hw/2, hh);
+  curves.translate(cw/2, ch);
+// Reverse the y axis so it grows upwards
+ diagram.scale(1,-1);
 hologram.scale(1,-1);
-curves.scale(1,-1);
+  curves.scale(1,-1);
+
+/*============================================================================*/
+/*                         MASTER UPDATE FUNCTION                             */
+/*============================================================================*/
 
 // Update all canvases with content based on the new values of the various parameters
 function refresh() {
 	// Reset canvases
-	diagram.clearRect(-dw/2, 0, dw, -dh);
-	hologram.clearRect(-hw/2, 0, hw, hh);
-	curves.clearRect(-cw/2, 0, cw, ch);
+	 diagram.clearRect(-dw/2, 0, dw, -dh);
+	hologram.clearRect(-hw/2, 0, hw,  hh);
+	  curves.clearRect(-cw/2, 0, cw,  ch);
 	// Get updated values from interactive controls
 	refAngle = document.getElementById("angle-slider").value;
+	// Check whether to display individual amplitude curves for each wave.
+	// This affects both the diagram and the curves canvases.
+	// Note: the curves canvas is filled in paintHologram().
 	displayCurves = document.getElementById("show-curves").checked;
 	animate = document.getElementById("animate").checked;
 	if(animate) {
@@ -84,9 +97,14 @@ function refresh() {
 	}
 }
 
+/*============================================================================*/
+/*             FUNCTIONS TO DRAW THE VARIOUS ELEMENTS                         */
+/*============================================================================*/
+
 // Draw the planar (reference) wave's wavefronts in the diagram canvas
 function drawPlanarWave() {
 
+	// Store current transformations to restore later
 	diagram.save();
 
 	// If user chooses to show the amplitude profiles
@@ -95,12 +113,20 @@ function drawPlanarWave() {
 	// Otherwise paint as "silver" (light grey)
 	diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Silver";
 
-	// the angle is inverted to make it more intuitive to manipulate
+	// Rotate the reference frame so we can draw the planar wavefronts as horizontal lines
+	// This rotation will be reversed once we're done drawing the reference wave.
+	// Normally the canvas rotation occurs in the clockwise direction,
+	// but since we reversed the y axis to make it point up,
+	// we need to invert the angle if we want a positive angle to rotate clockwise.
+	// (Technically this wouldn't matter, but since we'll control the angle with a slider
+	// it is more intuitive this way.)
 	diagram.rotate(-refAngle*deg2rad);
 
+	// Start storing the coordinates of the lines to be traced
+	// as a path composed of several segments
 	diagram.beginPath();
 
-	// Draw a set of horizontal lines (which, in a rotated coordinate system,
+	// Draw a set of horizontal lines (which, in our rotated coordinate system,
 	// end up becoming rotated parallel lines)
 	for (var i=0; i<diagramRadius*2; i+=wavLen) {
 		// Draw horizontal lines upwards from the center of the coordinate system
@@ -113,14 +139,19 @@ function drawPlanarWave() {
 		diagram.lineTo( diagramRadius*2,-i+refPhase*wavLen);
 	}
 
+	// Actually paint the path described above
 	diagram.stroke();
 
+	// Restore the unrotated reference frame
 	diagram.restore();
 }
 
-// Show a small box with an arrow showing the propagation direction of the reference wave
+// Draw a small box in the corner of the diagram canvas,
+// containing an arrow showing the propagation direction of the reference wave
 function drawPlanarWaveDirectionBox() {
 	
+	// Store current transformations and fill/stroke properties,
+	// to be restored to normal after we're done.
 	diagram.save();
 
 	diagram.fillStyle   = "White";
@@ -143,6 +174,7 @@ function drawPlanarWaveDirectionBox() {
 	diagram.lineTo( 3, arrowBoxSize/3 - 7);
 	diagram.stroke();
 
+	// Restore the canvas' reference frame and fill/stroke properties
 	diagram.restore();
 }
 
@@ -318,7 +350,35 @@ function paintHologram() {
 	phaseSweep[ Math.round(refPhase*phaseSteps) ] = true;
 }
 
-// ## AUXILIARY FUNCTIONS ##
+// Draw a point (or rectangle) in the "curves" canvas,
+// corresponding to a given wave's amplitude at that point.
+// As the hologram is scanned by the hologram drawing code,
+// this gets called for each hologram pixel,
+// and the points end up forming an amplitude curve,
+// while the rectangles form an area (i.e a filled curve).
+function drawCurve(waveIndex, xCoord, value, color) {
+	if( waveIndex < 0 ) {
+		// Draw a filled area if dealing with intensity values
+		// (both instantaneous and cumulative).
+		curves.fillStyle = color || "black";
+		curves.fillRect(xCoord, 0, 1, ch*value);
+	} else {
+		// Spread the colors around the hue circle according to the number of
+		// points we have. The reference wave keeps the 360º (red)
+		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
+		// Normalize values from cosine's [-1;1] range to [0;1]
+		// Also invert it for display, to make the crests of the curves canvas
+		// visually touch the crests as seen from top-down in the diagram canvas
+		value = 1-(value+1)/2;
+		curves.beginPath();
+		curves.arc(xCoord, ch*value, 0.75, 0, tau, true);
+		curves.fill();
+	}
+}
+
+/*============================================================================*/
+/*                           AUXILIARY FUNCTIONS                              */
+/*============================================================================*/
 
 // Create a new randomly positioned object point
 function generateNewPoint() {
@@ -366,32 +426,6 @@ function unitFractionToHexColor(val) {
 	if (greyHexValue.length==1) greyHexValue = '0' + greyHexValue;
 	// prefix with number sign and repeat the hex string 3 times (for RGB)
 	return "#" + Array(4).join(greyHexValue);
-}
-
-// Draw a point (or rectangle) in the "curves" canvas,
-// corresponding to a given wave's amplitude at that point.
-// As the hologram is scanned by the hologram drawing code,
-// this gets called for each hologram pixel,
-// and the points end up forming an amplitude curve,
-// while the rectangles form an area (i.e a filled curve).
-function drawCurve(waveIndex, xCoord, value, color) {
-	if( waveIndex < 0 ) {
-		// Draw a filled area if dealing with intensity values
-		// (both instantaneous and cumulative).
-		curves.fillStyle = color || "black";
-		curves.fillRect(xCoord, 0, 1, ch*value);
-	} else {
-		// Spread the colors around the hue circle according to the number of
-		// points we have. The reference wave keeps the 360º (red)
-		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
-		// Normalize values from cosine's [-1;1] range to [0;1]
-		// Also invert it for display, to make the crests of the curves canvas
-		// visually touch the crests as seen from top-down in the diagram canvas
-		value = 1-(value+1)/2;
-		curves.beginPath();
-		curves.arc(xCoord, ch*value, 0.75, 0, tau, true);
-		curves.fill();
-	}
 }
 
 // Calculate a distance using the Euclidean distance formula
