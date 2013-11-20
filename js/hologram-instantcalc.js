@@ -21,17 +21,19 @@ var tau = Math.PI*2,
     deg2rad = tau/360;
 // Define properties that affect the hologram itself
 var wavLen = 50,
-    refAngle = 0,
+    refWave = document.getElementById("ref-wave").checked,
+    refAngle = 0, // initialized in setRefAngle() wich is called on body onload
     points = [
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
     ],
 	k = tau/wavLen,
-    horizCycleLength;
+    horizCycleLength,
+    // Number of waves being processed.
+    // One wave per point source, plus the reference wave, if enabled.
+    numWaves = points.length + refWave;
 // Variables to control the appearance and behavior of the visualization
 var displayCurves = false;
-// Auxiliary variables
-var numWaves = points.length + 1; // one wave per point source, plus the reference wave
 
 // Center coordinate origin horizontally for all canvases
 // And place it in the bottom of the canvas
@@ -58,6 +60,10 @@ function refresh() {
 	// This affects both the diagram and the curves canvases.
 	// Note: the curves canvas is filled in paintHologram().
 	displayCurves = document.getElementById("show-curves").checked;
+	// Check whether to include the reference wave in the hologram or not
+	refWave = document.getElementById("ref-wave").checked;
+	// Update numWaves accordingly
+	numWaves = points.length + refWave;
 	// Update the diagram canvas with the updated content
 	drawPlanarWave();
 	drawCircularWaves();
@@ -76,11 +82,13 @@ function drawPlanarWave() {
 	// Store current transformations to restore later
 	diagram.save();
 
-	// If user chooses to show the amplitude profiles
-	// (which implies color-coding the curves and the waves to match them)
-	// paint as red, using the HSL format to match the code for the other waves
-	// Otherwise paint as "silver" (light grey)
-	diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Silver";
+	// If the reference wave is being included in the hologram
+	// and the user chooses to show the amplitude profiles
+	// (which implies color-coding the curves and the waves to match them),
+	// then paint the reference wave as red
+	// (using the HSL format to match the code for the other waves).
+	// Otherwise, paint as "silver" (light grey)
+	diagram.strokeStyle = (refWave && displayCurves) ? "hsl(0, 100%, 80%)" : "Silver";
 
 	// Rotate the reference frame so we can draw the planar wavefronts as horizontal lines
 	// This rotation will be reversed once we're done drawing the reference wave.
@@ -128,13 +136,19 @@ function drawPlanarWaveDirectionBox() {
 	diagram.fillRect(  -dw/2-1, -dh-1, arrowBoxSize, arrowBoxSize);
 	diagram.strokeRect(-dw/2-1, -dh-1, arrowBoxSize, arrowBoxSize);
 
+	// If the reference wave is being included in the hologram
+	// and the user chooses to show the amplitude profiles
+	// (which implies color-coding the curves and the waves to match them),
+	// then paint the reference wave's arrow as red
+	// (using the HSL format to match the code for the other waves).
+	// Otherwise, paint as "silver" (light grey)
+	if (refWave && displayCurves) { diagram.strokeStyle = "hsl(0, 100%, 80%)"; }
+
 	// center the coordinate system in the box
 	diagram.translate(-dw/2 + arrowBoxSize/2, -dh + arrowBoxSize/2);
 	// rotate the coordinate system
 	diagram.rotate(-refAngle*deg2rad);
-
 	// Draw a vertical arrow
-	if (displayCurves) { diagram.strokeStyle = "hsl(0, 100%, 80%)"; }
 	diagram.beginPath();
 	diagram.moveTo( 0,-arrowBoxSize/3);
 	diagram.lineTo( 0, arrowBoxSize/3);
@@ -235,26 +249,28 @@ function paintHologram() {
 		var perWaveIntensity = [],
 		    totalIntensity = 0;
 
-		// Calculate the amplitude of the reference wave at this pixel.
-		//   We know — because we define it that way in drawPlanarWave() —
-		//   that the the reference wave has zero phase at x=0
-		//   (since we draw a horizontal line at y=0 and the others growing
-		//   from there, while the coordinate system is rotated around (0,0))
-		//
-		//   |<-- horizCycleLength -->|            The amplitude at x=0
-		// ============================= hologram  will be cos(refPhase) = cos(0).
-		//   `-. ) refAngle          /   plane     As x progresses within
-		//      `-.                 /              horizCycleLength, the amplitude
-		//         `-.             /               will gradually make the cosine curve
-		// wavefront  `-.         / wavLen         until it reaches cos(tau) = cos(0).
-		// of reference  `-.     /             So we calculate the currently covered
-		//           wave   `-. /              fraction of horizCycleLength,
-		//                     `               then multiply the cycle number by tau
-		//                                     to get the result in radians, for cosine.
-		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength ) );
-		// Draw the intensity profile curve for the reference wave
-		if (displayCurves) {
-			drawCurve(points.length, holo_x, totalIntensity);
+		if (refWave) {
+			// Calculate the amplitude of the reference wave at this pixel.
+			//   We know — because we define it that way in drawPlanarWave() —
+			//   that the the reference wave has zero phase at x=0
+			//   (since we draw a horizontal line at y=0 and the others growing
+			//   from there, while the coordinate system is rotated around (0,0))
+			//
+			//   |<-- horizCycleLength -->|            The amplitude at x=0
+			// ============================= hologram  will be cos(refPhase) = cos(0).
+			//   `-. ) refAngle          /   plane     As x progresses within
+			//      `-.                 /              horizCycleLength, the amplitude
+			//         `-.             /               will gradually make the cosine curve
+			// wavefront  `-.         / wavLen         until it reaches cos(tau) = cos(0).
+			// of reference  `-.     /             So we calculate the currently covered
+			//           wave   `-. /              fraction of horizCycleLength,
+			//                     `               then multiply the cycle number by tau
+			//                                     to get the result in radians, for cosine.
+			totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength ) );
+			// Draw the intensity profile curve for the reference wave
+			if (displayCurves) {
+				drawCurve(points.length, holo_x, totalIntensity);
+			}
 		}
 
 		// Calculate the intensity of the object wave at the current hologram pixel

@@ -28,6 +28,12 @@
 		<label for="show-curves">Amplitude curves: </label>
 		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="refresh()">
 		&emsp;
+		<!-- Control whether to include the reference wave in the hologram calculation. --
+		  -- (on by default). Note that even if this is turned off,                     --
+		  -- the reference wave is still used to generate the object waves.             -->
+		<label for="ref-wave">Reference wave: </label>
+		<input type="checkbox" name="ref-wave" id="ref-wave" autocomplete="off" onchange="refresh()">
+		&emsp;
 		<input type="button" id="lessPts" value="−" autocomplete="off" onclick="removePoint()">
 		points
 		<input type="button" id="lessPts" value="+" onclick="addPoint()">
