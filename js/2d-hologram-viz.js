@@ -244,18 +244,18 @@ function paintHologram() {
 		    // Otherwise calculating its maximum would be cumbersome.
 		    holo_index = holo_x+hw/2;
 
-		// Calculate the amplitude of the reference wave.
+		// Calculate the amplitude of the reference wave at this pixel.
 		//   We know — because we define it that way in drawPlanarWave() —
 		//   that the the reference wave has zero phase at x=0
 		//   (since we draw a horizontal line at y=0 and the others growing
 		//   from there, while the coordinate system is rotated around (0,0))
 		//
-		//   |<-- horizCycleLength -->|            The amplitude at holo_x==0
+		//   |<-- horizCycleLength -->|            The amplitude at x=0
 		// ============================= hologram  will be cos(refPhase) = cos(0).
-		//   `-. ) refAngle          /   plane     As holo_x progresses within
+		//   `-. ) refAngle          /   plane     As x progresses within
 		//      `-.                 /              horizCycleLength, the amplitude
 		//         `-.             /               will gradually make the cosine curve
-		// wavefront  `-.         / wavLen         until it reaches cos(tau) == cos(0).
+		// wavefront  `-.         / wavLen         until it reaches cos(tau) = cos(0).
 		// of reference  `-.     /             So we calculate the currently covered
 		//           wave   `-. /              fraction of horizCycleLength,
 		//                     `               then multiply the cycle number by tau
@@ -279,10 +279,11 @@ function paintHologram() {
 		}
 
 		// Divide by number of points (plus ref wave)
-		// to allow summing intensity contributions of all waves
-		// and still have the final intensity values range from 0 to 1
-		// Also, take the absolute value, since what we care about is
-		// whether there is wave activity at this point, and by how much
+		// to allow summing amplitude contributions of all waves
+		// and still have the final amplitude values range from 0 to 1
+		// Then, calculate the intensity as the square of the amplitude
+		// (intensity indicates whether there is wave activity at this point,
+		// and by how much). No need to normalize again since 1² = 1.
 		var intensity = Math.pow(totalAmplitude/numWaves,2);
 		maxIntensity = Math.max(maxIntensity, intensity);
 
