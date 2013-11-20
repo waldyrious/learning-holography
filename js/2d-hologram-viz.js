@@ -28,18 +28,18 @@ var wavLen = 50,
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
     ],
-    hologramValues = Array(hw);
-// Variables to control the appearance and behavior of the visualization
-var displayCurves = false,
-    animate = false;
-// Auxiliary variables
-var animateTimeoutID = 0,
-    phaseSteps = 1/document.getElementById("phase-slider").step,
-    phaseSweep = Array(phaseSteps),
+    hologramValues = Array(hw),
     maxIntensity = 0,
     // Number of waves being processed.
     // One wave per point source, plus the reference wave, if enabled.
     numWaves = points.length + refWave;
+// Variables to control the appearance and behavior of the visualization
+var displayCurves = false,
+    animate = false;
+// Animation-related variables
+var animateTimeoutID = 0,
+    phaseSteps = 1/document.getElementById("phase-slider").step,
+    phaseSweep = Array(phaseSteps);
 
 // Center coordinate origin horizontally for all canvases
 // And place it in the bottom of the canvas
