@@ -89,7 +89,7 @@ function drawPlanarWave() {
 
 	diagram.save();
 
-	// If user chooses to show the intensity profiles
+	// If user chooses to show the amplitude profiles
 	// (which implies color-coding the curves and the waves to match them)
 	// paint as red, using the HSL format to match the code for the other waves
 	// Otherwise paint as "silver" (light grey)
@@ -223,9 +223,9 @@ function drawCircularWaves() {
 	diagram.restore();
 }
 
-// Calculate the intensity values for each wave (including the reference wave),
-// obtain the interference (sum) values for each hologram pixel
-// and paint them
+// Calculate the amplitude values for each wave (including the reference wave),
+// obtain the interference values (sum of amplitudes) for each hologram pixel,
+// square it to get the intensity, and paint them
 function paintHologram() {
 	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad ),
 	    // Count how many phase states we have already calculated hologram values for
@@ -236,45 +236,45 @@ function paintHologram() {
 	    // the max value will correspond to the greatest increase, so we use it as a limit.
 	    growthRatio = (maxHologramValue+(1/phaseSteps)) / maxHologramValue;
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
-		var perWaveIntensity = [],
-		    totalIntensity = 0,
+		var perWaveAmplitude = [],
+		    totalAmplitude = 0,
 		    // holo_index is used for the hologramValues array.			
 		    // Its value is calculated to make it go from 0 to hw
 		    // rather than from -hw/2 to hw/2
 		    // Otherwise calculating its maximum would be cumbersome.
 		    holo_index = holo_x+hw/2;
 
-		// Calculate the intensity of the reference wave.
+		// Calculate the amplitude of the reference wave.
 		//   We know — because we define it that way in drawPlanarWave() —
 		//   that the the reference wave has zero phase at x=0
 		//   (since we draw a horizontal line at y=0 and the others growing
 		//   from there, while the coordinate system is rotated around (0,0))
 		//
-		//   |<-- horizCycleLength -->|            The intensity at holo_x==0
+		//   |<-- horizCycleLength -->|            The amplitude at holo_x==0
 		// ============================= hologram  will be cos(refPhase) = cos(0).
 		//   `-. ) refAngle          /   plane     As holo_x progresses within
-		//      `-.                 /              horizCycleLength, the intensity
+		//      `-.                 /              horizCycleLength, the amplitude
 		//         `-.             /               will gradually make the cosine curve
 		// wavefront  `-.         / wavLen         until it reaches cos(tau) == cos(0).
 		// of reference  `-.     /             So we calculate the currently covered
 		//           wave   `-. /              fraction of horizCycleLength,
 		//                     `               then multiply the cycle number by tau
 		//                                     to get the result in radians, for cosine.
-		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
-		// Draw the intensity profile curve for the reference wave
+		totalAmplitude = Math.cos( tau * ( holo_x / horizCycleLength - refPhase ) );
+		// Draw the amplitude profile curve for the reference wave
 		if (displayCurves) {
-			drawIntensityCurve(points.length, holo_x, totalIntensity);
+			drawCurve(points.length, holo_x, totalAmplitude);
 		}
 
 		// Calculate the intensity of the current point's object wave
 		for (var pt = 0; pt < points.length; pt++) {
 			var radius = distanceToOrigin(holo_x-points[pt].x, points[pt].y);
-			perWaveIntensity[pt] = Math.cos((radius - points[pt].phase) * tau/wavLen);
-			totalIntensity += perWaveIntensity[pt];
+			perWaveAmplitude[pt] = Math.cos((radius - points[pt].phase) * tau/wavLen);
+			totalAmplitude += perWaveAmplitude[pt];
 			// Draw the intensity profile curve for the current wave
 			if (displayCurves) {
 				// Normalize intensity values from cosine's [-1;1] range to [0;1]
-				drawIntensityCurve(pt, holo_x, perWaveIntensity[pt] );
+				drawCurve(pt, holo_x, perWaveAmplitude[pt]);
 			}
 		}
 
@@ -283,22 +283,22 @@ function paintHologram() {
 		// and still have the final intensity values range from 0 to 1
 		// Also, take the absolute value, since what we care about is
 		// whether there is wave activity at this point, and by how much
-		var normalizedIntensity = Math.abs(totalIntensity/numWaves);
-		maxIntensity = Math.max(maxIntensity, normalizedIntensity);
+		var intensity = Math.pow(totalAmplitude/numWaves,2);
+		maxIntensity = Math.max(maxIntensity, intensity);
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
-		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
+		hologram.fillStyle = unitFractionToHexColor(intensity);
 		hologram.fillRect(holo_x, 0, 1, hh/2);
 
 		// Calculate values for cumulative (final) hologram
 		if( !phaseSweep[ Math.round(refPhase*phaseSteps) ] ) {
-			hologramValues[holo_index] = (hologramValues[holo_index]||0) + normalizedIntensity/phaseSteps;
+			hologramValues[holo_index] = (hologramValues[holo_index]||0) + intensity/phaseSteps;
 		}
 		// Gradually normalize intensity of cumulative hologram
 		// We make it grow at a pace of 1/phaseSteps,
 		// which is the maximum pace it could grow in the previous stage
 		// (i.e. when each phase value was being accumulated,
-		// assuming totalIntensity would total 1 for any given pixel)
+		// assuming totalAmplitude would total 1 for any given pixel)
 		else if(filledPhases == phaseSteps && maxHologramValue < maxIntensity-1/phaseSteps) {
 			hologramValues[holo_index] *= growthRatio;
 		}
@@ -308,10 +308,10 @@ function paintHologram() {
 
 		// Draw cumulative version of main intensity curve
 		// Two versions are drawn to account for its axial symmetry
-		drawIntensityCurve(-2, holo_x, hologramValues[holo_index], "#ccc");
-		drawIntensityCurve(-2, holo_x,-hologramValues[holo_index], "#ccc");
+		drawCurve(-2, holo_x, hologramValues[holo_index], "#ccc");
+		drawCurve(-2, holo_x,-hologramValues[holo_index], "#ccc");
 		// Draw instantaneous version of main intensity curve
-		drawIntensityCurve(-1, holo_x, totalIntensity/numWaves, "gray");
+		drawCurve(-1, holo_x, intensity, "gray");
 	}
 	// Mark this phase value as done, so it isn't calculated again
 	phaseSweep[ Math.round(refPhase*phaseSteps) ] = true;
@@ -368,30 +368,27 @@ function unitFractionToHexColor(val) {
 }
 
 // Draw a point (or rectangle) in the "curves" canvas,
-// corresponding to a given wave's intensity at that point.
+// corresponding to a given wave's amplitude at that point.
 // As the hologram is scanned by the hologram drawing code,
 // this gets called for each hologram pixel,
-// and the points end up forming a intensity curve,
+// and the points end up forming an amplitude curve,
 // while the rectangles form an area (i.e a filled curve).
-function drawIntensityCurve(waveIndex, xCoord, intensity, color) {
+function drawCurve(waveIndex, xCoord, value, color) {
 	if( waveIndex < 0 ) {
-		// Draw a filled area for the combined intensity curve and the cumulative one.
-		// The values are divided by two to convert the range from [-1;1] to [-0.5;0.5]
-		// This allows them to stem from the middle of the canvas up or downwards
-		// without overflowing. The inversion is to match the one in the else clause.
-		intensity = -intensity/2;
+		// Draw a filled area if dealing with intensity values
+		// (both instantaneous and cumulative).
 		curves.fillStyle = color || "black";
-		curves.fillRect(xCoord, ch/2, 1, ch*intensity);
+		curves.fillRect(xCoord, 0, 1, ch*value);
 	} else {
 		// Spread the colors around the hue circle according to the number of
 		// points we have. The reference wave keeps the 360º (red)
 		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
-		// Normalize intensity values from cosine's [-1;1] range to [0;1]
+		// Normalize values from cosine's [-1;1] range to [0;1]
 		// Also invert it for display, to make the crests of the curves canvas
 		// visually touch the crests as seen from top-down in the diagram canvas
-		intensity = 1-(intensity+1)/2;
+		value = 1-(value+1)/2;
 		curves.beginPath();
-		curves.arc(xCoord, ch*intensity, 0.75, 0, tau, true);
+		curves.arc(xCoord, ch*value, 0.75, 0, tau, true);
 		curves.fill();
 	}
 }
