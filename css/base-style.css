@@ -1,9 +1,10 @@
 @import url("normalize.css");
+@import url("http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic&subset=latin,latin-ext");
 
 body {
   max-width: 40em;
-  font-family: serif;
-  font-size: 95%;
+  font-family: 'Noto Serif', serif;
+  font-size: 80%;
   line-height: 1.5;
   padding: 1em;
 }
@@ -65,4 +66,8 @@ embed {
 
 dt {
   margin-top: 1em;
+}
+
+input {
+  vertical-align: middle;
 }

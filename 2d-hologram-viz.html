@@ -6,8 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="css/base-style.css">
 	<style>
 	canvas, #controls { border: 1px solid grey; display: block; }
-	input[type="range"] { width: 480px; vertical-align: middle; }
-	#controls { width: 480px; padding:10px; background-color: Lavender; }
+	#angle-slider { width: 480px; }
+	#phase-slider { width: 270px; float: right; }
+	#controls { width: 480px; padding: 10px; background-color: Lavender; }
 	#controls, canvas#curves, canvas#hologram { border-bottom: none; }
 	p { width: 500px; }
 	</style>
@@ -25,7 +26,7 @@
 		       value="20.6" min="-90" max="90" step="0.1">
 		<br><br>
 		<label for="phase">Phase of the incident light: </label>
-		<span id="phase-text" title="delay as percentage of a wave cycle"></span><br>
+		<span id="phase-text" title="delay as percentage of a wave cycle"></span>
 		<input type="range" name="phase" id="phase-slider" oninput="update()"
 		       value="0" min="0" max="1" step="0.01">
 		<br><br>
