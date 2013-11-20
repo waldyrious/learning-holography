@@ -351,10 +351,11 @@ function paintHologram() {
 }
 
 // Draw a point (or rectangle) in the "curves" canvas,
-// corresponding to a given wave's amplitude at that point.
+// corresponding, respectively, to a given wave's amplitude
+// or intensity at that point.
 // As the hologram is scanned by the hologram drawing code,
 // this gets called for each hologram pixel,
-// and the points end up forming an amplitude curve,
+// and the points end up forming an amplitude/intensity curve,
 // while the rectangles form an area (i.e a filled curve).
 function drawCurve(waveIndex, xCoord, value, color) {
 	if( waveIndex < 0 ) {
@@ -366,7 +367,7 @@ function drawCurve(waveIndex, xCoord, value, color) {
 		// Spread the colors around the hue circle according to the number of
 		// points we have. The reference wave keeps the 360º (red)
 		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
-		// Normalize values from cosine's [-1;1] range to [0;1]
+		// Normalize amplitude values from cosine's [-1;1] range to [0;1]
 		// Also invert it for display, to make the crests of the curves canvas
 		// visually touch the crests as seen from top-down in the diagram canvas
 		value = 1-(value+1)/2;

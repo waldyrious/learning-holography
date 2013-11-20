@@ -254,7 +254,7 @@ function paintHologram() {
 		totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength ) );
 		// Draw the intensity profile curve for the reference wave
 		if (displayCurves) {
-			drawIntensityCurve(points.length, holo_x, totalIntensity);
+			drawCurve(points.length, holo_x, totalIntensity);
 		}
 
 		// Calculate the intensity of the object wave at the current hologram pixel
@@ -268,7 +268,7 @@ function paintHologram() {
 			// Draw the intensity profile curve for the current wave
 			if (displayCurves) {
 				perWaveIntensity[pt1] = Math.cos((radius1 - points[pt1].phase) * k);
-				drawIntensityCurve(pt1, holo_x, perWaveIntensity[pt1]);
+				drawCurve(pt1, holo_x, perWaveIntensity[pt1]);
 			}
 		}
 
@@ -285,38 +285,35 @@ function paintHologram() {
 
 		// Draw cumulative version of main intensity curve
 		// Two versions are drawn to account for its axial symmetry
-		drawIntensityCurve(-2, holo_x, normalizedIntensity, "#ccc");
-		drawIntensityCurve(-2, holo_x,-normalizedIntensity, "#ccc");
+		drawCurve(-2, holo_x, normalizedIntensity, "#ccc");
+		drawCurve(-2, holo_x,-normalizedIntensity, "#ccc");
 		// Draw instantaneous version of main intensity curve
-		drawIntensityCurve(-1, holo_x, totalIntensity/numWaves, "gray");
+		drawCurve(-1, holo_x, totalIntensity/numWaves, "gray");
 	}
 }
 
 // Draw a point (or rectangle) in the "curves" canvas,
-// corresponding to a given wave's intensity at that point.
+// corresponding, respectively, to a given wave's amplitude
+// or intensity at that point.
 // As the hologram is scanned by the hologram drawing code,
 // this gets called for each hologram pixel,
-// and the points end up forming a intensity curve,
+// and the points end up forming an amplitude/intensity curve,
 // while the rectangles form an area (i.e a filled curve).
-function drawIntensityCurve(waveIndex, xCoord, intensity, color) {
+function drawCurve(waveIndex, xCoord, value, color) {
 	if( waveIndex < 0 ) {
-		// Draw a filled area for the combined intensity curve and the cumulative one.
-		// The values are divided by two to convert the range from [-1;1] to [-0.5;0.5]
-		// This allows them to stem from the middle of the canvas up or downwards
-		// without overflowing. The inversion is to match the one in the else clause.
-		intensity = -intensity/2;
+		// Draw a filled area if dealing with intensity values
 		curves.fillStyle = color || "black";
-		curves.fillRect(xCoord, ch/2, 1, ch*intensity);
+		curves.fillRect(xCoord, 0, 1, ch*value);
 	} else {
 		// Spread the colors around the hue circle according to the number of
 		// points we have. The reference wave keeps the 360º (red)
 		curves.fillStyle = "hsl(" + 360*((waveIndex+1)/numWaves) + ", 100%, 50%)";
-		// Normalize intensity values from cosine's [-1;1] range to [0;1]
+		// Normalize amplitude values from cosine's [-1;1] range to [0;1]
 		// Also invert it for display, to make the crests of the curves canvas
 		// visually touch the crests as seen from top-down in the diagram canvas
-		intensity = 1-(intensity+1)/2;
+		value = 1-(value+1)/2;
 		curves.beginPath();
-		curves.arc(xCoord, ch*intensity, 0.75, 0, tau, true);
+		curves.arc(xCoord, ch*value, 0.75, 0, tau, true);
 		curves.fill();
 	}
 }
