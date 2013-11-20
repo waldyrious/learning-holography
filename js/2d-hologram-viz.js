@@ -36,7 +36,7 @@ var displayCurves = false,
 var animateTimeoutID = 0,
     phaseSteps = 1/document.getElementById("phase-slider").step,
     phaseSweep = Array(phaseSteps),
-	maxIntensity = 0;
+    maxIntensity = 0,
     // Number of waves being processed.
     // One wave per point source, plus the reference wave, if enabled.
     numWaves = points.length + refWave;
