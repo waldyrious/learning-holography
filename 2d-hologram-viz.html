@@ -33,6 +33,12 @@
 		<label for="show-curves">Amplitude curves: </label>
 		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="update()">
 		&emsp;
+		<!-- Control whether to include the reference wave in the hologram calculation. --
+		  -- (on by default). Note that even if this is turned off,                     --
+		  -- the reference wave is still used to generate the object waves.             -->
+		<label for="ref-wave">Reference wave: </label>
+		<input type="checkbox" name="ref-wave" id="ref-wave" checked autocomplete="off" onchange="newHologram()">
+		&emsp;
 		<label for="animate">Animate: </label>
 		<input type="checkbox" name="animate" id="animate" autocomplete="off" onchange="update()">
 		&emsp;
