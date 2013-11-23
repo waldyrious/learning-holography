@@ -250,7 +250,8 @@ function paintHologram() {
 	for (var holo_x = -hw/2; holo_x < hw/2; holo_x++) {
 		// Create array to hold individual wave values
 		// so we can graph them individually if desired
-		var perWaveIntensity = [],
+		var perWaveAmplitude = [],
+		    totalAmplitude = 0,
 		    totalIntensity = 0;
 
 		if (refWave) {
@@ -270,10 +271,10 @@ function paintHologram() {
 			//           wave   `-. /              fraction of horizCycleLength,
 			//                     `               then multiply the cycle number by tau
 			//                                     to get the result in radians, for cosine.
-			totalIntensity = Math.cos( tau * ( holo_x / horizCycleLength ) );
-			// Draw the intensity profile curve for the reference wave
+			totalAmplitude = Math.cos( tau * ( holo_x / horizCycleLength ) );
+			// Draw the amplitude profile curve for the reference wave
 			if (displayCurves) {
-				drawCurve(points.length, holo_x, totalIntensity);
+				drawCurve(points.length, holo_x, totalAmplitude);
 			}
 		}
 
@@ -285,10 +286,11 @@ function paintHologram() {
 				var phaseDiff = Math.cos((radius1 - radius2) * k)/2;
 				totalIntensity += phaseDiff;
 			}
-			// Draw the intensity profile curve for the current wave
+			perWaveAmplitude[pt1] = Math.cos((radius1 - points[pt1].phase) * k);
+			totalAmplitude += perWaveAmplitude[pt1];
+			// Draw the amplitude profile curve for the current wave
 			if (displayCurves) {
-				perWaveIntensity[pt1] = Math.cos((radius1 - points[pt1].phase) * k);
-				drawCurve(pt1, holo_x, perWaveIntensity[pt1]);
+				drawCurve(pt1, holo_x, perWaveAmplitude[pt1]);
 			}
 		}
 
@@ -304,11 +306,9 @@ function paintHologram() {
 		hologram.fillRect(holo_x, 0, 1, hh);
 
 		// Draw cumulative version of main intensity curve
-		// Two versions are drawn to account for its axial symmetry
 		drawCurve(-2, holo_x, normalizedIntensity, "#ccc");
-		drawCurve(-2, holo_x,-normalizedIntensity, "#ccc");
 		// Draw instantaneous version of main intensity curve
-		drawCurve(-1, holo_x, totalIntensity/numWaves, "gray");
+		drawCurve(-1, holo_x, Math.pow(totalAmplitude/numWaves,2), "gray");
 	}
 }
 

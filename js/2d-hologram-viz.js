@@ -181,7 +181,7 @@ function drawPlanarWaveDirectionBox() {
 	// center the coordinate system in the box
 	diagram.translate( -dw/2 + arrowBoxSize/2, -dh + arrowBoxSize/2 );
 	// rotate the coordinate system
-	diagram.rotate( -refAngle*deg2rad);
+	diagram.rotate( -refAngle*deg2rad );
 	// Draw a vertical arrow
 	diagram.beginPath();
 	diagram.moveTo( 0,-arrowBoxSize/3 );
