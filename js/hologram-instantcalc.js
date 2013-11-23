@@ -313,13 +313,17 @@ function paintHologram() {
 			totalIntensity += 0.5;
 		}
 
-		// Divide by number of combinations (including ref wave, if enabled)
+		// Divide by total intensity (including ref wave, if enabled)
 		// to allow summing intensity contributions of all waves
 		// and still have the final intensity values range from 0 to 1
-		// Normalization is done by dividing by half the same-wave pairs (numWaves/2)
-		// plus the whole number of unique combinations (the triangular number
-		// n(n-1)/2 where n = numWaves
-		var normalizedIntensity = totalIntensity/(numWaves/2 + numWaves*(numWaves-1)/2);
+		// According to the formula, we will have N*N pairs of waves for N waves
+		// (including the reference wave). The complete formula is
+		//   Sum( i->N, j->N ){ [ Ai*Aj*cos( phi_i - phi_j ) ] / 2 }
+		// Note that amplitudes aren't being used,
+		// so the A's in the formula are essentialy being treated as 1's (=ignored).
+		// Each of these N*N pairs has its value divided by two,
+		// so we normalize also taking that into account.
+		var normalizedIntensity = totalIntensity/(numWaves*numWaves/2);
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
