@@ -24,6 +24,10 @@ var wavLen = 50,
     refWave = document.getElementById( "ref-wave" ).checked,
     refAngle = document.getElementById( "angle-slider" ).value,
     refPhase = document.getElementById( "phase-slider" ).value,
+	// Setup object point locations.
+	// Note that phase is set as zero only as a placeholder.
+	// The phase is dependent on the reference wave's phase,
+	// and will be calculated in drawCircularWaves()
     points = [
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
@@ -325,7 +329,7 @@ function paintHologram() {
 			}
 		}
 
-		// Divide by number of points (plus ref wave)
+		// Divide by number of points (plus ref wave, if enabled)
 		// to allow summing amplitude contributions of all waves
 		// and still have the final amplitude values range from 0 to 1
 		// Then, calculate the intensity as the square of the amplitude
@@ -401,7 +405,7 @@ function generateNewPoint() {
 	return {
 		x: Math.random() * (dw-arrowBoxSize) - (dw-arrowBoxSize)/2,
 		y: Math.random() * (dh-arrowBoxSize) - (dh-arrowBoxSize/2),
-		phase: 0
+		phase: 0 // will be filled during drawCircularWaves()
 	};
 }
 

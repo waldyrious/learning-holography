@@ -23,6 +23,10 @@ var tau = Math.PI*2,
 var wavLen = 50,
     refWave = document.getElementById("ref-wave").checked,
     refAngle = 0, // initialized in setRefAngle() wich is called on body onload
+	// Setup object point locations.
+	// Note that phase is set as zero only as a placeholder.
+	// The phase is dependent on the reference wave's phase,
+	// and will be calculated in drawCircularWaves()
     points = [
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
@@ -343,7 +347,7 @@ function generateNewPoint() {
 	return {
 		x: Math.random()*(dw-arrowBoxSize) - (dw-arrowBoxSize)/2,
 		y: Math.random()*(dh-arrowBoxSize) - (dh-arrowBoxSize/2),
-		phase: 0
+		phase: 0 // will be filled during drawCircularWaves()
 	};
 }
 
