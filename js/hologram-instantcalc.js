@@ -252,7 +252,8 @@ function paintHologram() {
 		// so we can graph them individually if desired
 		var perWaveAmplitude = [],
 		    totalAmplitude = 0,
-		    totalIntensity = 0;
+		    totalIntensity = 0,
+		    refArrivalPhase = 0;
 
 		if (refWave) {
 			// Calculate the amplitude of the reference wave at this pixel.
@@ -271,37 +272,54 @@ function paintHologram() {
 			//           wave   `-. /              fraction of horizCycleLength,
 			//                     `               then multiply the cycle number by tau
 			//                                     to get the result in radians, for cosine.
-			totalAmplitude = Math.cos( tau * ( holo_x / horizCycleLength ) );
+			refArrivalPhase = tau * ( holo_x / horizCycleLength );
+			totalAmplitude = Math.cos( refArrivalPhase );
 			// Draw the amplitude profile curve for the reference wave
 			if (displayCurves) {
 				drawCurve(points.length, holo_x, totalAmplitude);
 			}
 		}
 
-		// Calculate the intensity of the object wave at the current hologram pixel
+		// Calculate the intensity at the current hologram pixel
 		for (var pt1 = 0; pt1 < points.length; pt1++) {
 			// Amplitude
 			var dist1 = distanceToOrigin(holo_x-points[pt1].x, points[pt1].y);
-			perWaveAmplitude[pt1] = Math.cos((dist1 - points[pt1].phase) * k);
+			var objArrivalPhase = (dist1 - points[pt1].phase) * k;
+			perWaveAmplitude[pt1] = Math.cos( objArrivalPhase );
 			totalAmplitude += perWaveAmplitude[pt1];
 			// Draw the amplitude profile curve for the current wave
 			if (displayCurves) {
 				drawCurve(pt1, holo_x, perWaveAmplitude[pt1]);
 			}
-			// Intensity
+			// Object-Object interference intensity
 			for (var pt2 = 0; pt2 < points.length; pt2++) {
 				var dist2 = distanceToOrigin(holo_x-points[pt2].x, points[pt2].y);
-				var phaseDiff = Math.cos((dist1 - dist2) * k)/2;
+				var phaseDiff = Math.cos(((dist1 - points[pt1].phase) - (dist2 - points[pt2].phase)) * k)/2;
 				totalIntensity += phaseDiff;
+			}
+			if (refWave) {
+				// Object-Reference interference intensity
+				totalIntensity += Math.cos( refArrivalPhase - objArrivalPhase );
 			}
 		}
 
-		// Divide by number of points (plus ref wave)
+		if (refWave) {
+			// Reference-Reference interference intensity
+			// (only one wave, so the result is a constant
+			// equal to half the square of the amplitude)
+			// Expanded, this would be:
+			// totalIntensity += Math.pow(Math.cos( refArrivalPhase - refArrivalPhase ), 2) / 2;
+			// but we know cos(0) = 1 and 1^2 = 1 and 1/2 = 0.5, so we simplify:
+			totalIntensity += 0.5;
+		}
+
+		// Divide by number of combinations (including ref wave, if enabled)
 		// to allow summing intensity contributions of all waves
 		// and still have the final intensity values range from 0 to 1
-		// Also, take the absolute value, since what we care about is
-		// whether there is wave activity at this point, and by how much
-		var normalizedIntensity = Math.abs(totalIntensity/numWaves);
+		// Normalization is done by dividing by half the same-wave pairs (numWaves/2)
+		// plus the whole number of unique combinations (the triangular number
+		// n(n-1)/2 where n = numWaves
+		var normalizedIntensity = totalIntensity/(numWaves/2 + numWaves*(numWaves-1)/2);
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
