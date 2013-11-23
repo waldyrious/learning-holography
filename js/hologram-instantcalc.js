@@ -394,10 +394,3 @@ function unitFractionToHexColor(val) {
 function distanceToOrigin(x, y) {
 	return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
 }
-
-// Attention: only works for positive indexes!
-Array.prototype.max = function () {
-  return this.reduce(function (p, v) {
-    return ( p > v ? p : v );
-  });
-}
