@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 /*============================================================================*/
 /*                 INITIALIZE VARIABLES AND SETUP CANVASES                    */
@@ -110,7 +110,7 @@ function drawPlanarWave() {
 		diagram.moveTo(-diagramRadius*2, i+wavLen);
 		diagram.lineTo( diagramRadius*2, i+wavLen);
 		// Don't draw the central line twice
-		if (i == 0) { continue; }
+		if (i === 0) { continue; }
 		// Draw horizontal lines downwards from the center of the coordinate system
 		diagram.moveTo(-diagramRadius*2,-i+wavLen);
 		diagram.lineTo( diagramRadius*2,-i+wavLen);
@@ -344,7 +344,7 @@ function generateNewPoint() {
 		x: Math.random()*(dw-arrowBoxSize) - (dw-arrowBoxSize)/2,
 		y: Math.random()*(dh-arrowBoxSize) - (dh-arrowBoxSize/2),
 		phase: 0
-	}
+	};
 }
 
 // Add a new point to the object
@@ -358,7 +358,7 @@ function addPoint() {
 // Remove the last point of the object
 function removePoint() {
 	points.pop();
-	document.getElementById("lessPts").disabled = (points.length == 0);
+	document.getElementById("lessPts").disabled = (points.length === 0);
 	numWaves--;
 	refresh();
 }
@@ -381,9 +381,9 @@ function unitFractionToHexColor(val) {
 	// Convert range 0-1 to an integer in the range 0-255 and then to the hex format
 	var greyHexValue = Math.round(val * 255).toString(16);
 	// pad with zero if it has only one digit (#333 != #030303)
-	if (greyHexValue.length==1) greyHexValue = '0' + greyHexValue;
+	if (greyHexValue.length == 1) { greyHexValue = '0' + greyHexValue; }
 	// prefix with number sign and repeat the hex string 3 times (for RGB)
-	return "#" + Array(4).join(greyHexValue);
+	return "#" + new Array(4).join(greyHexValue);
 }
 
 // Calculate a distance using the Euclidean distance formula
