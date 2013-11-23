@@ -15,9 +15,10 @@
 <body onload="setRefAngle()">
 	<a href="index.html">&larr; back</a>
 	<h2>2D hologram (instant calculation)</h2>
-	<p>This page allows playing with physically-based hologram generation
-	and reasoning about how different parameters affect the hologram
-	and how it's formed.</p>
+	<p>This demo implements the same setup as <a href="2d-hologram-viz.html">the previous one</a>
+	but demonstrates how the cumulative hologram can be calculated instantaneously
+	by representing the cumulative effect as an integral and evaluating it.<!--
+	Details about this process will be added later in this text.--></p>
 	<div id="controls">
 		<label for="angle">Angle of the incident light: </label>
 		<span id="angle-text" title="angle with hologram plane"></span><br>
