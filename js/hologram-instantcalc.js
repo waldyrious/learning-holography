@@ -280,17 +280,19 @@ function paintHologram() {
 
 		// Calculate the intensity of the object wave at the current hologram pixel
 		for (var pt1 = 0; pt1 < points.length; pt1++) {
+			// Amplitude
 			var radius1 = distanceToOrigin(holo_x-points[pt1].x, points[pt1].y);
-			for (var pt2 = 0; pt2 < points.length; pt2++) {
-				var radius2 = distanceToOrigin(holo_x-points[pt2].x, points[pt2].y);
-				var phaseDiff = Math.cos((radius1 - radius2) * k)/2;
-				totalIntensity += phaseDiff;
-			}
 			perWaveAmplitude[pt1] = Math.cos((radius1 - points[pt1].phase) * k);
 			totalAmplitude += perWaveAmplitude[pt1];
 			// Draw the amplitude profile curve for the current wave
 			if (displayCurves) {
 				drawCurve(pt1, holo_x, perWaveAmplitude[pt1]);
+			}
+			// Intensity
+			for (var pt2 = 0; pt2 < points.length; pt2++) {
+				var radius2 = distanceToOrigin(holo_x-points[pt2].x, points[pt2].y);
+				var phaseDiff = Math.cos((radius1 - radius2) * k)/2;
+				totalIntensity += phaseDiff;
 			}
 		}
 
