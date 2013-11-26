@@ -273,10 +273,11 @@ function paintHologram() {
 			//                     `               then multiply the cycle number by tau
 			//                                     to get the result in radians, for cosine.
 			refArrivalPhase = tau * ( holo_x / horizCycleLength );
-			totalAmplitude = Math.cos( refArrivalPhase );
+			var refAmplitude = Math.cos( refArrivalPhase );
+			totalAmplitude += refAmplitude;
 			// Draw the amplitude profile curve for the reference wave
 			if (displayCurves) {
-				drawCurve(points.length, holo_x, totalAmplitude);
+				drawCurve(points.length, holo_x, refAmplitude);
 			}
 		}
 
