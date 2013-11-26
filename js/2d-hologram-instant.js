@@ -1,5 +1,7 @@
 "use strict";
 
+var math = mathjs();
+
 /*============================================================================*/
 /*                 INITIALIZE VARIABLES AND SETUP CANVASES                    */
 /*============================================================================*/
@@ -22,6 +24,7 @@ var tau = Math.PI*2,
 // Define properties that affect the hologram itself
 var wavLen = 50,
     refWave = document.getElementById("ref-wave").checked,
+    prevRefWave = refWave,
     refAngle = 0, // initialized in setRefAngle() wich is called on body onload
 	// Setup object point locations.
 	// Note that phase is set as zero only as a placeholder.
@@ -35,7 +38,8 @@ var wavLen = 50,
     horizCycleLength,
     // Number of waves being processed.
     // One wave per point source, plus the reference wave, if enabled.
-    numWaves = points.length + refWave;
+    numWaves = points.length + refWave,
+    method = "real";
 // Variables to control the appearance and behavior of the visualization
 var displayCurves = false;
 
@@ -253,6 +257,7 @@ function paintHologram() {
 		var perWaveAmplitude = [],
 		    totalAmplitude = 0,
 		    totalIntensity = 0,
+		    normalizedIntensity = 0,
 		    refArrivalPhase = 0;
 
 		if (refWave) {
@@ -274,7 +279,9 @@ function paintHologram() {
 			//                                     to get the result in radians, for cosine.
 			refArrivalPhase = tau * ( holo_x / horizCycleLength );
 			var refAmplitude = Math.cos( refArrivalPhase );
-			totalAmplitude += refAmplitude;
+			if (method !== "bipolar") {
+				totalAmplitude += refAmplitude;
+			}
 			// Draw the amplitude profile curve for the reference wave
 			if (displayCurves) {
 				drawCurve(points.length, holo_x, refAmplitude);
@@ -287,31 +294,50 @@ function paintHologram() {
 			var dist1 = distanceToOrigin(holo_x-points[pt1].x, points[pt1].y);
 			var objArrivalPhase = (dist1 - points[pt1].phase) * k;
 			perWaveAmplitude[pt1] = Math.cos( objArrivalPhase );
-			totalAmplitude += perWaveAmplitude[pt1];
+			if (method !== "bipolar") {
+				totalAmplitude += perWaveAmplitude[pt1];
+			} else {
+				totalAmplitude += perWaveAmplitude[pt1] + refAmplitude;
+			}
 			// Draw the amplitude profile curve for the current wave
 			if (displayCurves) {
 				drawCurve(pt1, holo_x, perWaveAmplitude[pt1]);
 			}
-			// Object-Object interference intensity
-			for (var pt2 = 0; pt2 < points.length; pt2++) {
-				var dist2 = distanceToOrigin(holo_x-points[pt2].x, points[pt2].y);
-				var phaseDiff = Math.cos(((dist1 - points[pt1].phase) - (dist2 - points[pt2].phase)) * k)/2;
-				totalIntensity += phaseDiff;
-			}
-			if (refWave) {
-				// Object-Reference interference intensity
-				totalIntensity += Math.cos( refArrivalPhase - objArrivalPhase );
+			if (method == "real") {
+				// Object-Object interference intensity
+				for (var pt2 = 0; pt2 < points.length; pt2++) {
+					var dist2 = distanceToOrigin(holo_x-points[pt2].x, points[pt2].y);
+					var phaseDiff = Math.cos(((dist1 - points[pt1].phase) - (dist2 - points[pt2].phase)) * k)/2;
+					totalIntensity += phaseDiff;
+				}
+				if (refWave) {
+					// Object-Reference interference intensity
+					totalIntensity += Math.cos( refArrivalPhase - objArrivalPhase );
+				}
+			} else if (method == "complex") {
+				totalIntensity = math.add(totalIntensity, math.eval("e^(i*"+objArrivalPhase+")"));
+			} else if (method == "bipolar") {
+				totalIntensity += Math.cos(objArrivalPhase - refArrivalPhase);
 			}
 		}
 
-		if (refWave) {
-			// Reference-Reference interference intensity
-			// (only one wave, so the result is a constant
-			// equal to half the square of the amplitude)
-			// Expanded, this would be:
-			// totalIntensity += Math.pow(Math.cos( refArrivalPhase - refArrivalPhase ), 2) / 2;
-			// but we know cos(0) = 1 and 1^2 = 1 and 1/2 = 0.5, so we simplify:
-			totalIntensity += 0.5;
+		if (method == "real") {
+			if (refWave) {
+				// Reference-Reference interference intensity
+				// (only one wave, so the result is a constant
+				// equal to half the square of the amplitude)
+				// Expanded, this would be:
+				// totalIntensity += Math.pow(Math.cos( refArrivalPhase - refArrivalPhase ), 2) / 2;
+				// but we know cos(0) = 1 and 1^2 = 1 and 1/2 = 0.5, so we simplify:
+				totalIntensity += 0.5;
+			}
+		} else if (method == "complex") {
+			if (refWave) {
+				totalIntensity = math.add(totalIntensity, math.eval("e^(i*"+refArrivalPhase+")"));
+			}
+			totalIntensity = Number(math.multiply(totalIntensity, math.conj(totalIntensity)));
+		} else if (method == "bipolar") {
+			totalIntensity += (numWaves-1);
 		}
 
 		// Divide by total intensity (including ref wave, if enabled)
@@ -324,7 +350,13 @@ function paintHologram() {
 		// so the A's in the formula are essentialy being treated as 1's (=ignored).
 		// Each of these N*N pairs has its value divided by two,
 		// so we normalize also taking that into account.
-		var normalizedIntensity = totalIntensity/(numWaves*numWaves/2);
+		if (method == "real") {
+			normalizedIntensity = totalIntensity/((numWaves*numWaves)/2);
+		} else if (method == "complex") {
+			normalizedIntensity = totalIntensity/(numWaves*numWaves);
+		} else if (method == "bipolar") {
+			normalizedIntensity = totalIntensity/((numWaves-1)*2);
+		}
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
 		hologram.fillStyle = unitFractionToHexColor(normalizedIntensity);
@@ -333,7 +365,11 @@ function paintHologram() {
 		// Draw cumulative version of main intensity curve
 		drawCurve(-2, holo_x, normalizedIntensity, "#ccc");
 		// Draw instantaneous version of main intensity curve
-		drawCurve(-1, holo_x, Math.pow(totalAmplitude/numWaves,2), "gray");
+		if (method !== "bipolar") {
+			drawCurve(-1, holo_x, Math.pow( totalAmplitude/numWaves         , 2 ), "gray");
+		} else {
+			drawCurve(-1, holo_x, Math.pow( totalAmplitude/(points.length*2), 2 ), "gray");
+		}
 	}
 }
 
@@ -418,4 +454,17 @@ function unitFractionToHexColor(val) {
 // Calculate a distance using the Euclidean distance formula
 function distanceToOrigin(x, y) {
 	return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
+}
+
+function setMethod(radioBtn) {
+	method = radioBtn.value;
+	if( method == "bipolar" ) {
+		prevRefWave = refWave;
+		document.getElementById("ref-wave").checked = true;
+		document.getElementById("ref-wave").disabled = true;
+	} else {
+		document.getElementById("ref-wave").checked = prevRefWave;
+		document.getElementById("ref-wave").disabled = false;
+	}
+	refresh();
 }

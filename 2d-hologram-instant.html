@@ -11,6 +11,7 @@
 	#controls, canvas#curves, canvas#hologram { border-bottom: none; }
 	p { width: 500px; }
 	</style>
+	<script src="js/lib/math.js"></script>
 </head>
 <body onload="setRefAngle()">
 	<a href="index.html">&larr; back</a>
@@ -25,6 +26,13 @@
 		<input type="range" name="angle" id="angle-slider" oninput="setRefAngle()"
 		       value="20.6" min="-90" max="90" step="0.1">
 		<br><br>
+		<span>Hologram calculation method: </span>&emsp;
+		<input type="radio" name="method" id="method-real"    onchange="setMethod(this)" value="real" checked>
+		<label for="method-real">Real</label>&emsp;
+		<input type="radio" name="method" id="method-complex" onchange="setMethod(this)" value="complex">
+		<label for="method-complex">Complex</label>&emsp;
+		<input type="radio" name="method" id="method-bipolar" onchange="setMethod(this)" value="bipolar">
+		<label for="method-bipolar">Bipolar</label>
 		<br><br>
 		<label for="show-curves">Amplitude curves: </label>
 		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="refresh()">
