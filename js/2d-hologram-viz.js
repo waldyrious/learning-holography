@@ -317,12 +317,12 @@ function paintHologram() {
 			}
 		}
 
-		// Calculate the intensity of the current point's object wave
+		// Calculate the amplitude of each point's object wave
 		for ( var pt = 0; pt < points.length; pt++ ) {
 			var radius = distanceToOrigin( holo_x-points[pt].x, points[pt].y );
 			perWaveAmplitude[pt] = Math.cos( ( radius - points[pt].phase ) * tau/wavLen );
 			totalAmplitude += perWaveAmplitude[pt];
-			// Draw the intensity profile curve for the current wave
+			// Draw the amplitude profile curve for the current wave
 			if ( displayCurves ) {
 				// Normalize intensity values from cosine's [-1;1] range to [0;1]
 				drawCurve( pt, holo_x, perWaveAmplitude[pt] );
