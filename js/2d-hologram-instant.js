@@ -353,7 +353,7 @@ function paintHologram() {
 		} else if (method == "complex") {
 			normalizedIntensity = totalIntensity/(numWaves*numWaves);
 		} else if (method == "bipolar") {
-			normalizedIntensity = totalIntensity/((numWaves-1)*2) + 0.5;
+			normalizedIntensity = totalIntensity/(points.length*2) + 0.5;
 		}
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
