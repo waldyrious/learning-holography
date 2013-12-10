@@ -336,8 +336,6 @@ function paintHologram() {
 				totalIntensity = math.add(totalIntensity, math.eval("e^(i*"+refArrivalPhase+")"));
 			}
 			totalIntensity = Number(math.multiply(totalIntensity, math.conj(totalIntensity)));
-		} else if (method == "bipolar") {
-			totalIntensity += (numWaves-1);
 		}
 
 		// Divide by total intensity (including ref wave, if enabled)
@@ -355,7 +353,7 @@ function paintHologram() {
 		} else if (method == "complex") {
 			normalizedIntensity = totalIntensity/(numWaves*numWaves);
 		} else if (method == "bipolar") {
-			normalizedIntensity = totalIntensity/((numWaves-1)*2);
+			normalizedIntensity = totalIntensity/((numWaves-1)*2) + 0.5;
 		}
 
 		// Paint the calculated intensity into the current (instantaneous) hologram pixel
