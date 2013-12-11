@@ -294,11 +294,7 @@ function paintHologram() {
 			var dist1 = distanceToOrigin(holo_x-points[pt1].x, points[pt1].y);
 			var objArrivalPhase = (dist1 - points[pt1].phase) * k;
 			perWaveAmplitude[pt1] = Math.cos( objArrivalPhase );
-			if (method !== "bipolar") {
-				totalAmplitude += perWaveAmplitude[pt1];
-			} else {
-				totalAmplitude += perWaveAmplitude[pt1] + refAmplitude;
-			}
+			totalAmplitude += perWaveAmplitude[pt1];
 			// Draw the amplitude profile curve for the current wave
 			if (displayCurves) {
 				drawCurve(pt1, holo_x, perWaveAmplitude[pt1]);
@@ -366,7 +362,21 @@ function paintHologram() {
 		if (method !== "bipolar") {
 			drawCurve(-1, holo_x, Math.pow( totalAmplitude/numWaves         , 2 ), "gray");
 		} else {
-			drawCurve(-1, holo_x, Math.pow( totalAmplitude/(points.length*2), 2 ), "gray");
+			// Instantaneous bipolar intensity = 2Ar*sum(Ai).
+			// Since we're not using amplitudes, the final range
+			// of the sum of object wave amplitudes
+			// will be the cosine's usual range (-1 to 1 = 2)
+			// multiplied by the number of points.
+			// That value is then multiplied by the reference wave,
+			// but since the latter's limits don't exceed 1, no scaling occurs.
+			// Finally, it's also multiplied by 2, per the formula.
+			// We're including this factor of 2
+			// although it's immediately cancelled out by the normalization,
+			// in order to make the equation recognizable in the code.
+			// The normalization gets us a value in the -1 --> 1 range.
+			var instantBipolarIntensity = (2*refAmplitude*totalAmplitude) / (2*points.length);
+			// Note the re-normalization of the value to the 0 --> 1 range, for drawCurve()
+			drawCurve(-1, holo_x, instantBipolarIntensity/2+0.5, "gray");
 		}
 	}
 }
