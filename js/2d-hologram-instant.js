@@ -357,10 +357,10 @@ function paintHologram() {
 		hologram.fillRect(holo_x, 0, 1, hh);
 
 		// Draw cumulative version of main intensity curve
-		drawCurve(-2, holo_x, normalizedIntensity, "#ccc");
+		drawCurve(-2, holo_x, normalizedIntensity);
 		// Draw instantaneous version of main intensity curve
 		if (method !== "bipolar") {
-			drawCurve(-1, holo_x, Math.pow( totalAmplitude/numWaves         , 2 ), "gray");
+			drawCurve(-1, holo_x, Math.pow( totalAmplitude/numWaves, 2 ));
 		} else {
 			// Instantaneous bipolar intensity = 2Ar*sum(Ai).
 			// Since we're not using amplitudes, the final range
@@ -376,7 +376,7 @@ function paintHologram() {
 			// The normalization gets us a value in the -1 --> 1 range.
 			var instantBipolarIntensity = (2*refAmplitude*totalAmplitude) / (2*points.length);
 			// Note the re-normalization of the value to the 0 --> 1 range, for drawCurve()
-			drawCurve(-1, holo_x, instantBipolarIntensity/2+0.5, "gray");
+			drawCurve(-1, holo_x, instantBipolarIntensity/2+0.5);
 		}
 	}
 }
@@ -388,11 +388,16 @@ function paintHologram() {
 // this gets called for each hologram pixel,
 // and the points end up forming an amplitude/intensity curve,
 // while the rectangles form an area (i.e a filled curve).
-function drawCurve(waveIndex, xCoord, value, color) {
-	if( waveIndex < 0 ) {
+function drawCurve(waveIndex, xCoord, value) {
+	if( waveIndex == -2 ) {
 		// Draw a filled area if dealing with intensity values
-		curves.fillStyle = color || "black";
+		curves.fillStyle = "#ccc";
 		curves.fillRect(xCoord, 0, 1, ch*value);
+	} else if( waveIndex == -1 ) {
+		curves.fillStyle = "black";
+		curves.beginPath();
+		curves.arc(xCoord, ch*value, 1, 0, tau, true);
+		curves.fill();
 	} else {
 		// Spread the colors around the hue circle according to the number of
 		// points we have. The reference wave keeps the 360º (red)
