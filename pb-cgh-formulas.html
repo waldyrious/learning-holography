@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PH CGH formulas | Learning Holography</title>
+	<link href="css/base-style.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+	  });
+	</script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>-->
+  </head>
+  <body>
+<h2>Step-by-step derivation of the physically-based computer-generated hologram formula</h2>
+
+<p>So, we have a 3D object which we want a hologram of.
+To do that, we first decompose the object into a large number of points,
+which we approximate as spherical light sources
+(for now we ignore the opacity of the object,
+which would make the front points to block the light from the back ones).</p>
+<img src="img/stanford-bunny.png" width="240px" style="vertical-align:middle;">
+<b style="font-size:x-large">➔</b>
+<img src="img/stanford-bunny-points.png" width="220px" style="vertical-align:middle;">
+
+<p>To make the hologram, we also need a reference wave,
+which will act as the "key" to decode the interference pattern that we will generate.
+The reference wave is a plane wave, i.e. it can be thought of
+as a series of parallel planes spread apart by the wavelength $\lambda$,
+each corresponding to a crest in the wave.</p>
+<p style="text-align:center"><img src="img/plane-wave.svg" width="400"></p>
+
+<p>Our system of coordinates will be the
+<a href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system#Orientation_and_handedness">left-handed cartesian</a>,
+with X pointing to the right, Y pointing up, and Z pointing forward (from the object to the hologram)
+The hologram will be a plane centered at the origin of the system of coordinates,
+and perpendicular to the Z (i.e., it will be the XY plane).</p>
+</p>
+Given the above, we'll define the following elements for our calculations:
+<ul>
+	<li>$h = (h_x, h_y, 0)$, a point on the hologram plane ($z = 0$),</li>
+	<li>$p_i = (p_{ix}, p_{iy}, p_{iz})$, the location of the $i^{th}$ object point light source, and</li>
+</ul>
+
+We know that the value of a single wave at the origin of the coordinate system at instant $t$ is
+\begin{equation}
+A \times cos(\omega t - \varphi)
+\end{equation}
+
+...where $A$ is the amplitude (maximum height) of the wave,
+$\omega$ is the temporal angular frequency of the wave
+(i.e. how many cycles, in radians, the wave completes per unit of time)
+and $\varphi$ is the initial phase (angle) of the wave at the origin.
+So both $\omega t$ and $\varphi$ are angles, which are subtracted to yield
+the real phase angle of the wave at instant $t$
+
+Then the amplitude of the whole compound object wave, made up of all $N$ object points,
+at a given point $h$ of the hologram and a given time $t$, is given by
+
+\begin{equation}
+u(t)=\sum_i^N A_i cos(\omega t - \varphi_i)
+\end{equation}
+
+Here, $\varphi_n$ is the initial ($t=0$) phase of the spherical wave emitted from point $n$
+at hologram point $h$. It depends on the distance from the object point
+to the hologram point being considered, which is calculated
+using the familiar <a href="http://en.wikipedia.org/wiki/Euclidean_distance">
+Euclidean distance</a> formula:
+
+\begin{equation}
+r_i(h) = \sqrt{(p_{ix} - h_x)^2 + (p_{iy} - h_y)^2 + p_{iz}^2}
+\end{equation}
+
+<p>(remember that $h_z$ is zero, because we placed the hologram plane at $z=0$).</p>
+
+<p>This distance is then multiplied by the angular spatial frequency of the wave
+(i.e. how many cycles, in radians, the wave completes per unit of distance),
+which is abbreviated as $k = \tau/\lambda$, and —somewhat unhelpfully—
+called the "wavenumber". This multiplication, $k r_i(h)$,
+like the $\omega t$ one, yields a phase angle, so both values can be
+subtracted to yield the phase of the wave $p_i$ at point $h$ and instant $t$.</p>
+
+The formula above then becomes:
+
+\begin{equation}
+u(t)=\sum_i^N A_i cos(\omega t - k r_i(h))
+\end{equation}
+
+Note how the duality of this generic formula can be exploited
+to calculate both the variation of the object wavefront in space
+(i.e. across the hologram), at a given instant frozen in time,
+by varying $h$ and keeping $t$ constant,
+and to calculate the variation of the object wavefront at a fixed
+hologram point, by varying $t$ and keeping $h$ constant.
+
+<p>Now, this is just for the compount object wave.
+We still need to add the reference wave
+to get the complete wavefront that will form the hologram.</p>
+
+<p>As we mentioned above, the reference wave is a planar wave
+(<span class="todo">TODO: explain why</span>),
+so it's formula can't be defined as based on the distance of its center,
+like for the spherical point waves, because by definition, a planar wave
+is a wave whose focal point is at an infinite distance, so the curvature
+of its wavefronts is zero. What we do, instead, is define it
+by the angles it makes with the hologram plane.</p>
+
+<p>This is done using two angles: $\theta_y$, aka "yaw", which represents its rotation
+around the (vertical) Y axis (like a head turning side to side),
+and $\theta_x$, aka "pitch", which represents its rotation
+around the (horizontal) X axis (like a head nodding up and down).<p>
+
+<p>Let's start by considering $\theta_x=0$ and seeing what happens as we change $\theta_y=0$:</p>
+
+<span class="todo">[INSERT DIAGRAM]</span>
+
+<p>This image shows a top-down view of the scene. As you can see,
+although the wavelength $\lambda$ is constant, the angle $\theta_y$
+determines the distance between two wave crests in the hologram plane.
+In other words, it's the projection of $\lambda$ into the X axis.
+We'll call this $\lambda_x$.</p>
+
+<p>Using elementary trigonometry, we can see that,
+using the definition of the sine of an angle
+as <a href="http://en.wikipedia.org/wiki/Sohcahtoa#Mnemonics">opposite/hypotenuse</a>,
+we obtain the relationship:</p>
+
+\begin{equation}
+sin(\theta_y) = \frac{\lambda}{\lambda_x}
+\end{equation}
+
+and therefore,
+
+\begin{equation}
+\lambda_x = \frac{\lambda}{sin(\theta_y)}
+\end{equation}
+
+<p></p>
+<p></p>
+<h3>Cummulative hologram</h3>
+
+<h3>Complex formulation</h3>
+\begin{equation}
+obj(h) = \sum_i^N A_i \exp{(j k r_i(h))}
+\end{equation}
+
+where $A_i$ is the amplitude of the light source and  is the euclidean distance between $p_i$ and $h$.
+
+Also let $A_{ref}$ be the amplitude of the planar reference wavefront, whose direction is given by the normalized vector $\mathbf{ref} = (ref_x, ref_y, ref_z), |\mathbf{ref}| = 1$. Then the reference wavefront at $h$ is given by
+
+\begin{equation}
+ref(h) = A_{ref} \exp \left[ j k (\mathbf{ref} \cdot h) \right] = A_{ref} \exp \left[ j k (ref_x h_x  + ref_y h_y ) \right]
+\end{equation}
+
+since $h_z = 0$. By modulating the object wavefront with the planar reference wavefront, the resulting field at each point $h$ of the hologram plane is given by
+
+\[
+E(h) = obj(h) + ref(h)
+\]
+
+The respective intensity pattern is given by the magnitude squared
+
+\[
+I(h) = |E(h)|^2 = E(h) * E(h)^*
+\]
+The bipolar intensity method can be derived by expanding the magnitude squared above
+\begin{equation}
+I(h) = |E(h)|^2 = |obj(h)|^2 + |ref(h)|^2 + 2 Real[obj(h) * ref^*(h)]
+\end{equation}
+The $|obj(h)|^2$ term represents object point light sources interfering with each others and can be neglected in computer generated holography. The $|ref(h)|^2$ term is the reference bias that increases the hologram intensity and can also not be included. Finally, the last term contains all the required information to fully reconstruct the desired image. In the bipolar intensity formulation the interference pattern across points $h$ of the hologram plane is thus described by
+\[ \begin{array}{lcl}
+I(h) & \propto &  Real[obj(h) * ref^*(h)]\\
+ & \propto & Real [ A_{ref} \exp[-j k (ref_x h_x + ref_y h_y)] \sum_i^N A_i \exp{(j k r_i(h))} ]\\
+ & \propto & Real [ A_{ref} \sum_i^N A_i \exp{[j k ( r_i(h) - (ref_x h_x + ref_y h_y) )]} ]
+\end{array} \]
+
+which finally leads to
+
+\begin{equation}
+I(h) \propto A_{ref} \sum_i^N A_i \cos{[k ( r_i(h) -(ref_x h_x + ref_y h_y) )]}
+\label{eq:bipolar}
+\end{equation}
+
+  </body>
+</html>

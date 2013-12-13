@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 14.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 43363)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_3"
+   x="0px"
+   y="0px"
+   width="327.333px"
+   height="200.909px"
+   viewBox="0 0 327.333 200.909"
+   enable-background="new 0 0 327.333 200.909"
+   xml:space="preserve"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="plane-wave.svg"><metadata
+   id="metadata41"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs39" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1006"
+   id="namedview37"
+   showgrid="false"
+   inkscape:zoom="2"
+   inkscape:cx="131.61157"
+   inkscape:cy="112.06875"
+   inkscape:window-x="0"
+   inkscape:window-y="25"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="g31" />
+<g
+   fill="#FF0000"
+   stroke="#000000"
+   stroke-width="2.5"
+   id="g3">
+	<polygon
+   opacity="0.3"
+   points="-73.222,120.586 -73.222,36.578 5.645,8.29 5.645,77.725"
+   id="polygon5" />
+	<polygon
+   opacity="0.3"
+   points="-49.82,126.372 -49.82,42.364 29.047,14.076 29.047,83.511"
+   id="polygon7" />
+	<polygon
+   opacity="0.3"
+   points="-26.418,132.158 -26.418,48.15 52.449,19.862 52.449,89.297"
+   id="polygon9" />
+	<polygon
+   opacity="0.3"
+   points="-3.016,137.944 -3.016,53.937 75.851,25.648 75.851,95.083"
+   id="polygon11" />
+	<polygon
+   opacity="0.3"
+   points="20.386,143.73 20.386,59.723 99.253,31.435 99.253,100.869"
+   id="polygon13" />
+	<polygon
+   opacity="0.3"
+   points="43.789,149.517 43.789,65.509 122.655,37.221 122.655,106.655"
+   id="polygon15" />
+	<polygon
+   opacity="0.3"
+   points="67.191,155.303 67.191,71.295 146.058,43.007 146.058,112.441"
+   id="polygon17" />
+	<polygon
+   opacity="0.3"
+   points="90.593,161.089 90.593,77.081 169.46,48.793 169.46,118.228"
+   id="polygon19" />
+	<polygon
+   opacity="0.3"
+   points="113.995,166.875 113.995,82.867 192.861,54.579 192.861,124.014"
+   id="polygon21" />
+	<polygon
+   opacity="0.3"
+   points="137.397,172.661 137.397,88.653 216.262,60.365 216.262,129.8"
+   id="polygon23" />
+	<polygon
+   opacity="0.3"
+   points="160.799,178.447 160.799,94.439 239.663,66.152 239.663,135.586"
+   id="polygon25" />
+	<polygon
+   opacity="0.3"
+   points="184.201,184.233 184.201,100.226 263.063,71.938 263.063,141.372"
+   id="polygon27" />
+	<polygon
+   opacity="0.3"
+   points="207.603,190.02 207.603,106.013 286.464,77.725 286.464,147.158"
+   id="polygon29" />
+</g>
+<g
+   id="g31">
+	<path
+   transform="translate(0.08838835,-0.08838835)"
+   style="fill:none;stroke:#000000;stroke-width:1.25000000000000000"
+   d="M 314.27847,143.20503 295.897,127.657 l -3.215,4.072 -22.288,-5.571 -9.77509,7.11141"
+   id="polyline33"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccc" />
+	<polygon
+   points="278.054,152.088 279.179,146.089 258.284,138.374 260.321,132.695 283.144,140.519 279.5,144.589 314.752,142.66 318.235,149.517 "
+   id="polygon35"
+   transform="translate(0.02209709,-0.02209709)" />
+<path
+   style="fill:#ffffff;stroke:none"
+   d="m 312.95008,142.72872 -16.84316,-14.27622 -3.08242,3.85102 -22.40784,-5.55958 -8.82906,6.42133 21.34894,7.35157 -3.63452,4.07153 z"
+   id="polyline3021"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="cccccccc" /></g>
+</svg>

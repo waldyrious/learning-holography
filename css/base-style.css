@@ -71,3 +71,7 @@ dt {
 input {
   vertical-align: middle;
 }
+
+.todo {
+  background-color: yellow;
+}
