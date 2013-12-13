@@ -19,7 +19,8 @@
 To do that, we first decompose the object into a large number of points,
 which we approximate as spherical light sources
 (for now we ignore the opacity of the object,
-which would make the front points to block the light from the back ones).</p>
+which would make the front points to block the light from the back ones
+from reaching the holographic plate).</p>
 <img src="img/stanford-bunny.png" width="240px" style="vertical-align:middle;">
 <b style="font-size:x-large">➔</b>
 <img src="img/stanford-bunny-points.png" width="220px" style="vertical-align:middle;">
@@ -33,14 +34,14 @@ each corresponding to a crest in the wave.</p>
 
 <p>Our system of coordinates will be the
 <a href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system#Orientation_and_handedness">left-handed cartesian</a>,
-with X pointing to the right, Y pointing up, and Z pointing forward (from the object to the hologram)
+with X pointing to the right, Y pointing up, and Z pointing forward (from the object to the hologram).
 The hologram will be a plane centered at the origin of the system of coordinates,
-and perpendicular to the Z (i.e., it will be the XY plane).</p>
+and perpendicular to the Z axis (i.e., it will be the XY plane).</p>
 </p>
 Given the above, we'll define the following elements for our calculations:
 <ul>
 	<li>$h = (h_x, h_y, 0)$, a point on the hologram plane ($z = 0$),</li>
-	<li>$p_i = (p_{ix}, p_{iy}, p_{iz})$, the location of the $i^{th}$ object point light source, and</li>
+	<li>$p_i = (p_{ix}, p_{iy}, p_{iz})$, the location of the $i^{th}$ object point light source</li>
 </ul>
 
 We know that the value of a single wave at the origin of the coordinate system at instant $t$ is
@@ -55,14 +56,15 @@ and $\varphi$ is the initial phase (angle) of the wave at the origin.
 So both $\omega t$ and $\varphi$ are angles, which are subtracted to yield
 the real phase angle of the wave at instant $t$
 
-Then the amplitude of the whole compound object wave, made up of all $N$ object points,
-at a given point $h$ of the hologram and a given time $t$, is given by
+The amplitude of the whole compound object wave, made up of all $N$ object points,
+at a given point $h$ of the hologram and a given time $t$,
+is given by simply summing all contributions together:
 
 \begin{equation}
 u(t)=\sum_i^N A_i cos(\omega t - \varphi_i)
 \end{equation}
 
-Here, $\varphi_n$ is the initial ($t=0$) phase of the spherical wave emitted from point $n$
+Here, $\varphi_n$ is the initial phase (at $t=0$) of the spherical wave emitted from point $n$
 at hologram point $h$. It depends on the distance from the object point
 to the hologram point being considered, which is calculated
 using the familiar <a href="http://en.wikipedia.org/wiki/Euclidean_distance">
@@ -80,6 +82,17 @@ which is abbreviated as $k = \tau/\lambda$, and —somewhat unhelpfully—
 called the "wavenumber". This multiplication, $k r_i(h)$,
 like the $\omega t$ one, yields a phase angle, so both values can be
 subtracted to yield the phase of the wave $p_i$ at point $h$ and instant $t$.</p>
+
+<p>Note that here we're considering that the wave is leagving the object point
+at phase zero, which is not true: because the object is not self-luminous,
+but rather is reflecting the reference wave towards the hologram,
+the initial phase at the object point will depend on its position
+along the direction of propagation of the wave,
+so the initial phase at the hologram point naturally depends on this as well.
+Ideally we would subtract it, as in $k r_i(h) - \varphi_{i0}$.
+However,
+<span class="todo">(TODO: copy from google docs)</span>
+</p>
 
 The formula above then becomes:
 
