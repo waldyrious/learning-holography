@@ -46,7 +46,7 @@ Given the above, we'll define the following elements for our calculations:
 
 <p style="text-align:center"><img src="img/scene.svg" width="500"></p>
 
-We know that the value of a single wave at the origin of the coordinate system at instant $t$ is
+To start, we know that the value of a single wave at the origin of the coordinate system at instant $t$ is
 \begin{equation}
 A \times \cos(\omega t - \varphi)
 \end{equation}
@@ -58,7 +58,8 @@ and $\varphi$ is the initial phase (angle) of the wave at the origin.
 So both $\omega t$ and $\varphi$ are angles, which are subtracted to yield
 the real phase angle of the wave at instant $t$.</p>
 
-<p>The amplitude of the whole compound object wave, made up of all $N$ object points,
+<p>Using this formulation, the amplitude of the whole compound object wave,
+made up of all $N$ object points,
 at a given point $h$ of the hologram and a given time $t$,
 is given by simply summing all contributions together:</p>
 
@@ -66,8 +67,10 @@ is given by simply summing all contributions together:</p>
 u(t)=\sum_n^N A_n \cos(\omega t - \varphi_n)
 \end{equation}
 
-Here, $\varphi_n$ is the initial phase (at $t=0$) of the spherical wave emitted from point $n$
-at hologram point $h$. It depends on the distance from the object point
+Here, $\varphi_n$ is the initial phase (at $t=0$)
+of the spherical wave emitted from point $n$
+at hologram point $h$.
+It depends on the distance from the object point
 to the hologram point being considered, which is calculated
 using the familiar <a href="http://en.wikipedia.org/wiki/Euclidean_distance">
 Euclidean distance</a> formula:
@@ -78,11 +81,13 @@ r_n(h) = \sqrt{(p_{nx} - h_x)^2 + (p_{ny} - h_y)^2 + p_{nz}^2}
 
 <p>(remember that $h_z$ is zero, because we placed the hologram plane at $z=0$).</p>
 
-<p>This distance is then multiplied by the angular spatial frequency of the wave
+<p>This distance (called "r" to underline its meaning as the <em>radius</em>
+of the light sphere emitted from the $n^{th}$ point)
+is then multiplied by the angular spatial frequency of the wave
 (i.e. how many cycles, in radians, the wave completes per unit of distance),
 which is abbreviated as $k = \tau/\lambda$, and —somewhat unhelpfully—
-called the "wavenumber". This multiplication, $k r_n(h)$,
-like the $\omega t$ one, yields a phase angle, so both values can be
+called the "wavenumber". This multiplication, $k \times r_n(h)$,
+like the $\omega \times t$ one, yields a phase angle, so both values can be
 subtracted to yield the phase of the wave $p_n$ at point $h$ and instant $t$.</p>
 
 <p>Note that here we're considering that the wave is leagving the object point
@@ -109,7 +114,7 @@ by varying $h$ and keeping $t$ constant,
 and to calculate the variation of the object wavefront at a fixed
 hologram point, by varying $t$ and keeping $h$ constant.
 
-<p>Now, this is just for the compount object wave.
+<p>Now, this is just for the compound object wave.
 We still need to add the reference wave
 to get the complete wavefront that will form the hologram.</p>
 
@@ -126,7 +131,7 @@ around the (vertical) Y axis (like a head turning side to side),
 and $\theta_x$, aka "pitch", which represents its rotation
 around the (horizontal) X axis (like a head nodding up and down).<p>
 
-<p>Let's start by considering $\theta_x=0$ and seeing what happens as we change $\theta_y=0$:</p>
+<p>Let's start by considering $\theta_x=0$ and seeing what happens as we change $\theta_y$:</p>
 
 <p style="text-align:center"><img src="img/plane-wave-projection.svg" width="400"></p>
 
