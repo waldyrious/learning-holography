@@ -41,7 +41,7 @@ and perpendicular to the Z axis (i.e., it will be the XY plane).</p>
 Given the above, we'll define the following elements for our calculations:
 <ul>
 	<li>$h = (h_x, h_y, 0)$, a point on the hologram plane ($z = 0$),</li>
-	<li>$p_i = (p_{ix}, p_{iy}, p_{iz})$, the location of the $i^{th}$ object point light source</li>
+	<li>$p_n = (p_{nx}, p_{ny}, p_{nz})$, the location of the $n^{th}$ object point light source</li>
 </ul>
 
 We know that the value of a single wave at the origin of the coordinate system at instant $t$ is
@@ -61,7 +61,7 @@ at a given point $h$ of the hologram and a given time $t$,
 is given by simply summing all contributions together:
 
 \begin{equation}
-u(t)=\sum_i^N A_i cos(\omega t - \varphi_i)
+u(t)=\sum_n^N A_n cos(\omega t - \varphi_n)
 \end{equation}
 
 Here, $\varphi_n$ is the initial phase (at $t=0$) of the spherical wave emitted from point $n$
@@ -71,7 +71,7 @@ using the familiar <a href="http://en.wikipedia.org/wiki/Euclidean_distance">
 Euclidean distance</a> formula:
 
 \begin{equation}
-r_i(h) = \sqrt{(p_{ix} - h_x)^2 + (p_{iy} - h_y)^2 + p_{iz}^2}
+r_n(h) = \sqrt{(p_{nx} - h_x)^2 + (p_{ny} - h_y)^2 + p_{nz}^2}
 \end{equation}
 
 <p>(remember that $h_z$ is zero, because we placed the hologram plane at $z=0$).</p>
@@ -79,9 +79,9 @@ r_i(h) = \sqrt{(p_{ix} - h_x)^2 + (p_{iy} - h_y)^2 + p_{iz}^2}
 <p>This distance is then multiplied by the angular spatial frequency of the wave
 (i.e. how many cycles, in radians, the wave completes per unit of distance),
 which is abbreviated as $k = \tau/\lambda$, and —somewhat unhelpfully—
-called the "wavenumber". This multiplication, $k r_i(h)$,
+called the "wavenumber". This multiplication, $k r_n(h)$,
 like the $\omega t$ one, yields a phase angle, so both values can be
-subtracted to yield the phase of the wave $p_i$ at point $h$ and instant $t$.</p>
+subtracted to yield the phase of the wave $p_n$ at point $h$ and instant $t$.</p>
 
 <p>Note that here we're considering that the wave is leagving the object point
 at phase zero, which is not true: because the object is not self-luminous,
@@ -89,7 +89,7 @@ but rather is reflecting the reference wave towards the hologram,
 the initial phase at the object point will depend on its position
 along the direction of propagation of the wave,
 so the initial phase at the hologram point naturally depends on this as well.
-Ideally we would subtract it, as in $k r_i(h) - \varphi_{i0}$.
+Ideally we would subtract it, as in $k r_n(h) - \varphi_{n0}$.
 However,
 <span class="todo">(TODO: copy from google docs)</span>
 </p>
@@ -97,7 +97,7 @@ However,
 The formula above then becomes:
 
 \begin{equation}
-u(t)=\sum_i^N A_i cos(\omega t - k r_i(h))
+u(t)=\sum_n^N A_n cos(\omega t - k r_n(h))
 \end{equation}
 
 Note how the duality of this generic formula can be exploited
