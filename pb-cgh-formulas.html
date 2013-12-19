@@ -6,7 +6,8 @@
 	<meta charset="utf-8">
 	<script type="text/x-mathjax-config">
 	  MathJax.Hub.Config({
-		tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+		tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] },
+		TeX: { equationNumbers: { autoNumber: "AMS" } }
 	  });
 	</script>
     <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -47,9 +48,10 @@ Given the above, we'll define the following elements for our calculations:
 <p style="text-align:center"><img src="img/scene.svg" width="500"></p>
 
 To start, we know that the value of a single wave at the origin of the coordinate system at instant $t$ is
-\begin{equation}
+
+\[
 A \times \cos(\omega t - \varphi)
-\end{equation}
+\]
 
 <p>...where $A$ is the amplitude (maximum height) of the wave,
 $\omega$ is the temporal angular frequency of the wave
@@ -63,9 +65,9 @@ made up of all $N$ object points,
 at a given point $h$ of the hologram and a given time $t$,
 is given by simply summing all contributions together:</p>
 
-\begin{equation}
+\[
 obj(h,t)=\sum_n^N A_n \cos(\omega t - \varphi_n)
-\end{equation}
+\]
 
 Here, $\varphi_n$ is the initial phase (at $t=0$)
 of the spherical wave emitted from point $n$
@@ -75,9 +77,9 @@ to the hologram point being considered, which is calculated
 using the familiar <a href="http://en.wikipedia.org/wiki/Euclidean_distance">
 Euclidean distance</a> formula:
 
-\begin{equation}
+\[
 r_n(h) = \sqrt{(p_{nx} - h_x)^2 + (p_{ny} - h_y)^2 + p_{nz}^2}
-\end{equation}
+\]
 
 <p>(remember that $h_z$ is zero, because we placed the hologram plane at $z=0$).</p>
 
@@ -104,7 +106,8 @@ However,
 The formula above then becomes:
 
 \begin{equation}
-obj(h,t)=\sum_n^N A_n \cos(\omega t - k r_n(h))
+	obj(h,t)=\sum_n^N A_n \cos(\omega t - k r_n(h))
+	\label{eq:obj}
 \end{equation}
 
 Note how the duality of this generic formula can be exploited
@@ -203,12 +206,114 @@ p_ʀ(h) = \left( h_x \sin(\theta_y) + h_y \sin(\theta_x) \right)
 thus yielding the reference wave formula:
 
 \begin{equation}
-ref(h,t)=A_ʀ \cos ( \omega t - k p_ʀ(h) )
+	ref(h,t)=A_ʀ \cos ( \omega t - k p_ʀ(h) )
+	\label{eq:ref}
 \end{equation}
 
-<p></p>
-<p></p>
-<h3>Cummulative hologram</h3>
+<h3>Putting the pieces together</h3>
+
+Ok, now that we have the object and the reference wave described as simple formulas,
+we can compute the hologram.
+To do that, we simply go over each point $h$ in the hologram,
+and sum the object and the reference waves,
+obtaining the interference field $E$:
+
+\[
+E(h) = obj(h) + ref(h)
+\]
+
+which, when combined with \eqref{eq:obj} and \eqref{eq:ref}, expands to:
+
+\begin{equation}
+	E(h) = \sum_n^N A_n \cos(\omega t - k r_n(h)) + A_ʀ \cos ( \omega t - k p_ʀ(h) )
+	\label{eq:interference}
+\end{equation}
+
+<p>However, this only gives us the instantaneous interference pattern
+created from the interaction of all these waves at a given moment $t$.
+The actual hologram is the result of the static "nodes" created when coherent waves interact.
+These nodes will have zero activity, while other points in the hologram will register oscillations.</p>
+
+<p>Now, although these oscillations have all the same period, because the waves are coherent,
+their peaks and valleys will occurr at different stages of the "global" cycle.
+And each of these oscillation zones will have the value zero at the right time in their cycle.
+So that makes it <b>impossible, in an instant snapshot, to distinguish permanently static zones
+from zones that only happen to be passing through zero at that moment</b>.</p>
+
+<p>To solve this, we have to calculate the interference pattern
+for all possible phase positions of the global cycle and accumulate any activity,
+to make the oscillation zones unambiguously distinguishable from the true, static nodes
+of the interference pattern.</p>
+
+<p>The straightforward way to do that is to discretize the phase space
+into a finite set of regularly-spaced phase values,
+calculate the interference pattern at each phase value, and sum them all
+to yield the hologram.</p>
+
+<p>Note that, precisely because each oscillation in the pattern
+occurs over the same length of time, and because the oscillations
+consist in the wave cycling between positive and negative values,
+simply summing the interference pattern over a wave cycle
+would result in zero everywhere. We need to make sure the values we're summing
+actually accumulate, rather than cancel out.<p>
+
+<p>Fortunately, what the holographic plate registers is <b>intensity, not amplitude</b>,
+and intensity is proportional to the amplitude squared.
+The squaring, conveniently, provides us with only positive values,
+which can indeed be summed and accumulated properly.</p>
+
+The cumulative interference pattern (i.e., the actual hologram) is thus obtained by:
+
+\begin{equation}
+holo(h) = \sum_t^T \left[ \sum_n^N A_n \cos(\omega t - k r_n(h)) + A_ʀ \cos ( \omega t - k p_ʀ(h)) \right]^2
+	\label{eq:hologram}
+\end{equation}
+
+<p>This is all we need to make the hologram! Since we're talking about
+computer-generated holograms, it is appropriate to present
+the above equation in the form of a computer algorithm.
+So, in pseudo-code, the equation above translates to:</p>
+
+<pre>
+var phaseSteps = 100
+var holoPixels = 500
+var objectPoints = [
+    {x: ..., y: ..., z: ...},
+    {x: ..., y: ..., z: ...},
+    {x: ..., y: ..., z: ...} ]
+var amplitude[], intensity[], hologram[]
+
+for i = 0 --> phaseSteps {
+  phase = i/phaseSteps * 2*pi
+  for h = 0 --> holoPixels {
+    amplitude[ h ] += ref-amplitude( h, phase )
+    for each point in objectPoints {
+      amplitude[ h ] += obj-amplitude( h, phase, p )
+    }
+    intensity[ h ] = amplitude[ h ]^2
+  }
+  hologram[] += intensity[]
+}
+
+# Normalize
+hologram[] /= max( hologram[] )
+
+# Auxiliary functions
+ref-amplitude( h, phase ) {
+  ...
+}
+obj-amplitude( h, phase, p ) {
+  ...
+}
+</pre>
+
+<p>But this is a rather naive approach,
+which not only introduces a loss of precision in the quantization of both the object
+and the phase space, but also requires a calculation over a given length of time
+— in other words, it essentially implements an exposure period.</p>
+
+In the next chapter, we will explore ways to make this calculation both more exact
+and faster. <b><a href="pb-cgh-formulas-2.html">Onward!</a></b>
 
 <h3>Complex formulation</h3>
 \begin{equation}

@@ -75,3 +75,9 @@ input {
 .todo {
   background-color: yellow;
 }
+
+pre {
+  background-color: #eec;
+  border: 1px solid silver;
+  padding: 1em;
+}
