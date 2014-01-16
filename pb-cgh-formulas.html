@@ -48,8 +48,8 @@ and perpendicular to the Z axis (i.e., it will be the XY plane).</p>
 </p>
 Given the above, we'll define the following elements for our calculations:
 <ul>
-	<li>$h = (h_x, h_y, 0)$, a point on the hologram plane ($z = 0$),</li>
-	<li>$p_n = (p_{nx}, p_{ny}, p_{nz})$, the location of the $n^{th}$ object point light source</li>
+	<li>$h = (h_x, h_y, 0)$, a point on the hologram plane ($z = 0$), and</li>
+	<li>$p_n = (p_{nx}, p_{ny}, p_{nz})$, the location of the $n^{th}$ object point light source.</li>
 </ul>
 
 <p style="text-align:center"><img src="img/scene.svg" width="500"></p>
@@ -87,7 +87,7 @@ using the familiar <a href="http://en.wikipedia.org/wiki/Euclidean_distance">
 Euclidean distance</a> formula:
 
 \[
-r_n(h) = \sqrt{(p_{nx} - h_x)^2 + (p_{ny} - h_y)^2 + p_{nz}^2}
+r_n(h) = \sqrt{(p_{nx} - h_x)^2 + (p_{ny} - h_y)^2 + {p_{nz}}^2}
 \]
 
 <p>(remember that $h_z$ is zero, because we placed the hologram plane at $z=0$).</p>
@@ -101,7 +101,7 @@ called the "wavenumber". This multiplication, $k \times r_n(h)$,
 like the $\omega \times t$ one, yields a phase angle, so both values can be
 subtracted to yield the phase of the wave $p_n$ at point $h$ and instant $t$.</p>
 
-<p>Note that here we're considering that the wave is leagving the object point
+<p>Note that here we're considering that the wave is leaving each object point
 at phase zero, which is not true: because the object is not self-luminous,
 but rather is reflecting the reference wave towards the hologram,
 the initial phase at the object point will depend on its position
