@@ -298,6 +298,14 @@ into a finite set of regularly-spaced phase values,
 calculate the instantaneous interference pattern at each phase value, and sum them all
 to yield the cumulative interference pattern, a.k.a. the hologram.</p>
 
+<p>Now, "discretize the phase space" may sound fancy,
+but in practice, this is equivalent to calculating the instantaneous intensity
+for all instants contained in the duration of a wave cycle
+(subdividing this period of time into a convenient number of time steps),
+since each instant will correspont to a phase position,
+and these will repeat after the wave cycle is over
+(so a single cycle is enough to cover all the phase positions).</p>
+
 <p>One thing to keep in mind when summing these values is that,
 because each oscillation in the pattern occurs over the same length of time,
 and because the oscillations consist in the wave alternating between positive and negative values,
@@ -323,7 +331,7 @@ the above equation in the form of a computer algorithm.
 So, in pseudo-code, the final equation above translates to:</p>
 
 <pre>
-var phaseSteps = 100
+var timeSteps = 100
 var holoPixels = 500
 var objectPoints = [
     {x: ..., y: ..., z: ...},
@@ -331,8 +339,8 @@ var objectPoints = [
     {x: ..., y: ..., z: ...} ]
 var amplitude[], intensity[], hologram[]
 
-for i = 0 --> phaseSteps {
-  phase = i/phaseSteps * 2*pi
+for i = 0 --> timeSteps {
+  phase = i/timeSteps * 2*pi  # wave phase, from 0 to 2pi
   for h = 0 --> holoPixels {
     amplitude[ h ] += ref-amplitude( h, phase )
     for each point in objectPoints {
@@ -356,9 +364,11 @@ obj-amplitude( h, phase, p ) {
 </pre>
 
 <p>But this is a rather naive approach,
-which not only introduces a loss of precision in the quantization of both the object
-and the phase space, but also requires a calculation over a given length of time
-— in other words, it essentially implements an exposure period.</p>
+which not only introduces a loss of precision in the quantization of both space
+(by dividing the object in points and the hologram surface in pixels)
+and time (by dividing the phase space into discrete steps),
+but also requires the calculation to range over a given length of time
+— in other words, it essentially simulates an exposure period.</p>
 
 In the next chapter, we will explore ways to make this calculation both more exact
 and faster. <b><a href="pb-cgh-formulas-2.html">Onward!</a></b>
