@@ -162,15 +162,16 @@ hologram point, by varying $t$ and keeping $h$ constant.
 
 <p>As may be noted, the above formula is just for the compound object wave.
 We still need to add the reference wave
-to get the complete wavefront that will form the hologram.</p>
+to get the final wavefront that will form the hologram.</p>
 
 <p>As mentioned above, we'll be using a planar wave as the reference wave
-(<span class="todo">TODO: explain why.</span>),
-so it's formula can't be defined as based on the distance of its center,
-like for the spherical point waves, because by definition, a planar wave
-is a wave whose focal point is at an infinite distance, so the curvature
-of its wavefronts is zero. What we do, instead, is define it
-by the angles it makes with the hologram plane.</p>
+(which makes some calculations simpler and some practical setups easier),
+so it's not useful to describe it with the spherical wave formula,
+because by definition, a planar wave is the idealized limit of a spherical wave
+as its source point's distance from the measuring region grows toward infinity,
+with the local curvature of its wavefronts consequently approaching zero.
+What we do, instead, is define it
+by the angles it makes with the hologram plane, since these will be constant.</p>
 
 <p>This is done using two angles: $\theta_y$, aka "yaw", which represents its rotation
 around the (vertical) Y axis (like a head turning side to side),
@@ -181,26 +182,29 @@ around the (horizontal) X axis (like a head nodding up and down).<p>
 
 <p style="text-align:center"><img src="img/plane-wave-projection.svg" width="400"></p>
 
-<p>This image shows a top-down view of the scene,
+<!--<p class="note">This image shows a top-down view of the scene,
 assuming the reference wave only changes in "yaw",
-so subsequent wavefronts, although planar, would be seen as parallel lines from the top.
-As you can see, if we adjust the angle $\theta_y$,
+so a series of wavefronts, despite being planes,
+would be seen as parallel lines from the top.</p>-->
+
+<p>As can be seen in the image, if we adjust the angle $\theta_y$,
 although the wavelength $\lambda$ would remain the same,
-the distance between two wave crests in the hologram plane would change.
-In other words, it's the projection of $\lambda$ into the X axis.
+the distance between two wave crests <i>in the hologram plane</i> would change accordingly.
+In other words, this distance is the projection of $\lambda$ into the X axis.
 We'll call this $\lambda_x$.</p>
 
 <p>Using elementary trigonometry, we can see that,
-using the definition of the sine of an angle
+from the definition of the sine of an angle
 as <a href="http://en.wikipedia.org/wiki/Sohcahtoa#Mnemonics">opposite/hypotenuse</a>,
 we obtain the relationship $\sin(\theta_y) = \lambda/\lambda_x$,
 and therefore, $\lambda_x = \lambda/\sin(\theta_y)$.</p>
 
-<p>Now, having the wavelength of the reference wave along the hologram plane,
+<p>Now, having the projected wavelength of the reference wave along the hologram plane,
 we can, for every location $h_x$, obtain the value of the wave (i.e. its phase).
 For example, assuming the wave's phase at $h_x=0$ is zero,
-the wave will have completed a full cycle (thus the phase will be zero again)
-at $h_x=\lambda_x$. So, to get the reference wave phase at any given $h_x$,
+the wave completes a full cycle (i.e. its phase is also zero)
+at $h_x=\lambda_x$, and again at $2 \lambda_x$, $3 \lambda_x$, etc.
+So, to get the reference wave phase at any given $h_x$,
 we just divide it by $\lambda_x$.</p>
 
 <p>Of course, this gives us a fractional value,
@@ -208,7 +212,7 @@ a linearly growing value representing the number of cycles completed as we advan
 To pass this value to the cosine function
 and thus get the amplitude of the wave, we need to convert this to radians,
 which we do by multiplying the fractional value by $\tau$.
-The formula for a (yaw-only) reference wave is thus:</p>
+The formula for a (yaw-varying only) reference wave is thus:</p>
 
 \[
 A_ʀ \cos ( \omega t - \frac{h_x}{\lambda_x} \tau )
@@ -222,7 +226,7 @@ So putting it all together, for the general case where both $\theta_x \neq 0$ an
 A_ʀ \cos \left[ \omega t - \left( \frac{h_x}{\lambda/\sin(\theta_y)} \tau + \frac{h_y}{\lambda/\sin(\theta_x)} \tau \right) \right]
 \]
 
-By rearranging the pieces, and because $k=\tau/\lambda$, this becomes:
+By rearranging the pieces, and because $k=\tau/\lambda$, this simplifies to:
 
 \[
 A_ʀ \cos \left[ \omega t - k \left( h_x \sin(\theta_y) + h_y \sin(\theta_x) \right) \right]
@@ -230,7 +234,7 @@ A_ʀ \cos \left[ \omega t - k \left( h_x \sin(\theta_y) + h_y \sin(\theta_x) \ri
 
 To make this similar to the object wave function,
 we can abstract away the inner sum that's multiplied by $k$
-into a function $p$ (named that way to stress its meaning
+into a function $p_ʀ$ (named that way to stress its meaning
 as the <em>projection</em> of the reference wave into the hologram plane):
 
 \[
@@ -265,8 +269,15 @@ which, when combined with equations \eqref{eq:obj} and \eqref{eq:ref}, expands t
 
 <p>However, this only gives us the instantaneous interference pattern
 created from the interaction of all these waves at a given moment $t$.
-The actual hologram is the result of the static "nodes" created when coherent waves interact.
-These nodes will have zero activity, while other points in the hologram will register oscillations.</p>
+The actual hologram is the result of the static "nodes" that appear over time
+when coherent waves interact. These nodes will always have zero activity,
+while other points in the hologram will register oscillations.</p>
+
+<p>Such nodes form whenever several waves of the same (constant) frequency interact.
+In fact, this is exactly the principle that allows holograms to exist,
+as static snapshots of a dynamic interference pattern.
+To gain a better understanding of how these nodes form,
+play a little with the animation at <a href="2d-hologram-viz.html">this page</a>.</p>
 
 <p>Now, although these oscillations have all the same period, because the waves are coherent,
 their peaks and valleys will occurr at different stages of the "global" cycle.
@@ -276,24 +287,24 @@ from zones that only happen to be passing through zero at that moment</b>.</p>
 
 <p>To solve this, we have to calculate the interference pattern
 for all possible phase positions of the global cycle and accumulate any activity,
-to make the oscillation zones unambiguously distinguishable from the true, static nodes
+to make the oscillation zones unambiguously distinguishable from the static nodes
 of the interference pattern.</p>
 
 <p>The straightforward way to do that is to discretize the phase space
 into a finite set of regularly-spaced phase values,
-calculate the interference pattern at each phase value, and sum them all
-to yield the hologram.</p>
+calculate the instantaneous interference pattern at each phase value, and sum them all
+to yield the cumulative interference pattern, a.k.a. the hologram.</p>
 
-<p>Note that, precisely because each oscillation in the pattern
-occurs over the same length of time, and because the oscillations
-consist in the wave cycling between positive and negative values,
+<p>One thing to keep in mind when summing these values is that,
+because each oscillation in the pattern occurs over the same length of time,
+and because the oscillations consist in the wave alternating between positive and negative values,
 simply summing the interference pattern over a wave cycle
 would result in zero everywhere. We need to make sure the values we're summing
 actually accumulate, rather than cancel out.<p>
 
 <p>Fortunately, what the holographic plate registers is <b>intensity, not amplitude</b>,
-and intensity is proportional to the amplitude squared.
-The squaring, conveniently, provides us with only positive values,
+and intensity is proportional to the amplitude squared;
+the squaring, conveniently, provides us with only positive values,
 which can indeed be summed and accumulated properly.</p>
 
 The cumulative interference pattern (i.e., the actual hologram) is thus obtained by:
