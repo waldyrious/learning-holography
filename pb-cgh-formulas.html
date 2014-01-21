@@ -334,19 +334,19 @@ So, in pseudo-code, the final equation above translates to:</p>
 var timeSteps = 100
 var holoPixels = 500
 var objectPoints = [
-    {x: ..., y: ..., z: ...},
-    {x: ..., y: ..., z: ...},
-    {x: ..., y: ..., z: ...} ]
+      {x: ..., y: ..., z: ...},
+      {x: ..., y: ..., z: ...},
+      {x: ..., y: ..., z: ...} ]
 var amplitude[], intensity[], hologram[]
 
-for i = 0 --> timeSteps {
-  phase = i/timeSteps * 2*pi  # wave phase, from 0 to 2pi
-  for h = 0 --> holoPixels {
-    amplitude[ h ] += ref-amplitude( h, phase )
-    for each point in objectPoints {
-      amplitude[ h ] += obj-amplitude( h, phase, p )
+for t = 0 --> timeSteps {
+  ph = t/timeSteps * 2*pi  # wave phase, from 0 to 2pi
+  for px = 0 --> holoPixels {
+    amplitude[ px ] += ref-amplitude( px, ph )
+    for each pt in objectPoints {
+      amplitude[ px ] += obj-amplitude( px, ph, pt )
     }
-    intensity[ h ] = amplitude[ h ]^2
+    intensity[ px ] = amplitude[ px ]^2
   }
   hologram[] += intensity[]
 }
@@ -355,10 +355,10 @@ for i = 0 --> timeSteps {
 hologram[] /= max( hologram[] )
 
 # Auxiliary functions
-ref-amplitude( h, phase ) {
+ref-amplitude( px, ph ) {
   ...
 }
-obj-amplitude( h, phase, p ) {
+obj-amplitude( px, ph, pt ) {
   ...
 }
 </pre>
