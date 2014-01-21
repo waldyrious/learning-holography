@@ -73,5 +73,29 @@ I(h) \propto A_{ref} \sum_i^N A_i \cos{[k ( r_i(h) -(ref_x h_x + ref_y h_y) )]}
 \label{eq:bipolar}
 \end{equation}
 
+<pre>
+var holoPixels = 500
+var waveSources = [
+      (reference wave),
+      (object point 1),
+      ...,
+      (object point n) ]
+var intensity[], hologram[]
+
+for px = 0 --> holoPixels {
+  for each src1 in waveSources, {
+    for each src2 in (objectPoints,) {
+      intensity[ px ] += wave-amplitude-difference( px, src1, src2 )
+    }
+  }
+}
+
+# Normalize
+var maxIntensity = max( intensity[] )
+for px = 0 --> holoPixels {
+  hologram[ px ] = intensity[ px ] / maxIntensity
+}
+</pre>
+
   </body>
 </html>
