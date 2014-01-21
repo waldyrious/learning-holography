@@ -20,6 +20,17 @@
 and formulate phase sweep as integral
 which yields a simple result based on the phase differences.</p>
 
+<p>cumulative calculation only needs the <u>initial phases</u>
+of each object point, because it works with their differences (relative values),
+not their absolute values.
+
+So, although the absolute values do cycle over time
+(which is what, theoretically, the cumulative calculation is doing:
+summing contributions at different moments,
+therefore at different absolute phase values),
+the fact that they cycle (precisely) <u>in phase</u> with each other,
+means that their differences will be constant over time.</p>
+
 <h3>Complex formulation</h3>
 \begin{equation}
 obj(h) = \sum_i^N A_i \exp{(j k r_i(h))}
