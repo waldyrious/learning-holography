@@ -23,12 +23,13 @@
 <a href="http://en.wikipedia.org/wiki/Holography">what a hologram is</a>
 and, in broad terms, the basic principles of how to make one.</p>
 
-<p>So, we have a 3D object of which we want to make a computer-generated hologram.
+<p>Let's say we have a 3D object,
+and we want to make a computer-generated hologram from it.
 To do that, we first decompose the object into a large number of points,
-which we approximate as spherical light sources
-(for now we ignore the opacity of the object,
-which would make the front points to block the light from the back ones
-from reaching the holographic plate).</p>
+which we approximate as spherical light sources.
+(For now, we'll ignore the opacity of the object.
+This means that the points near the holographic plate
+don't block the light from the farther ones).</p>
 <img src="img/stanford-bunny.png" width="240px" style="vertical-align:middle;">
 <b style="font-size:x-large">➔</b>
 <img src="img/stanford-bunny-points.png" width="220px" style="vertical-align:middle;">
@@ -86,7 +87,7 @@ at a given point $h$ of the hologram and a given time $t$,
 is given by simply summing all contributions together:</p>
 
 \[
-obj(h,t)=\sum_n^N A_n \cos(\omega t - \varphi_n)
+obj(h,t)=\sum_n A_n \cos(\omega t - \varphi_n)
 \]
 
 The value of $\varphi_n$ at point $h$ depends on the distance from the object point
@@ -140,7 +141,7 @@ but phase change has virtually the same effect and is much more convenient to us
 The object wave formula then becomes:
 
 \begin{equation}
-	obj(h,t)=\sum_n^N A_n \cos(\omega t - k r_n(h))
+	obj(h,t)=\sum_n A_n \cos(\omega t - k r_n(h))
 	\label{eq:obj}
 \end{equation}
 
@@ -173,7 +174,8 @@ with the local curvature of its wavefronts consequently approaching zero.
 What we do, instead, is define it
 by the angles it makes with the hologram plane, since these will be constant.</p>
 
-<p>This is done using two angles: $\theta_y$, aka "yaw", which represents its rotation
+<p>This is done using two angles: $\theta_y$, aka "yaw",
+which represents the planar waves' rotation
 around the (vertical) Y axis (like a head turning side to side),
 and $\theta_x$, aka "pitch", which represents its rotation
 around the (horizontal) X axis (like a head nodding up and down).<p>
@@ -263,7 +265,7 @@ E(h) = obj(h) + ref(h)
 which, when combined with equations \eqref{eq:obj} and \eqref{eq:ref}, expands to:
 
 \begin{equation}
-	E(h) = \sum_n^N A_n \cos(\omega t - k r_n(h)) + A_ʀ \cos ( \omega t - k p_ʀ(h) )
+	E(h) = \sum_n A_n \cos(\omega t - k r_n(h)) + A_ʀ \cos ( \omega t - k p_ʀ(h) )
 	\label{eq:interference}
 \end{equation}
 
@@ -321,7 +323,7 @@ which can indeed be summed and accumulated properly.</p>
 The cumulative interference pattern (i.e., the actual hologram) is thus obtained by:
 
 \begin{equation}
-holo(h) = \sum_t^T \left[ \sum_n^N A_n \cos(\omega t - k r_n(h)) + A_ʀ \cos ( \omega t - k p_ʀ(h)) \right]^2
+holo(h) = \sum_t \left[ \sum_n A_n \cos(\omega t - k r_n(h)) + A_ʀ \cos ( \omega t - k p_ʀ(h)) \right]^2
 	\label{eq:hologram}
 \end{equation}
 
