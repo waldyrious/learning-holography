@@ -8,6 +8,10 @@ body {
   font-size: 80%;
   line-height: 1.5;
   padding: 1em;
+  -webkit-font-feature-settings: "kern", "liga";
+  -moz-font-feature-settings: "kern", "liga";
+  font-feature-settings: "kern", "liga";
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4, h5, h6 {
