@@ -116,13 +116,18 @@ function drawPlanarWave() {
 	// Store current transformations to restore later
 	diagram.save();
 
-	// If the reference wave is being included in the hologram
-	// and the user chooses to show the amplitude profiles
-	// (which implies color-coding the curves and the waves to match them),
-	// then paint the reference wave as red
-	// (using the HSL format to match the code for the other waves).
+	// If the reference wave is being included in the interference pattern
+	// then paint it in either black, in the monochrome mode,
+	// or in red if the user chooses to show the amplitude profiles
+	// (which implies color-coding the curves and the waves to match them).
+	// Note: The red color is specified sing the HSL format
+	//       to match the code for the other waves.
 	// Otherwise, paint as "silver" (light grey)
-	diagram.strokeStyle = ( refWave && displayCurves ) ? "hsl(0, 100%, 80%)" : "Silver";
+	if ( refWave ) {
+		diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Black";
+	} else {
+		diagram.strokeStyle = "Silver";
+	}
 
 	// Rotate the reference frame so we can draw the planar wavefronts as horizontal lines
 	// This rotation will be reversed once we're done drawing the reference wave.
@@ -170,13 +175,12 @@ function drawPlanarWaveDirectionBox() {
 	diagram.fillRect(  -dw/2-1, -dh-1, arrowBoxSize, arrowBoxSize );
 	diagram.strokeRect(-dw/2-1, -dh-1, arrowBoxSize, arrowBoxSize );
 
-	// If the reference wave is being included in the hologram
-	// and the user chooses to show the amplitude profiles
-	// (which implies color-coding the curves and the waves to match them),
-	// then paint the reference wave's arrow as red
-	// (using the HSL format to match the code for the other waves).
-	// Otherwise, paint as "silver" (light grey)
-	if ( refWave && displayCurves ) { diagram.strokeStyle = "hsl(0, 100%, 80%)"; }
+	// Match the color of the reference wave
+	if ( refWave ) {
+		diagram.strokeStyle = displayCurves ? "hsl(0, 100%, 80%)" : "Black";
+	} else {
+		diagram.strokeStyle = "Silver";
+	}
 
 	// center the coordinate system in the box
 	diagram.translate( -dw/2 + arrowBoxSize/2, -dh + arrowBoxSize/2 );
@@ -244,8 +248,11 @@ function drawCircularWaves() {
 		// planar wave's propagation direction (+Y')
 		points[pt].phase = wavLen - ( wavLen + dist % wavLen ) % wavLen;
 
-		// Spread the colors around the hue circle according to the number of
-		// points we have. The ref. wave keeps the 0º (red)
+		// If the user chooses to show the amplitude profiles
+		// (which implies color-coding the curves and the waves to match them)
+		// spread the colors around the hue circle according to the number of
+		// points we have (the ref. wave keeps the 0º, i.e. red).
+		// Otherwise, leave the default color (black)
 		if ( displayCurves ) {
 			diagram.fillStyle = "hsl(" + 360*( (pt+1)/numWaves ) + ", 100%, 50%)";
 			diagram.strokeStyle = "hsl(" + 360*( (pt+1)/numWaves ) + ", 100%, 50%)";
