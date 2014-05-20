@@ -104,3 +104,7 @@ td, th {
 th {
   background-color: silver;
 }
+
+.right{
+  text-align: right;
+}
