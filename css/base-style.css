@@ -90,3 +90,11 @@ pre {
   border: 1px solid silver;
   padding: 1em;
 }
+
+table {
+  text-align: center;
+}
+
+td, th {
+  border: 1px solid silver;
+}
