@@ -6,47 +6,76 @@
 	<meta charset="utf-8">
 </head>
 <body>
-<a href="index.html">&larr; back</a>
-<h2>Wave propagation</h2>
-<!-- The diagrams of this section are based on original animations
-by Petr Lobaz, from the University of West Bohemia, Czech Republic -->
+	<a href="index.html">&larr; back</a>
+	<h2>Wave propagation</h2>
+	<!-- The diagrams of this section are based on original animations
+	by Petr Lobaz, from the University of West Bohemia, Czech Republic -->
+	
+	<p>Below are two charged particles, represented by green circles.
+	Each charge affects the electrical field around it.</p>
+	
+	<p>If you click the particle on the left,
+	an external force starts oscillating it.
+	This causes changes in its electrical field
+	to propagate outward, at the speed of light
+	(of course, much slowed down for this illustration).</p>
+	
+	<p>When these changes reach the second particle (5 seconds later),
+	they stimulate it into an identical motion pattern.
+	The propagation distance makes such motion to occur with a slight delay
+	compared to the original particle's.</p>
+	
+	<embed width="350" type="image/svg+xml" src="img/wave-propagation.fig1.svg" />
+	
+	<p>The wave "effect" caused by this propagation delay becomes clear
+	once we observe what happens when several more particles
+	are added to this setup:
+	(click the first one to start the animation)</p>
+	
+	<embed width="350" type="image/svg+xml" src="img/wave-propagation.fig2.svg" />
+	
+	<p>Essentially, charged particles "drag" each other along,
+	and the closer they are to each other,
+	the faster the influence of one reaches the next.</p>
+	
+	<!-- Check http://physics.stackexchange.com/q/93893 (why do EM waves oscillate?)
+	     and expand the above. -->
 
-<p>Below are two charged particles, represented by green circles.
-Each charge affects the electrical field around it.</p>
+	<p class="note">The following is just a draft for text to be added.</p>
+	
+	<!-- describe wave formula and its progressive generalization:
+	-      cos( t )
+	-      cos( wt )
+	-    A cos( wt )
+	-    A cos( wt - phi )
+	- A(r) cos( wt - phi(r) )
+	--->
+	
+	\begin{equation}
+	\cos ( t ) \\
+	A \cos ( \omega t + \varphi ) \\
+	\boxed{A} \cos \left( \boxed{\omega}t + \boxed{\varphi} \right) \\
+	y = \boxed{\mathsf{A}} \cos \left( \boxed{\mathsf{B}}x + \boxed{\mathsf{C}} \right) + \boxed{\mathsf{D}} \\
+	y = \boxed{\mathsf{1}} \cos \left( \boxed{\mathsf{1}}x + \boxed{\mathsf{0}} \right) + \boxed{\mathsf{0}} \\
+	y = sin ( x )
+	\end{equation}
 
-<p>If you click the particle on the left,
-an external force starts oscillating it.
-This causes changes in its electrical field
-to propagate outward, at the speed of light
-(of course, much slowed down for this illustration).</p>
-
-<p>When these changes reach the second particle (5 seconds later),
-they stimulate it into an identical motion pattern.
-The propagation distance makes such motion to occur with a slight delay
-compared to the original particle's.</p>
-
-<embed width="350" type="image/svg+xml" src="img/wave-propagation.fig1.svg" />
-
-<p>The wave "effect" caused by this propagation delay becomes clear
-once we observe what happens when several more particles
-are added to this setup:
-(click the first one to start the animation)</p>
-
-<embed width="350" type="image/svg+xml" src="img/wave-propagation.fig2.svg" />
-
-<p>Essentially, charged particles "drag" each other along,
-and the closer they are to each other,
-the faster the influence of one reaches the next.</p>
-
-<!-- Check http://physics.stackexchange.com/q/93893/4283 and expand the above.
-
-also describe wave formula and its progressive generalization:
--      cos( t )
--      cos( wt )
--    A cos( wt )
--    A cos( wt - phi )
-- A(r) cos( wt - phi(r) )
---->
-
+	<table>
+		<tr>
+			<th></th>
+			<th>...in the input (x) axis.<br/></th>
+			<th>...in the output (y) axis.</th>
+		</tr>
+		<tr>
+			<th style="text-align:right">slides the wave...</th>
+			<td>	C	</td>
+			<td>	D	</td>
+		</tr>
+		<tr>
+			<th style="text-align:right">stretches the wave...</th>
+			<td>	B	</td>
+			<td>	A	</td>
+		</tr>
+	</table>
 </body>
 </html>
