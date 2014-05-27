@@ -92,8 +92,11 @@ pre {
 }
 
 table {
-  text-align: center;
   margin-top: 1em;
+}
+
+table.center {
+  text-align: center;
 }
 
 td, th {
