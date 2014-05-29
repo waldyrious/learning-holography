@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 	<title>PH CGH formulas | Learning Holography</title>
-	<link href="css/base-style.css" rel="stylesheet">
-	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/base-style.css" />
+	<meta charset="utf-8" />
 	<script type="text/x-mathjax-config">
-	  MathJax.Hub.Config({
-		tex2jax: { inlineMath: [['$','$']] }
-	  });
+	  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']] } });
 	</script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   </head>
   <body>
 
@@ -65,9 +63,9 @@ I(h) = |E(h)|^2 = |obj(h)|^2 + |ref(h)|^2 + 2 Real[obj(h) * ref^*(h)]
 \end{equation}
 The $|obj(h)|^2$ term represents object point light sources interfering with each others and can be neglected in computer generated holography. The $|ref(h)|^2$ term is the reference bias that increases the hologram intensity and can also not be included. Finally, the last term contains all the required information to fully reconstruct the desired image. In the bipolar intensity formulation the interference pattern across points $h$ of the hologram plane is thus described by
 \[ \begin{array}{lcl}
-I(h) & \propto &  Real[obj(h) * ref^*(h)]\\
- & \propto & Real [ A_{ref} \exp[-j k (ref_x h_x + ref_y h_y)] \sum_i^N A_i \exp{(j k r_i(h))} ]\\
- & \propto & Real [ A_{ref} \sum_i^N A_i \exp{[j k ( r_i(h) - (ref_x h_x + ref_y h_y) )]} ]
+I(h) &amp; \propto &amp;  Real[obj(h) * ref^*(h)]\\
+ &amp; \propto &amp; Real [ A_{ref} \exp[-j k (ref_x h_x + ref_y h_y)] \sum_i^N A_i \exp{(j k r_i(h))} ]\\
+ &amp; \propto &amp; Real [ A_{ref} \sum_i^N A_i \exp{[j k ( r_i(h) - (ref_x h_x + ref_y h_y) )]} ]
 \end{array} \]
 
 which finally leads to
