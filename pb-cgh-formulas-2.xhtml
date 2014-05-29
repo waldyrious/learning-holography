@@ -16,6 +16,86 @@
   At the moment it's just a bunch of assorted notes.
 </p>
 
+<p>
+For any given object particle, $o$, the value of the wave it emits,
+measured at the moment in time and location in space
+corresponding to the hologram pixel, $h$,
+is given by the following expression:
+</p>
+
+\begin{equation}
+A*\cos( \text{phase}( o, h ) )
+\end{equation}
+
+where
+
+\begin{equation}
+\text{phase}(o, h)  =  \omega_t \Delta_t(o, h) - \omega_s \Delta_s(o, h)
+\end{equation}
+
+(Legend:
+$o$ = object,
+$h$ = hologram,
+$s$ = space,
+$t$ = time,
+$\omega$ = angular frequency)
+
+<p>More specifically:</p>
+<table>
+	<tr>
+		<td colspan="2">we start counting time
+		when the wavefront left the illumination/reference source</td>
+		<td colspan="2">we start measuring space
+		at the origin of the coordinate system,
+		usually the center of the hologram.</td>
+	</tr>
+	<tr>
+		<th>$t_\text{o}$, $t_h$</th>
+		<td>moments when the wavefront hits
+		the current object particle and the hologram pixel,
+		respectively</td>
+		<th>$s_\text{o}$, $s_h$</th>
+		<td>locations of the object particle and of the hologram pixel,
+		respectively</td>
+	</tr>
+	<tr>
+		<th>$\omega_t$</th>
+		<td>temporal angular frequency,
+		i.e. how many cycles, measured in radians,
+		the wave completes per unit of time.</td>
+		<th>$\omega_s$</th>
+		<td>spatial angular frequency,
+		i.e. how many cycles, measured in radians,
+		the wave completes per unit of space.</td>
+	</tr>
+	<tr>
+		<th>$\Delta_t(o, h)$<br />$= \|t_h - t_\text{o}\|$</th>
+		<td>duration of the propagation
+		from the object particle to the hologram pixel</td>
+		<th>$\Delta_s(o, h)$<br />$= \|s_h - s_\text{o}\|$</th>
+		<td>distance from the object particle to the hologram pixel</td>
+	</tr>
+	<tr>
+		<th>$\omega_t \Delta_t$</th>
+		<td>number of cycles, measured in radians,
+		completed by the wave in this interval of time</td>
+		<th>$\omega_s \Delta_s$</th>
+		<td>number of cycles, measured in radians,
+		completed by the wave in this interval of space</td>
+	</tr>
+</table>
+
+We plug $\text{phase}( obj, holo )$ into the cosine,
+and multiply it by the real amplitude of the wave
+(since cosine varies between -1 and 1),
+and lo and behold, we get the equation
+for calculating the value of a single particle wave,
+measured at a specific location (hologram pixel) and at a given moment.
+Then we just need to sum up all the particle-pixel pairs
+to get the whole object wave value for this space-time pair:
+
+$obj( holo ) = sum_{obj}( A*\cos( \text{phase}( obj, holo ) ) )$
+
 <h3>Hologram</h3>
 
 <p>abstract $\omega t/T - k r_n(h)$ and $\omega t - k p_ʀ(h)$ as $\varphi$
@@ -36,18 +116,16 @@ means that their differences will be constant over time.</p>
 <h3>Complex formulation</h3>
 
 <p>
-As previously defined, let $h = (h_x; h_y; 0)$ be a pixel on the hologram plane ($z = 0$),
-and $p_n = (p_{nx}; p_{ny}; p_{nz})$ be the location of the $n^{th}$ object point light source.
+As previously defined, let $s_h = (h_x; h_y; 0)$ be a pixel on the hologram plane ($z = 0$),
+and $s_{on} = (o_{nx}; o_{ny}; o_{nz})$ be the location of the $n^{th}$ object particle light source.
 Then the object wavefront at h for all object point light sources is given by:
 </p>
 
 \begin{equation}
-obj(h) = \sum_n A_n \exp{(i k r_n(h))}
+obj(s_h) = \sum_n A_n \exp{(i \cdot \omega_s \Delta_s)}
 \end{equation}
 
-<p>where $A_n$ is the amplitude of the light source
-and $r_n(h) = \sqrt{(h_x - p_{nx})^2 + (h_y - p_{iy})^2 + p_{iz}^2}$
-is the euclidean distance between $p_n$ and $h$.</p>
+<p>where $A_n$ is the amplitude of the light source.</p>
 
 <p>Also let $A_{ref}$ be the amplitude of the planar reference wavefront,
 whose direction is given by the normalized vector
