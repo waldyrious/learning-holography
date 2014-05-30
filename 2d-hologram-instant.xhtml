@@ -5,11 +5,11 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="css/base-style.css" />
 	<style>
-		canvas, #controls { border: 1px solid grey; display: block; }
-		#angle-slider { width: 34.5em; }
-		#controls { width: 16em; padding: 10px; background-color: Lavender; }
+		canvas, #controls { border: 1px solid grey; display: block; box-sizing: border-box; }
+		#angle-slider { width: 100%; }
+		#controls { padding: 10px; background-color: Lavender; }
 		#controls, canvas#curves, canvas#hologram { border-bottom: none; }
-		p { width: 500px; }
+		#controls, p { width: 502px; /* canvas doesn't seem to honor box-sizing: border-box... */ }
 	</style>
 	<script src="js/math.js"></script>
 </head>
@@ -31,15 +31,15 @@
 		<input type="range" name="angle" id="angle-slider" oninput="setRefAngle()"
 		       value="20.6" min="-90" max="90" step="0.1" />
 		<br /><br />
-		<span>Hologram calculation method: </span>&#8195;
+		<span>Hologram calculation method:&#8194;</span>
 		<input type="radio" name="method" id="method-real"    onchange="setMethod(this)" value="real" checked="checked" />
-		<label for="method-real">Real</label>&#8195;
+		<label for="method-real">Real</label>&#8194;
 		<input type="radio" name="method" id="method-complex" onchange="setMethod(this)" value="complex" />
-		<label for="method-complex">Complex</label>&#8195;
+		<label for="method-complex">Complex</label>&#8194;
 		<input type="radio" name="method" id="method-bipolar" onchange="setMethod(this)" value="bipolar" />
 		<label for="method-bipolar">Bipolar</label>
 		<br /><br />
-		<label for="show-curves">Amplitude curves: </label>
+		<label for="show-curves">Colorize: </label>
 		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="refresh()" />
 		&#8195;
 		<!-- Control whether to include the reference wave in the hologram calculation.

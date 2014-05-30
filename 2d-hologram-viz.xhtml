@@ -5,12 +5,12 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="css/base-style.css" />
 	<style>
-		canvas, #controls { border: 1px solid grey; display: block; }
-		#angle-slider { width: 34.5em; }
-		#phase-slider { width: 16em; float: right; }
+		canvas, #controls { border: 1px solid grey; display: block; box-sizing: border-box; }
+		#angle-slider { width: 100%; }
+		#phase-slider { width: calc(100% - 16em); float: right; }
 		#controls { width: 480px; padding: 10px; background-color: Lavender; }
 		#controls, canvas#curves, canvas#hologram { border-bottom: none; }
-		p { width: 500px; }
+		#controls, p { width: 502px; /* canvas doesn't seem to honor box-sizing: border-box... */ }
 	</style>
 </head>
 <body onload="update()">
@@ -35,14 +35,14 @@
 		<input type="range" name="phase" id="phase-slider" oninput="update()"
 		       value="0" min="0" max="1" step="0.01" />
 		<br /><br />
-		<label for="show-curves">Amplitude curves: </label>
+		<label for="show-curves">Colorize: </label>
 		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="update()" />
 		&#8195;
 		<!-- Control whether to include the reference wave in the hologram calculation.
 		  ~- (on by default). Note that even if this is turned off,
 		  ~- the reference wave is still used to generate the object waves.
 		  -->
-		<label for="ref-wave">Reference wave: </label>
+		<label for="ref-wave">Ref. wave: </label>
 		<input type="checkbox" name="ref-wave" id="ref-wave" checked="checked" autocomplete="off" onchange="newHologram()" />
 		&#8195;
 		<label for="animate">Animate: </label>
