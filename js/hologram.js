@@ -135,10 +135,10 @@ function run() {
 		img.setAttribute('id', cnv.id + '-img');
 		div.appendChild(img);
 		var par = document.createElement('p');
-		par.innerHTML = 'resolution: <span class="right">' + dpi + ' dpi</span><br>'
-			+ 'hologram pixel size: <span class="right">' + res_um + ' µm</span><br>'
-			+ 'hologram width: <span class="right">' + size_cm + ' cm</span><br>'
-			+ 'processing time: <span class="right" id="time-' + cnv.id + '"></span><br>';
+		par.innerHTML = 'resolution: <span class="right">' + dpi + ' dpi</span><br />'
+			+ 'hologram pixel size: <span class="right">' + res_um + ' µm</span><br />'
+			+ 'hologram width: <span class="right">' + size_cm + ' cm</span><br />'
+			+ 'processing time: <span class="right" id="time-' + cnv.id + '"></span><br />';
 		div.appendChild(par);
 		document.getElementsByTagName("body")[0].appendChild(div);
 		//draw hologram

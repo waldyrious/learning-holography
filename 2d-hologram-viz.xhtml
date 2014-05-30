@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<title>2D hologram vizualization | Learning Holography</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="css/base-style.css" />
+	<style>
+		canvas, #controls { border: 1px solid grey; display: block; }
+		#angle-slider { width: 34.5em; }
+		#phase-slider { width: 16em; float: right; }
+		#controls { width: 480px; padding: 10px; background-color: Lavender; }
+		#controls, canvas#curves, canvas#hologram { border-bottom: none; }
+		p { width: 500px; }
+	</style>
+</head>
+<body onload="update()">
+
+	<a href="index.html">← back</a>
+
+	<h2>2D hologram vizualization</h2>
+
+	<p>This page allows playing with physically-based hologram generation
+	and reasoning about how different parameters affect the hologram
+	and how it's formed.</p>
+
+	<div id="controls">
+		<label for="angle">Angle of the incident light: </label>
+		<span id="angle-text" title="angle with hologram plane"></span>
+		<br />
+		<input type="range" name="angle" id="angle-slider" oninput="newHologram()"
+		       value="20.6" min="-90" max="90" step="0.1" />
+		<br /><br />
+		<label for="phase">Phase of the incident light: </label>
+		<span id="phase-text" title="delay as percentage of a wave cycle"></span>
+		<input type="range" name="phase" id="phase-slider" oninput="update()"
+		       value="0" min="0" max="1" step="0.01" />
+		<br /><br />
+		<label for="show-curves">Amplitude curves: </label>
+		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="update()" />
+		&#8195;
+		<!-- Control whether to include the reference wave in the hologram calculation.
+		  ~- (on by default). Note that even if this is turned off,
+		  ~- the reference wave is still used to generate the object waves.
+		  -->
+		<label for="ref-wave">Reference wave: </label>
+		<input type="checkbox" name="ref-wave" id="ref-wave" checked="checked" autocomplete="off" onchange="newHologram()" />
+		&#8195;
+		<label for="animate">Animate: </label>
+		<input type="checkbox" name="animate" id="animate" autocomplete="off" onchange="update()" />
+		&#8195;
+		<input type="button" id="lessPts" value="−" autocomplete="off" onclick="removePoint()" />
+		points
+		<input type="button" id="lessPts" value="+" onclick="addPoint()" />
+	</div>
+
+	<canvas width="500" height="100" id="hologram"></canvas>
+	<canvas width="500" height="50" id="curves"></canvas>
+	<canvas width="500" height="300" id="diagram"></canvas>
+
+	<script type="text/javascript" src="js/2d-hologram-viz.js"></script>
+
+</body>
+</html>
