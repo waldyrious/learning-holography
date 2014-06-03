@@ -24,12 +24,6 @@ var lambda = 630e-9;
 var k = (2 * Math.PI) / lambda;
 // z-depth of the hologram plane (assuming it's parallel to the XY plane)
 var holo_z = 0;
-// All browsers currently assume 96 DPI as the screen resolution.  
-// See [Quirksmode: More about devicePixelRatio](http://www.quirksmode.org/blog/archives/2012/07/more_about_devi.html).  
-// Once real pixel size can be obtained, we can generate a real-size hologram
-// but for now 96dpi is a good approximation
-// 96 px = 1 in = 25.4 mm  -->  1 px = 0.26458(3) mm = 264.583 µm
-//pixelSize = { "hologram": 264.583e-6, "hologram-zoomed": 20e-6 };
 
 // aliasing artifacts:
 // 
@@ -43,10 +37,15 @@ function draw(canvas, pixelSize, nextPixelSize) {
 	if (canvas.getContext) { // test for browser support of the canvas API
 		// [Canvas context](http://wiki.whatwg.org/wiki/CanvasContexts) can be 2d or webgl
 		var ctx = canvas.getContext('2d');
-		// the lighter compositing mode allows overlapping values
-		// to be summed rather than multiplied. This allows controlling
-		// the dynamic range of the image (max intensity = locations
-		// where all point object waves interfere constructively)
+		// To implement the interference phenomenon, we have to sum the waves together.
+		// We'll be repainting the canvas, one wave at a time,
+		// but by default, writing over the same pixel in canvas
+		// completely replaces what was there before.
+		// So we need to use the canvas compositing mode "lighter",
+		// which implements the [additive color model](https://en.wikipedia.org/wiki/Additive_color).
+		// With "lighter", RGB values are summed, saturating at 255; for example:
+		// (100,100,100) + (0,100,200) = (100,200,255).
+		// See http://jsfiddle.net/esfmM/, http://jsfiddle.net/HKv9G/
 		ctx.globalCompositeOperation = "lighter";
 		var start = new Date();
 		var hologramCenterX = canvas.width * pixelSize / 2;
@@ -74,10 +73,13 @@ function draw(canvas, pixelSize, nextPixelSize) {
 					var distY = hpy - opy;
 					// Use the Euclidean formula to calculate the distance between point and hologram pixel
 					var radius = Math.sqrt( Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2) );
-					// Divide by number of points to allow summing values for all points
-					// and still have the final image values range from 0 to 1
-					//intensity = Math.abs(Math.cos(radius*k))/obj.length;
-					var intensity = (Math.cos(radius * k) + 1) / (2 * obj.length);
+					var intensity = Math.cos(radius*k); // normal cosine range, -1 to 1
+					intensity = (intensity + 1) / 2; // convert to 0 to 1 range
+					// We can't normalize the range of the final result after the loop is done,
+					// because the canvas would be saturated (overexposed) by then.
+					// Therefore we divide each wave by the number of waves,
+					// so that the final result ends up normalized within the allowed range.
+					intensity /= obj.length; 
 					// Convert range 0-1 to an integer in the range 0-255
 					var intRGB = Math.round(intensity * 255);
 					// fillStyle uses the same color syntax as css
@@ -110,7 +112,12 @@ function draw(canvas, pixelSize, nextPixelSize) {
 }
 
 function run() {
-	// pixel pitch of the holograms
+	// Pixel pitch of the holograms.
+	// Note: All browsers currently assume 96 DPI as the screen resolution.  
+	// See [Physical units on the web](https://docs.google.com/document/d/1CTMaSmFpCjhw90wNR_hl_uL2nKD2QPtPaBgnrT1X8I0/edit).  
+	// Once real pixel size can be obtained, we can generate a real-size hologram
+	// but for now 96dpi is a good approximation
+	// 96 px = 1 in = 25.4 mm  -->  1 px = 0.26458(3) mm = 264.583 µm
 	var resolutions = [
 		264.58e-6 + (1e-8)/3, // 1px = .00026458(3) m = .26458(3) mm
 		//150e-6,
