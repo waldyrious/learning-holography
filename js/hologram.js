@@ -8,7 +8,7 @@ var cm = 0.01; // 1 cm = 0.01 m
 var obj = [
 	{ x: 0.00*cm, y: 0.00*cm, z:-50*cm },
 	{ x: 0.04*cm, y: 0.00*cm, z:-50*cm },
-	{ x:-0.08*cm, y:-0.04*cm, z:-49*cm } 
+	{ x:-0.08*cm, y:-0.04*cm, z:-48*cm } 
 ];
 // wavelength of the (laser) light: 630nm
 // 
@@ -17,11 +17,17 @@ var obj = [
 // <pre>700  –  635   –    590   –    560   –   490  –   450   –    400
 //      |  red  |  orange  |  yellow  |  green  |  blue  |  purple  |</pre>
 //   - [wavelengths of commercially available lasers](http://upload.wikimedia.org/wikipedia/commons/4/48/Commercial_laser_lines.svg)
-var lambda = 630e-9;
+//   - 632.816 nm = wavelength of a typical red Neon-Helium (NeHe) laser in air.
+var lambda = 633e-9;
 
 // wavenumber: spatial angular frequency (radians per meter)
 // this represents the number of cycles the wave completes per unit distance
 var k = (2 * Math.PI) / lambda;
+// Angle of the planar reference wave relative to positive z axis
+var ref_angle = {x: 0.1, y: 0};
+// x/y components of the ref. wave's direction (normal) vector.
+var ref_x = Math.sin(ref_angle.x * Math.PI/180);
+var ref_y = Math.sin(ref_angle.y * Math.PI/180);
 // z-depth of the hologram plane (assuming it's parallel to the XY plane)
 var holo_z = 0;
 
@@ -50,30 +56,56 @@ function draw(canvas, pixelSize, nextPixelSize) {
 		var start = new Date();
 		var hologramCenterX = canvas.width * pixelSize / 2;
 		var hologramCenterY = canvas.height * pixelSize / 2;
-		for (var pt = 0; pt < obj.length; pt++) {
-			// depth difference between hologram plane and object point
-			var distZ = holo_z - obj[pt].z;
-			for (var holo_x = 0; holo_x < canvas.width; holo_x++) {
-				// calculate physical horizontal coordinate of current hologram pixel
-				// holo_x actually corresponds to the top-left corner of the pixel;
-				// since the pixel has 1x1 size, we add 0.5 to make the distance calculation
-				// take into account the actual center of the pixel
-				var hpx = (holo_x + 0.5) * pixelSize;
-				// Calculate physical horizontal coordinate of current object point
-				// half the width of the hologram's dimensions is added to center the point horizontally
-				var opx = hologramCenterX + obj[pt].x;
-				// horizontal distance between current hologram pixel and current object point
-				var distX = hpx - opx;
-				for (var holo_y = 0; holo_y < canvas.height; holo_y++) { // Note: the e^x code is Math.exp(x);
-					// Calculate physical vertical coordinate of current hologram pixel
-					var hpy = (holo_y + 0.5) * pixelSize;
+		for (var holo_x = 0; holo_x < canvas.width; holo_x++) {
+			// calculate physical horizontal coordinate of current hologram pixel
+			// holo_x actually corresponds to the top-left corner of the pixel;
+			// since the pixel has 1x1 size, we add 0.5 to make the distance calculation
+			// take into account the actual center of the pixel
+			var hpx = (holo_x + 0.5) * pixelSize;
+			for (var holo_y = 0; holo_y < canvas.height; holo_y++) { // Note: the e^x code is Math.exp(x);
+				// Calculate physical vertical coordinate of current hologram pixel
+				var hpy = (holo_y + 0.5) * pixelSize;
+				// Calculate value of the planar reference wavefront
+				// at the current point of the hologram.
+				// * To understand how the formula works, imagine that the wave was
+				//   propagating entirely in the x direction. This would mean that we
+				//   could simply take a location in x and get the number of cycles
+				//   that the wave completed until there (starting at the origin)
+				//   by multiplying this distance by k (which, recall, is the
+				//   spatial angular frequency of the wave, i.e. "radians per meter").
+				// * But of course, the wave does not actually propagate
+				//   entirely in the x direction (we made sure of that when defining 
+				//   its normal vector through ref_x and ref_y above).
+				//   Instead, for every wavelength it propagates in the direction
+				//   of its normal, it will only move in x by a small fraction of
+				//   that distance (i.e., ref_x).
+				//   So we scale the x position by ref_x first, and only then
+				//   convert the result to a phase angle by multiplying it by k.
+				//   We also add the y displacement, in case the wave also moves
+				//   in y (in this case it doesn't).
+				// * Since the center of the coordinate sytem (x=0, y=0) corresponds
+				//   to the top left corner of the hologram, we add the hologramCenter
+				//   variables to make the origin of this phenomenon (ref_phase = 0)
+				//   happen at the center of the hologram. (maybe we should center stuff
+				//   so they're correctly placed around the origin, and instead tweak the display)
+				// * There's an alternative explanation, leading to the same result,
+				//   in http://waldir.github.io/learning-holography/pb-cgh-formulas.xhtml
+				var ref_proj = (ref_x * (hpx + hologramCenterX) + ref_y * (hpy + hologramCenterY));
+				for (var pt = 0; pt < obj.length; pt++) {
+					// Calculate physical horizontal coordinate of current object point
+					// half the width of the hologram's dimensions is added to center the point horizontally
+					var opx = hologramCenterX + obj[pt].x;
 					// Calculate physical vertical coordinate of current object point
 					var opy = hologramCenterY - obj[pt].y;
+					// horizontal distance between current hologram pixel and current object point
+					var distX = hpx - opx;
 					// vertical distance between current hologram pixel and current object point
 					var distY = hpy - opy;
+					// depth difference between hologram plane and object point
+					var distZ = holo_z - obj[pt].z;
 					// Use the Euclidean formula to calculate the distance between point and hologram pixel
-					var radius = Math.sqrt( Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2) );
-					var intensity = Math.cos(radius*k); // normal cosine range, -1 to 1
+					var obj_dist = Math.sqrt( Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2) );
+					var intensity = Math.cos(k*(obj_dist - ref_proj)); // normal cosine range, -1 to 1
 					intensity = (intensity + 1) / 2; // convert to 0 to 1 range
 					// We can't normalize the range of the final result after the loop is done,
 					// because the canvas would be saturated (overexposed) by then.
