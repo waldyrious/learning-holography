@@ -113,6 +113,9 @@ function draw(canvas, pixelSize, nextPixelSize) {
 					var sinThetaObjX = distX/Math.sqrt(distX*distX + distZ*distZ);
 					var sinThetaObjY = distY/Math.sqrt(distY*distY + distZ*distZ);
 					if ( Math.abs(sinThetaObjX - sinThetaRefX) <= maxFreq && Math.abs(sinThetaObjY - sinThetaRefY) <= maxFreq) {
+						// How to include amplitude attenuation? should be A/r,
+						// but that means the amplitude when r=0 would be infinite, and it should be A.
+						// Using Math.exp(-obj_dist) should work, but what would be the appropriate scaling factor?
 						var intensity = Math.cos(k*(obj_dist - ref_proj)); // normal cosine range, -1 to 1
 						intensity = (intensity + 1) / 2; // convert to 0 to 1 range
 						// We can't normalize the range of the final result after the loop is done,
