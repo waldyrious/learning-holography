@@ -28,6 +28,7 @@ var ref_angle = {x: 0.1, y: 0};
 // x/y components of the ref. wave's direction (normal) vector.
 var ref_x = Math.sin(ref_angle.x * Math.PI/180);
 var ref_y = Math.sin(ref_angle.y * Math.PI/180);
+var ref_z = Math.sqrt(1 - ref_x*ref_x - ref_y*ref_y); // z is the remaining to make a 1-long vector
 // z-depth of the hologram plane (assuming it's parallel to the XY plane)
 var holo_z = 0;
 
@@ -56,6 +57,7 @@ function draw(canvas, pixelSize, nextPixelSize) {
 		var start = new Date();
 		var hologramCenterX = canvas.width * pixelSize / 2;
 		var hologramCenterY = canvas.height * pixelSize / 2;
+		var maxFreq = lambda/(2*pixelSize);
 		for (var holo_x = 0; holo_x < canvas.width; holo_x++) {
 			// calculate physical horizontal coordinate of current hologram pixel
 			// holo_x actually corresponds to the top-left corner of the pixel;
@@ -91,6 +93,8 @@ function draw(canvas, pixelSize, nextPixelSize) {
 				// * There's an alternative explanation, leading to the same result,
 				//   in http://waldir.github.io/learning-holography/pb-cgh-formulas.xhtml
 				var ref_proj = (ref_x * (hpx + hologramCenterX) + ref_y * (hpy + hologramCenterY));
+				var sinThetaRefX = ref_x/Math.sqrt(ref_x*ref_x + ref_z*ref_z);
+				var sinThetaRefY = ref_y/Math.sqrt(ref_y*ref_y + ref_z*ref_z);
 				for (var pt = 0; pt < obj.length; pt++) {
 					// Calculate physical horizontal coordinate of current object point
 					// half the width of the hologram's dimensions is added to center the point horizontally
@@ -105,17 +109,25 @@ function draw(canvas, pixelSize, nextPixelSize) {
 					var distZ = holo_z - obj[pt].z;
 					// Use the Euclidean formula to calculate the distance between point and hologram pixel
 					var obj_dist = Math.sqrt( Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2) );
-					var intensity = Math.cos(k*(obj_dist - ref_proj)); // normal cosine range, -1 to 1
-					intensity = (intensity + 1) / 2; // convert to 0 to 1 range
-					// We can't normalize the range of the final result after the loop is done,
-					// because the canvas would be saturated (overexposed) by then.
-					// Therefore we divide each wave by the number of waves,
-					// so that the final result ends up normalized within the allowed range.
-					intensity /= obj.length; 
-					// Convert range 0-1 to an integer in the range 0-255
-					var intRGB = Math.round(intensity * 255);
-					// fillStyle uses the same color syntax as css
-					ctx.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
+					// Test for aliasing
+					var sinThetaObjX = distX/Math.sqrt(distX*distX + distZ*distZ);
+					var sinThetaObjY = distY/Math.sqrt(distY*distY + distZ*distZ);
+					if ( Math.abs(sinThetaObjX - sinThetaRefX) <= maxFreq && Math.abs(sinThetaObjY - sinThetaRefY) <= maxFreq) {
+						var intensity = Math.cos(k*(obj_dist - ref_proj)); // normal cosine range, -1 to 1
+						intensity = (intensity + 1) / 2; // convert to 0 to 1 range
+						// We can't normalize the range of the final result after the loop is done,
+						// because the canvas would be saturated (overexposed) by then.
+						// Therefore we divide each wave by the number of waves,
+						// so that the final result ends up normalized within the allowed range.
+						intensity /= obj.length; 
+						// Convert range 0-1 to an integer in the range 0-255
+						var intRGB = Math.round(intensity * 255);
+						// fillStyle uses the same color syntax as css
+						ctx.fillStyle = "rgb(" + intRGB + "," + intRGB + "," + intRGB + ")";
+					}
+					else {
+						ctx.fillStyle = "black";
+					}
 					// paint the pixel with the calculated intensity.
 					// See http://html5tutorial.com/how-to-draw-a-point-with-the-canvas-api/
 					ctx.fillRect(holo_x, holo_y, 1, 1);
@@ -127,10 +139,14 @@ function draw(canvas, pixelSize, nextPixelSize) {
 		var elapsed = document.getElementById("time-" + canvas.id);
 		elapsed.textContent = (now - start) / 1000 + ' s';
 		// Draw square depicting area covered by the next resolution level
+		// FIXME: this doesn't seem to be working correctly. The area of the
+		//        next hologram area indeed appears to be correct,
+		//        but the contents of that area don't match what is actually seen
+		//        when that hologram is rendered.
 		if (nextPixelSize) {
 			var zoomedWidth = canvas.width * nextPixelSize / pixelSize;
 			var zoomedHeight = canvas.height * nextPixelSize / pixelSize;
-			ctx.strokeStyle = "red";
+			ctx.strokeStyle = "white";
 			ctx.strokeRect(
 				canvas.width/2 - zoomedWidth/2, canvas.height/2 - zoomedHeight/2,
 				zoomedWidth, zoomedHeight
@@ -152,9 +168,8 @@ function run() {
 	// 96 px = 1 in = 25.4 mm  -->  1 px = 0.26458(3) mm = 264.583 µm
 	var resolutions = [
 		264.58e-6 + (1e-8)/3, // 1px = .00026458(3) m = .26458(3) mm
-		//150e-6,
-		100e-6,
-		70e-6,
+		80e-6,
+		40e-6,
 		20e-6
 	];
 	for (var r = 0; r < resolutions.length; r++) {
