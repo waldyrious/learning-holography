@@ -110,9 +110,17 @@ function draw(canvas, pixelSize, nextPixelSize) {
 					// Use the Euclidean formula to calculate the distance between point and hologram pixel
 					var obj_dist = Math.sqrt( Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2) );
 					// Test for aliasing
-					var sinThetaObjX = distX/Math.sqrt(distX*distX + distZ*distZ);
-					var sinThetaObjY = distY/Math.sqrt(distY*distY + distZ*distZ);
-					if ( Math.abs(sinThetaObjX - sinThetaRefX) <= maxFreq && Math.abs(sinThetaObjY - sinThetaRefY) <= maxFreq) {
+					// calc cosine of angle between object-->hologramPixel ray and reference normal vector.
+					// since the dot product between two vectors is defined as ||A||*||B||*cos(theta)
+					// as well as Ax*Bx + Ay*By + Az*Bz, we can find cos(theta) since we know all the values
+					// for the second equation. We then derive sin(theta),
+					// which according to the aliasing equation shouldn't exceed lambda/2*pixelSize.
+					// (pixelSize is the sampling frequency).
+					//var cosTheta = ref_x*(distX/obj_dist) + ref_y*(distY/obj_dist) + ref_z*(distZ/obj_dist);
+					var cosTheta = (ref_x*distX + ref_y*distY + ref_z*distZ) / obj_dist;
+					var sinTheta = Math.sqrt(1-(cosTheta*cosTheta)); // because sin^2(theta) + cos^2(theta) = 1
+					// note: using ( Math.abs(Math.acos(cosTheta)) <= maxFreq ) also seems to work, not sure why
+					if ( Math.abs(sinTheta) <= maxFreq ) {
 						// How to include amplitude attenuation? should be A/r,
 						// but that means the amplitude when r=0 would be infinite, and it should be A.
 						// Using Math.exp(-obj_dist) should work, but what would be the appropriate scaling factor?
