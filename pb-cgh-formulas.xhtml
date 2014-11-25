@@ -351,19 +351,19 @@
 	var timeSteps = 100
 	var holoPixels = 500
 	var objectPoints = [
-		  {x: ..., y: ..., z: ...},
-		  {x: ..., y: ..., z: ...},
-		  {x: ..., y: ..., z: ...} ]
+	      {x: ..., y: ..., z: ...},
+	      {x: ..., y: ..., z: ...},
+	      {x: ..., y: ..., z: ...} ]
 	var amplitude[], intensity[], hologram[]
 
 	for t = 0 --> timeSteps {
 	  ph = t/timeSteps * 2*pi  # wave phase, from 0 to 2pi
 	  for px = 0 --> holoPixels {
-		amplitude[ px ] += ref-amplitude( px, ph )
-		for each pt in objectPoints {
-		  amplitude[ px ] += obj-amplitude( px, ph, pt )
-		}
-		intensity[ px ] = amplitude[ px ]^2
+	    amplitude[ px ] += ref-amplitude( px, ph )
+	    for each pt in objectPoints {
+	      amplitude[ px ] += obj-amplitude( px, ph, pt )
+	    }
+	    intensity[ px ] = amplitude[ px ]^2
 	  }
 	  hologram[] += intensity[]
 	}
