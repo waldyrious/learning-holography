@@ -1,6 +1,6 @@
 var source = { x: 0, y: 0, z: 0 };
 var tau = Math.PI*2;
-var lambda = 1;
+var lambda = 5;
 
 function draw() {
 	var canvas = document.getElementById("canvas-zp");
@@ -11,7 +11,12 @@ function draw() {
 		var start = new Date();
 		for (var zp_x = 0; zp_x < canvas.width; zp_x++) {
 			for (var zp_y = 0; zp_y < canvas.height; zp_y++) {
-				var intensity = Math.cos(tau*(Math.pow(zp_x - canvas.width/2, 2) + Math.pow(zp_y - canvas.height/2, 2))/(canvas.width*source.z)); // normal cosine range, -1 to 1
+				//var intensity = Math.cos(tau*(Math.pow(zp_x - canvas.width/2, 2) + Math.pow(zp_y - canvas.height/2, 2))/(canvas.width*source.z)); // normal cosine range, -1 to 1
+				var intensity = Math.cos((tau/lambda) *
+				                         (Math.sqrt(Math.pow(zp_x - canvas.width/2, 2) +
+				                                                  Math.pow(zp_y - canvas.height/2, 2) +
+				                                                  Math.pow(source.z, 2)) -
+				                         source.z)); // normal cosine range, -1 to 1
 				intensity = (intensity + 1) / 2; // convert to 0 to 1 range
 				// Convert range 0-1 to an integer in the range 0-255
 				var intRGB = Math.round(intensity * 255);
@@ -42,4 +47,6 @@ function setSourceLocation(){
 
 function setWavelength(){
 	lambda = document.getElementById("lambda-slider").value;
+	console.log("wavelength=" + lambda);
+	draw();
 }
