@@ -1,5 +1,6 @@
 var source = { x: 0, y: 0, z: 0 };
 var tau = Math.PI*2;
+var lambda = 1;
 
 function draw() {
 	var canvas = document.getElementById("canvas-zp");
@@ -37,4 +38,8 @@ function setSourceLocation(){
 	source.y = document.getElementById("y-slider").value;
 	source.z = document.getElementById("z-slider").value;
 	draw();
+}
+
+function setWavelength(){
+	lambda = document.getElementById("lambda-slider").value;
 }
