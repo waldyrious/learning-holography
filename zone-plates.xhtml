@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<title>Zone Plates | Learning Holography</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="css/base-style.css" />
+	<link rel="stylesheet" href="css/zone-plates.css" />
+	<script src="js/zone-plates.js"></script>
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: { inlineMath: [['$','$']] }
+		});
+	</script>
+	<script async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body onload="setSourceLocation()" id="zone-plates">
+
+	<a href="index.xhtml">← back</a>
+
+	<h2>Zone Plates</h2>
+
+	<p>
+		Placeholder explanatory text.
+	</p>
+	<div>
+		<canvas width="100" height="100" id="canvas-zp"></canvas>
+		<fieldset>
+			<legend>Location of the source:</legend>
+			x: <input type="range" name="x" id="x-slider" oninput="setSourceLocation()" value="1" min="1" max="5" step="1" /><br/>
+			y: <input type="range" name="y" id="y-slider" oninput="setSourceLocation()" value="1" min="1" max="5" step="1" /><br/>
+			z: <input type="range" name="z" id="z-slider" oninput="setSourceLocation()" value="5" min="1" max="5" step="1" />
+		</fieldset>
+		<fieldset>
+			<legend>Formula:</legend>
+			<input type="radio" name="formula" id="formula-1" onchange="setFormula(this)" value="1" checked="checked" />
+			<label for="formula-1">$\frac{1 + \cos(x^2+y^2)}{2}$</label>&#8194;&#8194;
+			<input type="radio" name="formula" id="formula-2" onchange="setFormula(this)" value="2" />
+			<label for="formula-2">$\frac{1}{2} \; [ 1 + \cos( \omega_{zp}^2 \; \boldsymbol{x}^2 ) ]$</label><br/><br/>
+			<input type="radio" name="formula" id="formula-3" onchange="setFormula(this)" value="3" />
+			<label for="formula-3">$\frac{1}{2} \; \left[ 1 + \cos\left( \frac{\pi\boldsymbol{x}^2}{r_0^2} \right) \right]$</label>&#8194;&#8194;
+			<input type="radio" name="formula" id="formula-4" onchange="setFormula(this)" value="4" />
+			<label for="formula-4">$sin\left[\frac{k(x^2+y^2)}{2z_1}\right]$</label>
+		</fieldset>
+		<p>Elapsed time: <span id="duration"></span></p>
+	</div>
+
+</body>
+</html>
