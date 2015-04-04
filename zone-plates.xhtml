@@ -5,15 +5,9 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="css/base-style.css" />
 	<link rel="stylesheet" href="css/zone-plates.css" />
-	<script src="js/zone-plates.js"></script>
-	<script type="text/x-mathjax-config">
-		MathJax.Hub.Config({
-			tex2jax: { inlineMath: [['$','$']] }
-		});
-	</script>
-	<script async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script src="js/zone-plates.js" defer="true"></script>
 </head>
-<body onload="setSourceLocation()" id="zone-plates">
+<body id="zone-plates">
 
 	<a href="index.xhtml">← back</a>
 
@@ -23,27 +17,21 @@
 		Placeholder explanatory text.
 	</p>
 	<div>
-		<canvas width="100" height="100" id="canvas-zp"></canvas>
+		<div id="canvas-wrapper">
+			<canvas id="glcanvas" width="600" height="400">Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.</canvas>
+			<div id="scale"></div>
+		</div>
 		<fieldset>
-			<legend>Location of the source:</legend>
-			x: <input type="range" name="x" id="x-slider" oninput="setSourceLocation()" value="1" min="1" max="5" step="1" /><br/>
-			y: <input type="range" name="y" id="y-slider" oninput="setSourceLocation()" value="1" min="1" max="5" step="1" /><br/>
-			z: <input type="range" name="z" id="z-slider" oninput="setSourceLocation()" value="5" min="1" max="5" step="1" /><br/>
-			λ: <input type="range" name="lambda" id="lambda-slider" oninput="setWavelength()" value="10" min="5" max="50" step="1" />
-		</fieldset>
-		<fieldset>
-			<legend>Formula:</legend>
-			<input type="radio" name="formula" id="formula-1" onchange="setFormula(this)" value="1" checked="checked" />
-			<label for="formula-1">$\frac{1 + \cos(x^2+y^2)}{2}$</label>&#8194;&#8194;
-			<input type="radio" name="formula" id="formula-2" onchange="setFormula(this)" value="2" />
-			<label for="formula-2">$\frac{1}{2} \; [ 1 + \cos( \omega_{zp}^2 \; \boldsymbol{x}^2 ) ]$</label><br/><br/>
-			<input type="radio" name="formula" id="formula-3" onchange="setFormula(this)" value="3" />
-			<label for="formula-3">$\frac{1}{2} \; \left[ 1 + \cos\left( \frac{\pi\boldsymbol{x}^2}{r_0^2} \right) \right]$</label>&#8194;&#8194;
-			<input type="radio" name="formula" id="formula-4" onchange="setFormula(this)" value="4" />
-			<label for="formula-4">$sin\left[\frac{k(x^2+y^2)}{2z_1}\right]$</label>
+			<legend>Adjust parameters:</legend>
+			x: <input type="range" name="x" id="x-slider" value="0" min= "-1.0" max=  "1.0" step="0.01" /><span id="x-show"></span><br/>
+			y: <input type="range" name="y" id="y-slider" value="0" min= "-1.0" max=  "1.0" step="0.01" /><span id="y-show"></span><br/>
+			z: <input type="range" name="z" id="z-slider" value="1" min= " 0.0" max=  "1.0" step="0.01" /><span id="z-show"></span><br/>
+			λ: <input type="range" name="w" id="w-slider" value="1" min="400.0" max="700.0" step="1.00" /><span id="w-show"></span><br/>
+			<!-- wavelength is just a scaling factor, really, but is included here for physical realism -->
+			ρ: <input type="range" name="r" id="r-slider" value="1" min= "-1.0" max=  "2.0" step="0.01" /><span id="r-show"></span><br/>
+			<!-- resolution (using rho symbol that normally represents density) measured as powers of ten of micrometers -->
 		</fieldset>
 		<p>Elapsed time: <span id="duration"></span></p>
 	</div>
-
 </body>
 </html>
