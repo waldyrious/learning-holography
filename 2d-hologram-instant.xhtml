@@ -10,7 +10,10 @@
 		/* no phase slider */
 		#controlsBox { padding: 10px; background-color: Lavender; }
 		#controlsBox, canvas#curves, canvas#hologram { border-bottom: none; }
-		#controlsBox, p { width: 502px; /* canvas doesn't seem to honor box-sizing: border-box... */ }
+		/* Width must be 502px to account for the borders,
+		 * because the 500px width attribute set to the canvas element (below)
+		 * doesn't honor box-sizing: border-box */
+		#controlsBox, body>p { width: 502px; }
 	</style>
 </head>
 <body onload="setRefAngle()">
