@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-	<title>2D hologram (instant calculation) | Learning Holography</title>
+	<title>2D hologram visualization (instant) | Learning Holography</title>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="css/base-style.css" />
 	<style>
 		canvas, #controls { border: 1px solid grey; display: block; box-sizing: border-box; }
 		#angle-slider { width: 100%; }
+		/* no phase slider */
 		#controls { padding: 10px; background-color: Lavender; }
 		#controls, canvas#curves, canvas#hologram { border-bottom: none; }
 		#controls, p { width: 502px; /* canvas doesn't seem to honor box-sizing: border-box... */ }
@@ -16,9 +17,9 @@
 
 	<a href="index.xhtml">← back</a>
 
-	<h2>2D hologram (instant calculation)</h2>
+	<h2>2D hologram visualization (instant)</h2>
 
-	<p>This demo implements the same setup as <a href="2d-hologram-viz.xhtml">the previous one</a>
+	<p>This demo implements the same setup as <a href="2d-hologram-cumulative.xhtml">the previous one</a>
 	but demonstrates how the cumulative hologram can be calculated instantaneously
 	by representing the cumulative effect as an integral and evaluating it.</p>
 	<!-- Details about this process will be added later in this text.-->
