@@ -98,8 +98,8 @@ function refresh() {
 	// Update the hologram and the curves canvases.
 	paintHologram();
 	// Update the interface labels with the current slider values
-	document.getElementById( "angle-text" ).textContent = ' ' + Math.round( refAngle*10 )/10 + 'º';
-	document.getElementById( "phase-text" ).textContent = ' +' + Math.round( 100*refPhase ) + '%';
+	document.getElementById( "angle-value" ).textContent = ' ' + Math.round( refAngle*10 )/10 + 'º';
+	document.getElementById( "phase-value" ).textContent = ' +' + Math.round( 100*refPhase ) + '%';
 	// Schedule next call of refresh()
 	if ( animate ) {
 		animateTimeoutID = window.setTimeout( refresh, 10 );
