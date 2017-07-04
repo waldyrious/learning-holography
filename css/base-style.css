@@ -24,9 +24,13 @@ a:visited {
   color: DarkSlateBlue;
 }
 
-/* Remove dotted border in Firefox when clicking on a link */
+/* Remove dotted border in Firefox when activating elements */
 a:focus {
   outline: none;
+}
+
+input[type='range']::-moz-focus-outer {
+  border: 0;
 }
 
 /* Use Semantic Linefeeds:
