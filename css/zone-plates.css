@@ -1,4 +1,4 @@
-div:not([id]) {
+#main-wrapper {
 	background: #eee;
 	border: 1px solid crimson;
 	padding: 1em;
@@ -18,16 +18,16 @@ input[type=range] {
 	width: 60%;
 }
 
-span[id$=show] {
+span[id$=value] {
 	float: right;
 	text-align: right;
 }
 
-/* *********
- * Scale bar
+/* ************
+ * Scale marker
  */
 
-#scale {
+#scale-marker {
 	border: none;
 	border-top: 1px solid black;
 	margin: 0.5em auto;
@@ -39,18 +39,18 @@ span[id$=show] {
 
 /* Add a zero-width space so the content isn't empty,
  * otherwise the pseudo-elements aren't shown. */
-#scale:before, #scale:after {
+#scale-marker:before, #scale-marker:after {
 	content: "\200B";
 	height: 1em;
 	margin-top: -0.5em;
 }
 
-#scale:before {
+#scale-marker:before {
 	border-left: 1px solid black;
 	float: left;
 }
 
-#scale:after {
+#scale-marker:after {
 	border-right: 1px solid black;
 	float: right;
 }

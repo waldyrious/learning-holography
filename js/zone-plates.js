@@ -153,19 +153,19 @@ function updateSlider( elem, paint ) {
 	switch( elem.name ) {
 		case "x":
 			sourcePos.x = elem.value * canvas.width / 2 * pixelPitch; // Left of the canvas to right of the canvas
-			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( sourcePos.x * 1000 ) + ' mm';
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( sourcePos.x * 1000 ) + ' mm';
 			break;
 		case "y":
 			sourcePos.y = elem.value * canvas.height / 2 * pixelPitch // Bottom of the canvas to top of the canvas
-			document.getElementById( elem.name + "-show" ).textContent = ' ' + formatNumber( sourcePos.y * 1000 ) + ' mm';
+			document.getElementById( elem.name + "-value" ).textContent = ' ' + formatNumber( sourcePos.y * 1000 ) + ' mm';
 			break;
 		case "z":
 			sourcePos.z = Math.pow( elem.value, 4 ) * ( pixelPitch * canvas.width / 2 ) * 100; // Up to 2 orders of magnitude (100x) larger than the xy variation
-			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( sourcePos.z * 1000 ) + ' mm';
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( sourcePos.z * 1000 ) + ' mm';
 			break;
 		case "w":
 			wavelength = elem.value * nm; // 400 to 700 nm
-			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( wavelength / nm ) + '&#8202;&#8194;nm';
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( wavelength / nm ) + '&#8202;&#8194;nm';
 			laserRGB = nmToRGB( elem.value );
 			break;
 		case "r":
@@ -177,9 +177,9 @@ function updateSlider( elem, paint ) {
 				case  1: printTech = 'imagesetter'; break;
 				case  2: printTech = 'laser printer';
 			}
-			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm<br/>(' + printTech + ')';
-			// Update scale indicator
-			document.getElementById( "scale" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm<br/>(' + printTech + ')';
+			// Update scale marker
+			document.getElementById( "scale-marker" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
 			// Update xyz sliders, which depend on the resolution
 			updateSlider( document.getElementById( "x-slider" ), false );
 			updateSlider( document.getElementById( "y-slider" ), false );
