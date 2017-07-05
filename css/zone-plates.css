@@ -24,7 +24,7 @@ span[id$=show] {
 }
 
 /* *********
- * scale bar
+ * Scale bar
  */
 
 #scale {
@@ -37,7 +37,7 @@ span[id$=show] {
 	text-align: center;
 }
 
-/* add a zero-witdth space so the content isn't empty,
+/* Add a zero-width space so the content isn't empty,
  * otherwise the pseudo-elements aren't shown. */
 #scale:before, #scale:after {
 	content: "\200B";

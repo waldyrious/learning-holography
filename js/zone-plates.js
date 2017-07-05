@@ -1,25 +1,25 @@
-// declaration and initialization of global variables
+// Declaration and initialization of global variables
 var sourcePos = { x: 0, y: 0, z: 0 };
-var wavelength = 633e-9; // initialize wavelength as 633 nanometers
+var wavelength = 633e-9; // Initialize wavelength as 633 nanometers
 var laserRGB = [0.0, 0.0, 0.0];
-var pixelPitch = 10e-6; // initialize pixel pitch as 10 micrometers
+var pixelPitch = 10e-6; // Initialize pixel pitch as 10 micrometers
 var canvas = null;
 var gl = null;
 var zonePlateShader = null;
 
-// conversion constants
-var nm = 1e-9; // conversion factor from nanometers to meters
-var µm = 1e-6; // conversion factor from micrometers to meters
-//var nm2px = 480 / 127e6; // conversion factor from nanometers to standard pixels (96 dpi);
+// Conversion constants
+var nm = 1e-9; // Conversion factor from nanometers to meters
+var µm = 1e-6; // Conversion factor from micrometers to meters
+//var nm2px = 480 / 127e6; // Conversion factor from nanometers to standard pixels (96 dpi);
 
 window.onload = init;
 
 function init() {
-	canvas = document.getElementById( "glcanvas" ); // chrome doesn't seem to support defer properly?!
+	canvas = document.getElementById( "glcanvas" ); // Chrome doesn't seem to support defer properly?!
 	console.log( canvas );
 	initGL();
-	initSliders(); // setup sliders' event handlers
-	updateSlider( document.getElementById( "r-slider" ), false ); // updates xyz sliders
+	initSliders(); // Setup sliders' event handlers
+	updateSlider( document.getElementById( "r-slider" ), false ); // This also updates the xyz sliders
 	updateSlider( document.getElementById( "w-slider" ), false );
 	paintCanvas();
 }
@@ -49,28 +49,28 @@ function initGL() {
 		"void main() { gl_Position = vec4( a_Position, 0.0, 1.0 ); }",
 		// Fragment shader
 		"precision highp float;" +
-		"uniform vec2 u_CanvasSize;" + // needs to be a float because it will be used in a division operation
+		"uniform vec2 u_CanvasSize;" + // Needs to be a float because it will be used in a division operation
 		"uniform float u_PixelPitch;" +
 		"uniform float u_Wavelength;" +
 		"uniform vec3 u_LaserColor;" +
 		"uniform vec3 u_sourcePos;" +
 		"void main() {" +
-		"  const int x=0; const int y=1; const int z=2;" + // for intuitive indexing of 3D vectors
-		"  const int R=0; const int G=1; const int B=2;" + // for intuitive indexing of 3D vectors
-		"  const float tau = 6.283185307179586476925286766559;" + // one full turn, measured in radians. See http://tauday.com/tau-manifesto
+		"  const int x=0; const int y=1; const int z=2;" + // Aliases for intuitive indexing of 3D spatial vectors
+		"  const int R=0; const int G=1; const int B=2;" + // Aliases for intuitive indexing of 3D color vectors
+		"  const float tau = 6.283185307179586476925286766559;" + // One full turn, measured in radians. See http://tauday.com/tau-manifesto
 		"  vec3 holoP = vec3( gl_FragCoord.xy - u_CanvasSize / 2.0, 0.0 ) * u_PixelPitch;" + // 3D position of the current pixel, in meters, shifted so the origin is at the center of the canvas
 
 		//"  float dist = distance( holoP, u_sourcePos );" +
-		//"  float phaseDiff = dist - u_sourcePos[z];" + // calculate phase difference between center of zone plate and the current pixel
+		//"  float phaseDiff = dist - u_sourcePos[z];" + // Calculate phase difference between center of zone plate and the current pixel
 		//"  float cosTheta = u_sourcePos[z] / dist;" +
 		//"  float sinTheta = sqrt( 1.0 - pow( cosTheta, 2.0 ) );" +
 		//"  float amplitude;" +
 		//"  if ( sinTheta < u_Wavelength / 2.0 * u_PixelPitch ) { amplitude = cos( tau / u_Wavelength * phaseDiff ); }" +
 		//"  else { amplitude = 0.0; }" +
-		"  float phaseDiff = distance( holoP, u_sourcePos ) - u_sourcePos[z];" + // calculate phase difference between center of zone plate and the current pixel
-		"  float amplitude = cos( tau / u_Wavelength * phaseDiff );" + // core calculation of zone plate value for this pixel
+		"  float phaseDiff = distance( holoP, u_sourcePos ) - u_sourcePos[z];" + // Calculate phase difference between center of zone plate and the current pixel
+		"  float amplitude = cos( tau / u_Wavelength * phaseDiff );" + // Core calculation of zone plate value for this pixel
 
-		"  float c = ( 1.0 + amplitude ) / 2.0;" + // normalize amplitude of cosine from [-1 ... +1] to [0 ... 1], so it can be used as a color value
+		"  float c = ( 1.0 + amplitude ) / 2.0;" + // Normalize amplitude of cosine from [-1 ... +1] to [0 ... 1], so it can be used as a color value
 		"  gl_FragColor = vec4( c * u_LaserColor[R], c * u_LaserColor[G], c * u_LaserColor[B], 1.0 );" +
 		"}"
 	);
@@ -151,16 +151,16 @@ function initSliders() {
 
 function updateSlider( elem, paint ) {
 	switch( elem.name ) {
-		case "x": //                 ↓ (-1,1) to px  ↓ px to m
-			sourcePos.x = elem.value * canvas.width / 2 * pixelPitch; // left of the canvas to right of the canvas
+		case "x":
+			sourcePos.x = elem.value * canvas.width / 2 * pixelPitch; // Left of the canvas to right of the canvas
 			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( sourcePos.x * 1000 ) + ' mm';
 			break;
 		case "y":
-			sourcePos.y = elem.value * canvas.height / 2 * pixelPitch // bottom of the canvas to top of the canvas
+			sourcePos.y = elem.value * canvas.height / 2 * pixelPitch // Bottom of the canvas to top of the canvas
 			document.getElementById( elem.name + "-show" ).textContent = ' ' + formatNumber( sourcePos.y * 1000 ) + ' mm';
 			break;
 		case "z":
-			sourcePos.z = Math.pow( elem.value, 4 ) * ( pixelPitch * canvas.width / 2 ) * 100; // up to 2 orders of magnitude (100x) larger than the xy variation
+			sourcePos.z = Math.pow( elem.value, 4 ) * ( pixelPitch * canvas.width / 2 ) * 100; // Up to 2 orders of magnitude (100x) larger than the xy variation
 			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( sourcePos.z * 1000 ) + ' mm';
 			break;
 		case "w":
@@ -178,9 +178,9 @@ function updateSlider( elem, paint ) {
 				case  2: printTech = 'laser printer';
 			}
 			document.getElementById( elem.name + "-show" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm<br/>(' + printTech + ')';
-			// update scale indicator
+			// Update scale indicator
 			document.getElementById( "scale" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
-			// update xyz sliders, which depend on the resolution
+			// Update xyz sliders, which depend on the resolution
 			updateSlider( document.getElementById( "x-slider" ), false );
 			updateSlider( document.getElementById( "y-slider" ), false );
 			updateSlider( document.getElementById( "z-slider" ), false );
