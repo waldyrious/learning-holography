@@ -6,8 +6,8 @@
 	<link rel="stylesheet" href="css/base-style.css" />
 	<style>
 		canvas, #controlsBox { border: 1px solid grey; display: block; box-sizing: border-box; }
-		#angle-slider { width: 100%; }
-		/* no phase slider */
+		#angle-slider { width: calc(100% - 4em); }
+		.detail { font-size: small; color: gray; margin-top: 0; }
 		#controlsBox { padding: 10px; background-color: Lavender; }
 		#controlsBox, canvas#curves, canvas#hologram { border-bottom: none; }
 		/* Width must be 502px to account for the borders,
@@ -28,11 +28,11 @@
 	<!-- Details about this process will be added later in this text.-->
 
 	<div id="controlsBox">
-		<label for="angle">Angle of the incident light: </label>
-		<span id="angle-value" title="angle with hologram plane"></span>
-		<br />
+		<label for="angle">Angle of the reference wave: </label>
+		<p class="detail">Slope of the reference wave relative to the hologram plane</p>
 		<input type="range" name="angle" id="angle-slider" oninput="setRefAngle()"
 		       value="20.6" min="-90" max="90" step="0.1" />
+		<span id="angle-value"></span>
 		<br /><br />
 		<span>Calculation method:&#8194;</span>
 		<input type="radio" name="method" id="method-real"    onchange="setMethod(this)" value="real" checked="checked" />
@@ -49,7 +49,7 @@
 		  ~- (on by default). Note that even if this is turned off,
 		  ~- the reference wave is still used to generate the object waves.
 		  -->
-		<label for="ref-wave">Reference wave: </label>
+		<label for="ref-wave" title="Whether to include the reference wave in the hologram">Reference wave: </label>
 		<input type="checkbox" name="ref-wave" id="ref-wave" checked="checked" autocomplete="off" onchange="refresh()" />
 		&#8195;
 		<input type="button" id="lessPts" value="−" autocomplete="off" onclick="removePoint()" />

@@ -6,8 +6,8 @@
 	<link rel="stylesheet" href="css/base-style.css" />
 	<style>
 		canvas, #controlsBox { border: 1px solid grey; display: block; box-sizing: border-box; }
-		#angle-slider { width: 100%; }
-		#phase-slider { width: calc(100% - 16em); float: right; }
+		#angle-slider, #phase-slider { width: calc(100% - 4em); }
+		.detail { font-size: small; color: gray; margin-top: 0; }
 		#controlsBox { padding: 10px; background-color: Lavender; }
 		#controlsBox, canvas#curves, canvas#hologram { border-bottom: none; }
 		/* Width must be 502px to account for the borders,
@@ -28,16 +28,20 @@
 	<p>Click the "Animate" checkbox to start the calculation.</p>
 
 	<div id="controlsBox">
-		<label for="angle">Angle of the incident light: </label>
-		<span id="angle-value" title="angle with hologram plane"></span>
-		<br />
+		<label for="angle">Angle of the reference wave: </label>
+		<p class="detail">Slope of the reference wave relative to the hologram plane</p>
 		<input type="range" name="angle" id="angle-slider" oninput="newHologram()"
 		       value="20.6" min="-90" max="90" step="0.1" />
+		<span id="angle-value"></span>
 		<br /><br />
-		<label for="phase">Phase of the incident light: </label>
-		<span id="phase-value" title="delay as percentage of a wave cycle"></span>
+		<label for="phase">Phase of the reference wave: </label>
+		<p class="detail">
+			Portion of a full cycle completed by the reference wave
+			<br/>(measured at the middle of the hologram plane)
+		</p>
 		<input type="range" name="phase" id="phase-slider" oninput="update()"
 		       value="0" min="0" max="1" step="0.01" />
+		<span id="phase-value"></span>
 		<br /><br />
 		<label for="show-curves">Colorize: </label>
 		<input type="checkbox" name="show-curves" id="show-curves" autocomplete="off" onchange="update()" />
@@ -46,7 +50,7 @@
 		  ~- (on by default). Note that even if this is turned off,
 		  ~- the reference wave is still used to generate the object waves.
 		  -->
-		<label for="ref-wave">Ref. wave: </label>
+		<label for="ref-wave" title="Whether to include the reference wave in the hologram">Ref. wave: </label>
 		<input type="checkbox" name="ref-wave" id="ref-wave" checked="checked" autocomplete="off" onchange="newHologram()" />
 		&#8195;
 		<label for="animate"><strong>Animate: </strong></label>
