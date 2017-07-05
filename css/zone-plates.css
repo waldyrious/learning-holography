@@ -1,15 +1,56 @@
-div:not([id]) { background: #eee; border: 1px solid crimson; padding: 1em; text-align: center; }
-#canvas-wrapper{ display: inline-block; }
+div:not([id]) {
+	background: #eee;
+	border: 1px solid crimson;
+	padding: 1em;
+	text-align: center;
+}
 
-fieldset { margin-top: 1em; text-align: left; }
-input[type=range] { width: 60%; }
-span[id$=show] { float: right; text-align: right; }
+#canvas-wrapper {
+	display: inline-block;
+}
 
-/* scale bar */
+fieldset {
+	margin-top: 1em;
+	text-align: left;
+}
+
+input[type=range] {
+	width: 60%;
+}
+
+span[id$=show] {
+	float: right;
+	text-align: right;
+}
+
+/* *********
+ * scale bar
+ */
+
 #scale {
-	border: none; border-top: 1px solid black; margin: 0.5em auto;
-	width: 100%; height: 1em; padding: 0; text-align: center; }
-/* add a zero-witdth space so the content isn't empty, otherwise the pseudo-elements aren't shown. */
-#scale:before, #scale:after { content: "\200B"; height: 1em; margin-top: -0.5em; }
-#scale:before { border-left: 1px solid black; float: left; }
-#scale:after { border-right: 1px solid black; float: right; }
+	border: none;
+	border-top: 1px solid black;
+	margin: 0.5em auto;
+	width: 100%;
+	height: 1em;
+	padding: 0;
+	text-align: center;
+}
+
+/* add a zero-witdth space so the content isn't empty,
+ * otherwise the pseudo-elements aren't shown. */
+#scale:before, #scale:after {
+	content: "\200B";
+	height: 1em;
+	margin-top: -0.5em;
+}
+
+#scale:before {
+	border-left: 1px solid black;
+	float: left;
+}
+
+#scale:after {
+	border-right: 1px solid black;
+	float: right;
+}
