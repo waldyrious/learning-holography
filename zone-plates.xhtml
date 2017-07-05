@@ -25,30 +25,41 @@
 		</div>
 		<fieldset>
 			<legend>Adjust parameters:</legend>
-			<span title="X location of the point light source">x</span>:
-			<input type="range" name="x" id="x-slider" value="0" min= "-1.0" max=  "1.0" step="0.01" />
-			<span id="x-value"></span>
-			<br/>
-			<span title="Y location of the point light source">y</span>:
-			<input type="range" name="y" id="y-slider" value="0" min= "-1.0" max=  "1.0" step="0.01" />
-			<span id="y-value"></span>
-			<br/>
-			<span title="Z location of the point light source">z</span>:
-			<input type="range" name="z" id="z-slider" value="1" min= " 0.0" max=  "1.0" step="0.01" />
-			<span id="z-value"></span>
-			<br/>
-			<span title="Wavelength of the light">λ</span>:
-			<input type="range" name="w" id="w-slider" value="1" min="400.0" max="700.0" step="1.00" />
-			<span id="w-value"></span>
-			<br/>
-			<!-- wavelength is just a scaling factor, really,
-			  ~~ but is included here for physical realism -->
-			<span title="Pixel density of the holographic plate">ρ</span>:
-			<input type="range" name="r" id="r-slider" value="1" min= "-1.0" max=  "2.0" step="0.01" />
-			<span id="r-value"></span>
-			<br/>
-			<!-- resolution (using rho symbol that normally represents density)
-			  ~~ measured as powers of ten of micrometers -->
+			<div id="position-x" class="flankedSlider">
+				<span title="X location of the point light source">x</span>:
+				<input type="range" name="x" id="x-slider"
+				       value="0" min= "-1.0" max=  "1.0" step="0.01" />
+				<span id="x-value"></span>
+			</div>
+			<div id="position-y" class="flankedSlider">
+				<span title="Y location of the point light source">y</span>:
+				<input type="range" name="y" id="y-slider"
+				       value="0" min="-1.0" max="1.0" step="0.01" />
+				<span id="y-value"></span>
+			</div>
+			<div id="position-z" class="flankedSlider">
+				<span title="Z location of the point light source">z</span>:
+				<input type="range" name="z" id="z-slider"
+				       value="1" min="0.0" max="1.0" step="0.01" />
+				<span id="z-value"></span>
+			</div>
+			<div id="wavelength" class="flankedSlider">
+				<span title="Wavelength of the light">λ</span>:
+				<input type="range" name="w" id="w-slider"
+				       value="1" min="400.0" max="700.0" step="1.00" />
+				<span id="w-value"></span>
+				<!-- wavelength is just a scaling factor, really,
+				  ~~ but is included here for physical realism -->
+			</div>
+			<div id="resolution" class="flankedSlider">
+				<span title="Pixel density of the holographic plate">ρ</span>:
+				<input type="range" name="r" id="r-slider"
+				       value="1" min="-1.0" max="2.0" step="0.01" />
+				<span id="r-value"></span>
+				<!-- resolution (using rho symbol that normally represents density)
+				  ~~ measured as powers of ten of micrometers -->
+			</div>
+			<span id="r-example"></span>
 		</fieldset>
 		<p>Elapsed time: <span id="duration"></span></p>
 	</div>

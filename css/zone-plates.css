@@ -14,12 +14,24 @@ fieldset {
 	text-align: left;
 }
 
-input[type=range] {
-	width: 60%;
+.flankedSlider input[type=range] {
+	flex: 1;
+	margin: 0 1em;
 }
 
 span[id$=value] {
-	float: right;
+	width: 6em;
+	text-align: right;
+}
+
+.flankedSlider {
+	display: flex;
+}
+
+#r-example {
+	font-size: small;
+	color: grey;
+	display: block;
 	text-align: right;
 }
 

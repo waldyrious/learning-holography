@@ -172,12 +172,13 @@ function updateSlider( elem, paint ) {
 			pixelPitch = Math.pow( 10, elem.value ) * µm;
 			var printTech = '';
 			switch( Math.round( elem.value ) ) {
-				case -1: printTech = 'electron beam lithography'; break;
-				case  0: printTech = 'laser lithography'; break;
-				case  1: printTech = 'imagesetter'; break;
-				case  2: printTech = 'laser printer';
+				case -1: printTech = 'an electron beam lithography'; break;
+				case  0: printTech = 'a laser lithography'; break;
+				case  1: printTech = 'an imagesetter'; break;
+				case  2: printTech = 'a laser printer';
 			}
-			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm<br/>(' + printTech + ')';
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm';
+			document.getElementById( elem.name + "-example" ).innerHTML = (' (approximately equivalent to ' + printTech + ')' );
 			// Update scale marker
 			document.getElementById( "scale-marker" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
 			// Update xyz sliders, which depend on the resolution
