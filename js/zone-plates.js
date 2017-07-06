@@ -18,7 +18,10 @@ function init() {
 	canvas = document.getElementById( "glcanvas" ); // Chrome doesn't seem to support defer properly?!
 	console.log( canvas );
 	initGL();
-	initSliders(); // Setup sliders' event handlers
+	// Setup event handlers for the sliders
+	for( slider of document.querySelectorAll( "input[type=range]" ) ) {
+		slider.oninput = function( e ) { updateControl( e.target, true ) };
+	}
 	updateSlider( document.getElementById( "r-slider" ), false ); // This also updates the xyz sliders
 	updateSlider( document.getElementById( "w-slider" ), false );
 	paintCanvas();
@@ -138,15 +141,6 @@ function connectUniforms( gl, shaderProgram ) {
 
 	var sourcePosPtr = gl.getUniformLocation( shaderProgram, "u_sourcePos" );
 	gl.uniform3f( sourcePosPtr, sourcePos.x, sourcePos.y, sourcePos.z );
-}
-
-function initSliders() {
-	var sliders = document.querySelectorAll( "input[type=range]" );
-	for( s in sliders ) {
-		if( typeof( sliders[s] ) === "object" ) {
-			sliders[s].oninput = function( e ) { updateSlider( e.target, true ) };
-		}
-	}
 }
 
 function updateSlider( elem, paint ) {
