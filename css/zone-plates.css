@@ -2,16 +2,10 @@
 	background: #eee;
 	border: 1px solid crimson;
 	padding: 1em;
-	text-align: center;
 }
 
-#canvas-wrapper {
-	display: inline-block;
-}
-
-fieldset {
-	margin: 1em auto 0; /* Auto = center horizontally */
-	text-align: left;
+#canvas-wrapper, fieldset {
+	margin: 1em auto; /* Auto = center horizontally */
 	box-sizing: border-box;
 	width: 600px; /* Same as the canvas width */
 }
