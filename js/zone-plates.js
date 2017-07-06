@@ -167,8 +167,8 @@ function updateSlider( elem, repaintCanvas ) {
 			pixelPitch = Math.pow( 10, elem.value ) * µm;
 			var printTech = '';
 			switch( Math.round( elem.value ) ) {
-				case -1: printTech = 'an electron beam lithography'; break;
-				case  0: printTech = 'a laser lithography'; break;
+				case -1: printTech = 'an electron beam lithograph'; break;
+				case  0: printTech = 'a laser lithograph'; break;
 				case  1: printTech = 'an imagesetter'; break;
 				case  2: printTech = 'a laser printer';
 			}
