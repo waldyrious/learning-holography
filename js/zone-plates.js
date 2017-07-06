@@ -26,6 +26,61 @@ function init() {
 	paintCanvas();
 }
 
+// Event handler for when the user interacts with the input controls.
+// Also used to update controls whose values depend on other controls.
+function updateControl( elem, repaintCanvas ) {
+	if( elem == null ) return;
+	switch( elem.name ) {
+		case "x":
+			sourcePos.x = elem.value * canvas.width / 2 * pixelPitch; // Left of the canvas to right of the canvas
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( sourcePos.x * 1000 ) + ' mm';
+			break;
+		case "y":
+			sourcePos.y = elem.value * canvas.height / 2 * pixelPitch // Bottom of the canvas to top of the canvas
+			document.getElementById( elem.name + "-value" ).textContent = ' ' + formatNumber( sourcePos.y * 1000 ) + ' mm';
+			break;
+		case "z":
+			sourcePos.z = Math.pow( elem.value, 4 ) * ( pixelPitch * canvas.width / 2 ) * 100; // Up to 2 orders of magnitude (100x) larger than the xy variation
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( sourcePos.z * 1000 ) + ' mm';
+			break;
+		case "w":
+			wavelength = elem.value * nm; // 400 to 700 nm
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( wavelength / nm ) + '&#8202;&#8194;nm';
+			laserRGB = document.getElementById( "colorize" ).checked ? nmToRGB( elem.value ) : [255.0, 255.0, 255.0];
+			break;
+		case "c":
+			updateControl( document.getElementById( "w-slider" ), false );
+			break;
+		case "r":
+			pixelPitch = Math.pow( 10, elem.value ) * µm;
+			var printTech = '';
+			switch( Math.round( elem.value ) ) {
+				case -1: printTech = 'an electron beam lithograph'; break;
+				case  0: printTech = 'a laser lithograph'; break;
+				case  1: printTech = 'an imagesetter'; break;
+				case  2: printTech = 'a laser printer';
+			}
+			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm';
+			document.getElementById( elem.name + "-example" ).innerHTML = (' (approximately equivalent to ' + printTech + ')' );
+			// Update scale marker
+			document.getElementById( "scale-marker" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
+			// Update xyz sliders, which depend on the resolution
+			updateControl( document.getElementById( "x-slider" ), false );
+			updateControl( document.getElementById( "y-slider" ), false );
+			updateControl( document.getElementById( "z-slider" ), false );
+	}
+	if( repaintCanvas ) paintCanvas();
+}
+
+// Convenience auxiliary function for displaying all numbers consistently
+function formatNumber( n ) {
+	return Number( n ).toFixed( 2 );
+}
+
+// ============================================================================
+// WebGL stuff
+// ============================================================================
+
 function paintCanvas() {
 	connectUniforms( gl, zonePlateShader );
 	gl.drawArrays( gl.TRIANGLE_STRIP, 0, 4 );
@@ -132,52 +187,4 @@ function connectUniforms( gl, shaderProgram ) {
 
 	var sourcePosPtr = gl.getUniformLocation( shaderProgram, "u_sourcePos" );
 	gl.uniform3f( sourcePosPtr, sourcePos.x, sourcePos.y, sourcePos.z );
-}
-
-function updateControl( elem, repaintCanvas ) {
-	if( elem == null ) return;
-	switch( elem.name ) {
-		case "x":
-			sourcePos.x = elem.value * canvas.width / 2 * pixelPitch; // Left of the canvas to right of the canvas
-			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( sourcePos.x * 1000 ) + ' mm';
-			break;
-		case "y":
-			sourcePos.y = elem.value * canvas.height / 2 * pixelPitch // Bottom of the canvas to top of the canvas
-			document.getElementById( elem.name + "-value" ).textContent = ' ' + formatNumber( sourcePos.y * 1000 ) + ' mm';
-			break;
-		case "z":
-			sourcePos.z = Math.pow( elem.value, 4 ) * ( pixelPitch * canvas.width / 2 ) * 100; // Up to 2 orders of magnitude (100x) larger than the xy variation
-			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( sourcePos.z * 1000 ) + ' mm';
-			break;
-		case "w":
-			wavelength = elem.value * nm; // 400 to 700 nm
-			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( wavelength / nm ) + '&#8202;&#8194;nm';
-			laserRGB = document.getElementById( "colorize" ).checked ? nmToRGB( elem.value ) : [255.0, 255.0, 255.0];
-			break;
-		case "c":
-			updateControl( document.getElementById( "w-slider" ), false );
-			break;
-		case "r":
-			pixelPitch = Math.pow( 10, elem.value ) * µm;
-			var printTech = '';
-			switch( Math.round( elem.value ) ) {
-				case -1: printTech = 'an electron beam lithograph'; break;
-				case  0: printTech = 'a laser lithograph'; break;
-				case  1: printTech = 'an imagesetter'; break;
-				case  2: printTech = 'a laser printer';
-			}
-			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm';
-			document.getElementById( elem.name + "-example" ).innerHTML = (' (approximately equivalent to ' + printTech + ')' );
-			// Update scale marker
-			document.getElementById( "scale-marker" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
-			// Update xyz sliders, which depend on the resolution
-			updateControl( document.getElementById( "x-slider" ), false );
-			updateControl( document.getElementById( "y-slider" ), false );
-			updateControl( document.getElementById( "z-slider" ), false );
-	}
-	if( repaintCanvas ) paintCanvas();
-}
-
-function formatNumber( n ) {
-	return Number( n ).toFixed( 2 );
 }
