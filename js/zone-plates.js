@@ -1,7 +1,7 @@
 // Declaration and initialization of global variables
 var sourcePos = { x: 0, y: 0, z: 0 };
 var wavelength = 633e-9; // Initialize wavelength as 633 nanometers
-var laserRGB = [0.0, 0.0, 0.0];
+var laserRGB = [255.0, 255.0, 255.0]; // Initialize laser color as white
 var pixelPitch = 10e-6; // Initialize pixel pitch as 10 micrometers
 var canvas = null;
 var gl = null;
@@ -18,12 +18,12 @@ function init() {
 	canvas = document.getElementById( "glcanvas" ); // Chrome doesn't seem to support defer properly?!
 	console.log( canvas );
 	initGL();
-	// Setup event handlers for the sliders
-	for( slider of document.querySelectorAll( "input[type=range]" ) ) {
-		slider.oninput = function( e ) { updateControl( e.target, true ) };
+	// Setup event handlers for the controls
+	for( control of document.querySelectorAll( "input" ) ) {
+		control.oninput = function( e ) { updateControl( e.target, true ) };
 	}
-	updateSlider( document.getElementById( "r-slider" ), false ); // This also updates the xyz sliders
-	updateSlider( document.getElementById( "w-slider" ), false );
+	updateControl( document.getElementById( "r-slider" ), false ); // This also updates the xyz sliders
+	updateControl( document.getElementById( "w-slider" ), false );
 	paintCanvas();
 }
 
@@ -143,7 +143,7 @@ function connectUniforms( gl, shaderProgram ) {
 	gl.uniform3f( sourcePosPtr, sourcePos.x, sourcePos.y, sourcePos.z );
 }
 
-function updateSlider( elem, repaintCanvas ) {
+function updateControl( elem, repaintCanvas ) {
 	if( elem == null ) return;
 	switch( elem.name ) {
 		case "x":
@@ -163,6 +163,9 @@ function updateSlider( elem, repaintCanvas ) {
 			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( wavelength / nm ) + '&#8202;&#8194;nm';
 			laserRGB = nmToRGB( elem.value );
 			break;
+		case "c":
+			updateControl( document.getElementById( "w-slider" ), false );
+			break;
 		case "r":
 			pixelPitch = Math.pow( 10, elem.value ) * µm;
 			var printTech = '';
@@ -177,9 +180,9 @@ function updateSlider( elem, repaintCanvas ) {
 			// Update scale marker
 			document.getElementById( "scale-marker" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
 			// Update xyz sliders, which depend on the resolution
-			updateSlider( document.getElementById( "x-slider" ), false );
-			updateSlider( document.getElementById( "y-slider" ), false );
-			updateSlider( document.getElementById( "z-slider" ), false );
+			updateControl( document.getElementById( "x-slider" ), false );
+			updateControl( document.getElementById( "y-slider" ), false );
+			updateControl( document.getElementById( "z-slider" ), false );
 	}
 	if( repaintCanvas ) paintCanvas();
 }
@@ -192,6 +195,8 @@ function formatNumber( n ) {
 // Code from http://academo.org/demos/wavelength-to-colour-relationship/animation.js,
 // which in turn was adapted from http://www.efg2.com/Lab/ScienceAndEngineering/Spectra.htm
 function nmToRGB( Wavelength ) {
+	if( document.getElementById( "colorize" ).checked == false ) { return [255.0, 255.0, 255.0]; }
+
 	var Gamma = 0.80;
 	var IntensityMax = 255;
 	var factor;
