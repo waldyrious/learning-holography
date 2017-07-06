@@ -10,7 +10,10 @@ var zonePlateShader = null;
 // Conversion constants
 var nm = 1e-9; // Conversion factor from meters to nanometers
 var µm = 1e-6; // Conversion factor from meters to micrometers
-//var nm2px = 480 / 127e6; // Conversion factor from nanometers to standard pixels (96 dpi);
+
+// Size of a standard pixel in meters
+// (96 pixels per inch, 2.54 centimeters per inch)
+var standardPixelPitch = 1/96 * 0.0254;
 
 window.onload = init;
 
@@ -63,7 +66,10 @@ function updateControl( elem, repaintCanvas ) {
 			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( pixelPitch / µm ) + '&#8202;&#8194;µm';
 			document.getElementById( elem.name + "-example" ).innerHTML = (' (approximately equivalent to ' + printTech + ')' );
 			// Update scale marker
-			document.getElementById( "scale-marker" ).textContent = formatNumber( canvas.width * pixelPitch * 1000 ) + ' mm';
+			var scaleMarkerWidth = document.getElementById( "scale-marker" ).offsetWidth;
+			var zoom = ' (~' + formatApprox( standardPixelPitch / pixelPitch ) + '× magnification)';
+			var scaleText = scaleMarkerWidth + 'px = ' + formatApprox( scaleMarkerWidth * pixelPitch * 1000 ) + 'mm';
+			document.getElementById( "scale-text" ).textContent = scaleText + zoom;
 			// Update xyz sliders, which depend on the resolution
 			updateControl( document.getElementById( "x-slider" ), false );
 			updateControl( document.getElementById( "y-slider" ), false );
@@ -72,9 +78,14 @@ function updateControl( elem, repaintCanvas ) {
 	if( repaintCanvas ) paintCanvas();
 }
 
-// Convenience auxiliary function for displaying all numbers consistently
+// Convenience auxiliary function: format numbers with two decimal digits
 function formatNumber( n ) {
 	return Number( n ).toFixed( 2 );
+}
+
+// Convenience auxiliary function: format numbers with two significant digits
+function formatApprox( n ) {
+	return Number( n ).toFixed( 1 - Math.floor( Math.log10( n.toPrecision( 3 ) ) ) );
 }
 
 // ============================================================================

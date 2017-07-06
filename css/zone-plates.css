@@ -36,13 +36,11 @@ span[id$=value] {
  */
 
 #scale-marker {
-	border: none;
-	border-top: 1px solid black;
-	margin: 0.5em auto;
-	width: 100%;
+	border-bottom: 1px solid black;
+	margin-right: 0.5em;
+	width: 100px;
 	height: 1em;
-	padding: 0;
-	text-align: center;
+	display: inline-block;
 }
 
 /* Add a zero-width space so the content isn't empty,
@@ -50,7 +48,7 @@ span[id$=value] {
 #scale-marker:before, #scale-marker:after {
 	content: "\200B";
 	height: 1em;
-	margin-top: -0.5em;
+	margin-top: 0.5em;
 }
 
 #scale-marker:before {
@@ -61,4 +59,11 @@ span[id$=value] {
 #scale-marker:after {
 	border-right: 1px solid black;
 	float: right;
+}
+
+#scale-text {
+	display: inline-block;
+	height: 1em;
+	line-height: 1em;
+	vertical-align: bottom;
 }
