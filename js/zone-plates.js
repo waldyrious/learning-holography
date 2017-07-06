@@ -15,8 +15,7 @@ var µm = 1e-6; // Conversion factor from micrometers to meters
 window.onload = init;
 
 function init() {
-	canvas = document.getElementById( "glcanvas" ); // Chrome doesn't seem to support defer properly?!
-	console.log( canvas );
+	canvas = document.getElementById( "glcanvas" );
 	initGL();
 	// Setup event handlers for the controls
 	for( control of document.querySelectorAll( "input" ) ) {
@@ -28,16 +27,8 @@ function init() {
 }
 
 function paintCanvas() {
-	// Start the timer
-	var start = new Date();
-
 	connectUniforms( gl, zonePlateShader );
 	gl.drawArrays( gl.TRIANGLE_STRIP, 0, 4 );
-
-	// Calculate and display elapsed time
-	var now = new Date();
-	var elapsed = document.getElementById( "duration" );
-	elapsed.textContent = ( now - start ) + ' ms';
 }
 
 function initGL() {
