@@ -8,8 +8,8 @@ var gl = null;
 var zonePlateShader = null;
 
 // Conversion constants
-var nm = 1e-9; // Conversion factor from nanometers to meters
-var µm = 1e-6; // Conversion factor from micrometers to meters
+var nm = 1e-9; // Conversion factor from meters to nanometers
+var µm = 1e-6; // Conversion factor from meters to micrometers
 //var nm2px = 480 / 127e6; // Conversion factor from nanometers to standard pixels (96 dpi);
 
 window.onload = init;
