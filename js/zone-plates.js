@@ -150,6 +150,7 @@ function initSliders() {
 }
 
 function updateSlider( elem, paint ) {
+	if( elem == null ) return;
 	switch( elem.name ) {
 		case "x":
 			sourcePos.x = elem.value * canvas.width / 2 * pixelPitch; // Left of the canvas to right of the canvas
