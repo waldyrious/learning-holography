@@ -40,7 +40,7 @@ function paintCanvas() {
 function initGL() {
 	// Get the WebGL context from the canvas
 	try { gl = canvas.getContext( "webgl" ) } catch( ex ) { console.log( "ERROR: " + ex ); }
-	if ( !gl ) { console.log( "Unable to initialize WebGL. Your browser may not support it." ); return; }
+	if( !gl ) { console.log( "Unable to initialize WebGL. Your browser may not support it." ); return; }
 
 	// Setup the shader program with the vertex shader and the fragment shader
 	zonePlateShader = setupShader( gl,
@@ -65,7 +65,7 @@ function initGL() {
 		//"  float cosTheta = u_sourcePos[z] / dist;" +
 		//"  float sinTheta = sqrt( 1.0 - pow( cosTheta, 2.0 ) );" +
 		//"  float amplitude;" +
-		//"  if ( sinTheta < u_Wavelength / 2.0 * u_PixelPitch ) { amplitude = cos( tau / u_Wavelength * phaseDiff ); }" +
+		//"  if( sinTheta < u_Wavelength / 2.0 * u_PixelPitch ) { amplitude = cos( tau / u_Wavelength * phaseDiff ); }" +
 		//"  else { amplitude = 0.0; }" +
 		"  float phaseDiff = distance( holoP, u_sourcePos ) - u_sourcePos[z];" + // Calculate phase difference between center of zone plate and the current pixel
 		"  float amplitude = cos( tau / u_Wavelength * phaseDiff );" + // Core calculation of zone plate value for this pixel
@@ -82,16 +82,16 @@ function initGL() {
 function setupShader( gl, vertShaderSrc, fragShaderSrc ) {
 	function buildShader( type, sourceCode ) {
 		var sh;
-		if ( type == "fragment" )
+		if( type == "fragment" )
 			sh = gl.createShader( gl.FRAGMENT_SHADER );
-		else if ( type == "vertex" )
+		else if( type == "vertex" )
 			sh = gl.createShader( gl.VERTEX_SHADER );
 		else // Unknown shader type
 			return null;
 		gl.shaderSource( sh, sourceCode );
 		gl.compileShader( sh );
 		// See if it compiled successfully
-		if ( !gl.getShaderParameter( sh, gl.COMPILE_STATUS ) ) {
+		if( !gl.getShaderParameter( sh, gl.COMPILE_STATUS ) ) {
 			console.log( "An error occurred compiling the " + type +
 			" shader: " + gl.getShaderInfoLog( sh ) );
 			return null;
@@ -102,7 +102,7 @@ function setupShader( gl, vertShaderSrc, fragShaderSrc ) {
 	gl.attachShader( prog, buildShader( 'vertex', vertShaderSrc ) );
 	gl.attachShader( prog, buildShader( 'fragment', fragShaderSrc ) );
 	gl.linkProgram( prog );
-	if ( !gl.getProgramParameter( prog, gl.LINK_STATUS ) ) {
+	if( !gl.getProgramParameter( prog, gl.LINK_STATUS ) ) {
 		throw "Could not link the shader program!";
 	}
 	gl.useProgram( prog );
@@ -142,8 +142,8 @@ function connectUniforms( gl, shaderProgram ) {
 
 function initSliders() {
 	var sliders = document.querySelectorAll( "input[type=range]" );
-	for ( s in sliders ) {
-		if ( typeof( sliders[s] )==="object" ) {
+	for( s in sliders ) {
+		if( typeof( sliders[s] ) === "object" ) {
 			sliders[s].oninput = function( e ) { updateSlider( e.target, true ) };
 		}
 	}
@@ -200,31 +200,31 @@ function nmToRGB( Wavelength ) {
 	var IntensityMax = 255;
 	var factor;
 
-	if( ( Wavelength >= 380 ) && ( Wavelength<440 ) ) {
+	if( ( Wavelength >= 380 ) && ( Wavelength < 440 ) ) {
 		Red = -( Wavelength - 440 ) / ( 440 - 380 );
 		Green = 0.0;
 		Blue = 1.0;
-	} else if( ( Wavelength >= 440 ) && ( Wavelength<490 ) ) {
+	} else if( ( Wavelength >= 440 ) && ( Wavelength < 490 ) ) {
 		Red = 0.0;
 		Green = ( Wavelength - 440 ) / ( 490 - 440 );
 		Blue = 1.0;
-	} else if( ( Wavelength >= 490 ) && ( Wavelength<510 ) ) {
+	} else if( ( Wavelength >= 490 ) && ( Wavelength < 510 ) ) {
 		Red = 0.0;
 		Green = 1.0;
 		Blue = -( Wavelength - 510 ) / ( 510 - 490 );
-	} else if( ( Wavelength >= 510 ) && ( Wavelength<580 ) ) {
+	} else if( ( Wavelength >= 510 ) && ( Wavelength < 580 ) ) {
 		Red = ( Wavelength - 510 ) / ( 580 - 510 );
 		Green = 1.0;
 		Blue = 0.0;
-	} else if( ( Wavelength >= 580 ) && ( Wavelength<645 ) ) {
+	} else if( ( Wavelength >= 580 ) && ( Wavelength < 645 ) ) {
 		Red = 1.0;
 		Green = -( Wavelength - 645 ) / ( 645 - 580 );
 		Blue = 0.0;
-	} else if( ( Wavelength >= 645 ) && ( Wavelength<781 ) ) {
+	} else if( ( Wavelength >= 645 ) && ( Wavelength < 781 ) ) {
 		Red = 1.0;
 		Green = 0.0;
 		Blue = 0.0;
-	} else{
+	} else {
 		Red = 0.0;
 		Green = 0.0;
 		Blue = 0.0;
@@ -232,20 +232,20 @@ function nmToRGB( Wavelength ) {
 
 	// Let the intensity fall off near the vision limits
 
-	if( ( Wavelength >= 380 ) && ( Wavelength<420 ) ) {
+	if( ( Wavelength >= 380 ) && ( Wavelength < 420 ) ) {
 		factor = 0.3 + 0.7 * ( Wavelength - 380 ) / ( 420 - 380 );
-	} else if( ( Wavelength >= 420 ) && ( Wavelength<701 ) ) {
+	} else if( ( Wavelength >= 420 ) && ( Wavelength < 701 ) ) {
 		factor = 1.0;
-	} else if( ( Wavelength >= 701 ) && ( Wavelength<781 ) ) {
+	} else if( ( Wavelength >= 701 ) && ( Wavelength < 781 ) ) {
 		factor = 0.3 + 0.7 * ( 780 - Wavelength ) / ( 780 - 700 );
-	} else{
+	} else {
 		factor = 0.0;
 	};
 
 	// Don't want 0^x = 1 for x <> 0
-	if ( Red==0 ) { Red = 0 } else Red = Math.round( IntensityMax * Math.pow( Red * factor, Gamma ) );
-	if ( Green==0 ) { Green = 0 } else Green = Math.round( IntensityMax * Math.pow( Green * factor, Gamma ) );
-	if ( Blue==0 ) { Blue = 0 } else Blue = Math.round( IntensityMax * Math.pow( Blue * factor, Gamma ) );
+	if( Red == 0 ) { Red = 0 } else Red = Math.round( IntensityMax * Math.pow( Red * factor, Gamma ) );
+	if( Green == 0 ) { Green = 0 } else Green = Math.round( IntensityMax * Math.pow( Green * factor, Gamma ) );
+	if( Blue == 0 ) { Blue = 0 } else Blue = Math.round( IntensityMax * Math.pow( Blue * factor, Gamma ) );
 
 	rgb = new Array( Red, Green, Blue );
 	return rgb;
