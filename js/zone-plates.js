@@ -143,7 +143,7 @@ function connectUniforms( gl, shaderProgram ) {
 	gl.uniform3f( sourcePosPtr, sourcePos.x, sourcePos.y, sourcePos.z );
 }
 
-function updateSlider( elem, paint ) {
+function updateSlider( elem, repaintCanvas ) {
 	if( elem == null ) return;
 	switch( elem.name ) {
 		case "x":
@@ -181,7 +181,7 @@ function updateSlider( elem, paint ) {
 			updateSlider( document.getElementById( "y-slider" ), false );
 			updateSlider( document.getElementById( "z-slider" ), false );
 	}
-	if( paint ) paintCanvas();
+	if( repaintCanvas ) paintCanvas();
 }
 
 function formatNumber( n ) {
