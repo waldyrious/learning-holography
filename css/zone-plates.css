@@ -10,8 +10,10 @@
 }
 
 fieldset {
-	margin-top: 1em;
+	margin: 1em auto 0; /* Auto = center horizontally */
 	text-align: left;
+	box-sizing: border-box;
+	width: 600px; /* Same as the canvas width */
 }
 
 .flankedSlider input[type=range] {
