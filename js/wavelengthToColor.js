@@ -4,8 +4,10 @@
 function nmToRGB( Wavelength ) {
 	var Gamma = 0.80;
 	var IntensityMax = 255;
-	var factor;
+	var intensityFactor = 1.0;
 
+	// Spectral sensitivity curves for each component,
+	// approximated as six linear segments
 	if( ( Wavelength >= 380 ) && ( Wavelength < 440 ) ) {
 		Red = -( Wavelength - 440 ) / ( 440 - 380 );
 		Green = 0.0;
@@ -37,21 +39,14 @@ function nmToRGB( Wavelength ) {
 	};
 
 	// Let the intensity fall off near the vision limits
-
-	if( ( Wavelength >= 380 ) && ( Wavelength < 420 ) ) {
-		factor = 0.3 + 0.7 * ( Wavelength - 380 ) / ( 420 - 380 );
-	} else if( ( Wavelength >= 420 ) && ( Wavelength < 701 ) ) {
-		factor = 1.0;
-	} else if( ( Wavelength >= 701 ) && ( Wavelength < 781 ) ) {
-		factor = 0.3 + 0.7 * ( 780 - Wavelength ) / ( 780 - 700 );
-	} else {
-		factor = 0.0;
-	};
+	smoothLow = ( 1 - Math.tanh( ( 420 - Wavelength ) / 20 ) ) / 2;
+	smoothHigh = ( 1 + Math.tanh( ( 740 - Wavelength ) / 20 ) ) / 2;
+	intensityFactor = Math.min( smoothLow, smoothHigh );
 
 	// Don't want 0^x = 1 for x <> 0
-	if( Red == 0 ) { Red = 0 } else Red = Math.round( IntensityMax * Math.pow( Red * factor, Gamma ) );
-	if( Green == 0 ) { Green = 0 } else Green = Math.round( IntensityMax * Math.pow( Green * factor, Gamma ) );
-	if( Blue == 0 ) { Blue = 0 } else Blue = Math.round( IntensityMax * Math.pow( Blue * factor, Gamma ) );
+	if( Red == 0 ) { Red = 0 } else Red = Math.round( IntensityMax * Math.pow( Red * intensityFactor, Gamma ) );
+	if( Green == 0 ) { Green = 0 } else Green = Math.round( IntensityMax * Math.pow( Green * intensityFactor, Gamma ) );
+	if( Blue == 0 ) { Blue = 0 } else Blue = Math.round( IntensityMax * Math.pow( Blue * intensityFactor, Gamma ) );
 
 	rgb = new Array( Red, Green, Blue );
 	return rgb;
