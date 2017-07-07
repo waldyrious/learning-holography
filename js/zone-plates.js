@@ -49,7 +49,7 @@ function updateControl( elem, repaintCanvas ) {
 		case "w":
 			wavelength = elem.value * nm; // 400 to 700 nm
 			document.getElementById( elem.name + "-value" ).innerHTML = ' ' + formatNumber( wavelength / nm ) + '&#8202;&#8194;nm';
-			laserRGB = document.getElementById( "colorize" ).checked ? nmToRGB( elem.value ) : [255.0, 255.0, 255.0];
+			laserRGB = nmToRGB( elem.value, document.getElementById( "colorize" ).checked == false );
 			break;
 		case "c":
 			updateControl( document.getElementById( "w-slider" ), false );
