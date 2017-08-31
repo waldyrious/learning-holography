@@ -10,10 +10,10 @@
 		.detail { font-size: small; color: gray; margin-top: 0; }
 		#controlsBox { padding: 10px; background-color: Lavender; }
 		#controlsBox, canvas#curves, canvas#hologram { border-bottom: none; }
-		/* Width must be 502px to account for the borders,
-		 * because the 500px width attribute set to the canvas element (below)
+		/* Width must be 802px to account for the borders,
+		 * because the 800px width attribute set to the canvas element (below)
 		 * doesn't honor box-sizing: border-box */
-		#controlsBox, body>p { width: 502px; }
+		#controlsBox, body>p { width: 802px; }
 	</style>
 </head>
 <body onload="update()">
@@ -61,9 +61,9 @@
 		<input type="button" id="lessPts" value="+" onclick="addPoint()" />
 	</div>
 
-	<canvas width="500" height="100" id="hologram"></canvas>
-	<canvas width="500" height="50" id="curves"></canvas>
-	<canvas width="500" height="300" id="diagram"></canvas>
+	<canvas width="800" height="100" id="hologram"></canvas>
+	<canvas width="800" height="50" id="curves"></canvas>
+	<canvas width="800" height="300" id="diagram"></canvas>
 
 	<script type="text/javascript" src="js/2d-hologram-cumulative.js"></script>
 
