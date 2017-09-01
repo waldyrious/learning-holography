@@ -216,7 +216,7 @@ function drawCircularWaves() {
 		// (in the right-hand side) down to the 0 --> wavLen range.
 		// Finally, we subtract that from wavLen, to get the growing with the
 		// planar wave's propagation direction (+Y')
-		points[pt].phase = wavLen - ( wavLen + dist % wavLen ) % wavLen;
+		points[pt].phase = wavLen - (wavLen + dist % wavLen) % wavLen;
 
 		// Spread the colors around the hue circle according to the number of
 		// points we have. The ref. wave keeps the 0º (red)
@@ -233,8 +233,8 @@ function drawCircularWaves() {
 		// Draw the circular waves emanating from it:
 		// 1. Calculate the max radius we would need to draw
 		//    so we don't attempt to draw outside the canvas
-		var maxRad = Math.sqrt( Math.pow(dw/2+Math.abs(x),      2) +
-		                        Math.pow(dh/2+Math.abs(y+dh/2), 2));
+		var maxRad = Math.sqrt(Math.pow(dw/2+Math.abs(x),      2) +
+		                       Math.pow(dh/2+Math.abs(y+dh/2), 2));
 		// 2. Loop through each radius level
 		//    and draw the wavefronts for the current point
 		for (var rad=0; rad<maxRad; rad+=wavLen) {
@@ -277,8 +277,8 @@ function paintHologram() {
 			//           wave   `-. /              fraction of horizCycleLength,
 			//                     `               then multiply the cycle number by tau
 			//                                     to get the result in radians, for cosine.
-			refArrivalPhase = tau * ( holo_x / horizCycleLength );
-			var refAmplitude = Math.cos( refArrivalPhase );
+			refArrivalPhase = tau * (holo_x / horizCycleLength);
+			var refAmplitude = Math.cos(refArrivalPhase);
 			if (method !== "bipolar") {
 				totalAmplitude += refAmplitude;
 			}
@@ -293,7 +293,7 @@ function paintHologram() {
 			// Amplitude
 			var dist1 = distanceToOrigin(holo_x-points[pt1].x, points[pt1].y);
 			var objArrivalPhase = (dist1 - points[pt1].phase) * k;
-			perWaveAmplitude[pt1] = Math.cos( objArrivalPhase );
+			perWaveAmplitude[pt1] = Math.cos(objArrivalPhase);
 			totalAmplitude += perWaveAmplitude[pt1];
 			// Draw the amplitude profile curve for the current wave
 			if (displayCurves) {
@@ -308,7 +308,7 @@ function paintHologram() {
 				}
 				if (refWave) {
 					// Object-Reference interference intensity
-					totalIntensity += Math.cos( refArrivalPhase - objArrivalPhase );
+					totalIntensity += Math.cos(refArrivalPhase - objArrivalPhase);
 				}
 			} else if (method == "complex") {
 				totalIntensity = math.add(totalIntensity, math.eval("e^(i*"+objArrivalPhase+")"));
@@ -323,7 +323,7 @@ function paintHologram() {
 				// (only one wave, so the result is a constant
 				// equal to half the square of the amplitude)
 				// Expanded, this would be:
-				// totalIntensity += Math.pow(Math.cos( refArrivalPhase - refArrivalPhase ), 2) / 2;
+				// totalIntensity += Math.pow(Math.cos(refArrivalPhase - refArrivalPhase), 2) / 2;
 				// but we know cos(0) = 1 and 1^2 = 1 and 1/2 = 0.5, so we simplify:
 				totalIntensity += 0.5;
 			}
@@ -360,7 +360,7 @@ function paintHologram() {
 		drawCurve(-2, holo_x, normalizedIntensity);
 		// Draw instantaneous version of main intensity curve
 		if (method !== "bipolar") {
-			drawCurve(-1, holo_x, Math.pow( totalAmplitude/numWaves, 2 ));
+			drawCurve(-1, holo_x, Math.pow(totalAmplitude/numWaves, 2));
 		} else {
 			// Instantaneous bipolar intensity = 2Ar*sum(Ai).
 			// Since we're not using amplitudes, the final range
@@ -389,11 +389,11 @@ function paintHologram() {
 // and the points end up forming an amplitude/intensity curve,
 // while the rectangles form an area (i.e a filled curve).
 function drawCurve(waveIndex, xCoord, value) {
-	if( waveIndex == -2 ) {
+	if(waveIndex == -2) {
 		// Draw a filled area if dealing with intensity values
 		curves.fillStyle = "#ccc";
 		curves.fillRect(xCoord, 0, 1, ch*value);
-	} else if( waveIndex == -1 ) {
+	} else if(waveIndex == -1) {
 		curves.fillStyle = "black";
 		curves.beginPath();
 		curves.arc(xCoord, ch*value, 1, 0, tau, true);
@@ -428,7 +428,7 @@ function generateNewPoint() {
 // Add a new point to the object
 function addPoint() {
 	document.getElementById("lessPts").disabled = false;
-	points.push( generateNewPoint() );
+	points.push(generateNewPoint());
 	numWaves++;
 	refresh();
 }
@@ -442,14 +442,14 @@ function removePoint() {
 }
 
 // Update angle of reference wave
-function setRefAngle(){
+function setRefAngle() {
 	// Get the current angle
-	refAngle = Number( document.getElementById("angle-slider").value );
+	refAngle = Number(document.getElementById("angle-slider").value);
 	// Update the angle label with the current slider value
 	document.getElementById("angle-value").textContent = ' ' + Math.round(refAngle * 10) / 10 + 'º';
 	// Calculate length of a cycle of the reference wave
 	// in the direction the hologram is set up (horizontal)
-	horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
+	horizCycleLength = wavLen / Math.sin(refAngle * deg2rad);
 	// Update the canvases
 	refresh();
 }
@@ -466,12 +466,12 @@ function unitFractionToHexColor(val) {
 
 // Calculate a distance using the Euclidean distance formula
 function distanceToOrigin(x, y) {
-	return Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
+	return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
 }
 
 function setMethod(radioBtn) {
 	method = radioBtn.value;
-	if( method == "bipolar" ) {
+	if(method == "bipolar") {
 		prevRefWave = refWave;
 		document.getElementById("ref-wave").checked = true;
 		document.getElementById("ref-wave").disabled = true;
