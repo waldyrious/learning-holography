@@ -24,10 +24,10 @@ var wavLen = 50,
     refWave = document.getElementById( "ref-wave" ).checked,
     refAngle = document.getElementById( "angle-slider" ).value,
     refPhase = document.getElementById( "phase-slider" ).value,
-	// Setup object point locations.
-	// Note that phase is set as zero only as a placeholder.
-	// The phase is dependent on the reference wave's phase,
-	// and will be calculated in drawCircularWaves()
+    // Setup object point locations.
+    // Note that phase is set as zero only as a placeholder.
+    // The phase is dependent on the reference wave's phase,
+    // and will be calculated in drawCircularWaves()
     points = [
     	{ x:-dw/3, y: -dh/2, phase: 0 },
     	{ x: dw/3, y: -3*dh/4, phase: 0 }
@@ -462,7 +462,7 @@ function distanceToOrigin( x, y ) {
 
 // Attention: only works for positive indexes!
 Array.prototype.max = function () {
-  return this.reduce( function ( p, v ) {
-    return ( p > v ? p : v );
-  });
+	return this.reduce( function ( p, v ) {
+		return ( p > v ? p : v );
+	});
 }
