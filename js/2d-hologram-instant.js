@@ -22,10 +22,10 @@ var diagramCanvas = document.getElementById("diagram"),
 var tau = Math.PI*2,
     deg2rad = tau/360;
 // Define properties that affect the hologram itself
-var wavLen = 50,
+var wavLen = 50, // Default value; will be initialized in init()
     refWave = document.getElementById("ref-wave").checked,
     prevRefWave = refWave,
-    refAngle = 0, // initialized in setRefAngle() wich is called on body onload
+    refAngle = 0, // Default value; will be initialized in init()
     // Setup object point locations.
     // Note that phase is set as zero only as a placeholder.
     // The phase is dependent on the reference wave's phase,
@@ -41,7 +41,8 @@ var wavLen = 50,
     numWaves = points.length + refWave,
     method = "real";
 // Variables to control the appearance and behavior of the visualization
-var displayCurves = false;
+var displayCurves = false,
+    updateCanvas = false;
 
 // Center coordinate origin horizontally for all canvases
 // And place it in the bottom of the canvas
@@ -60,6 +61,7 @@ hologram.scale(1,-1);
 
 // Update all canvases with content based on the new values of the various parameters
 function refresh() {
+	if(updateCanvas == false) return;
 	// Reset canvases
 	 diagram.clearRect(-dw/2, 0, dw, -dh);
 	hologram.clearRect(-hw/2, 0, hw,  hh);
@@ -441,6 +443,14 @@ function removePoint() {
 	refresh();
 }
 
+// Set up initial parameters and activate the drawing of the hologram
+function init() {
+	setRefAngle();
+	setWavLen();
+	updateCanvas = true;
+	refresh();
+}
+
 // Update angle of reference wave
 function setRefAngle() {
 	// Get the current angle
@@ -450,6 +460,22 @@ function setRefAngle() {
 	// Calculate length of a cycle of the reference wave
 	// in the direction the hologram is set up (horizontal)
 	horizCycleLength = wavLen / Math.sin(refAngle * deg2rad);
+	// Update the canvases
+	refresh();
+}
+
+// Update wavelength of reference wave
+function setWavLen() {
+	// Get the current wavelength
+	// and scale it down to a range that works well with the rest of the variables
+	wavLen = Number(document.getElementById("wavlen-slider").value) / 6 - 50;
+	// Update the wavelength label with the current slider value
+	document.getElementById("wavlen-value").textContent = ' ' + Math.round((wavLen + 50) * 6) + 'nm';
+	// Calculate length of a cycle of the reference wave
+	// in the direction the hologram is set up (horizontal)
+	horizCycleLength = wavLen / Math.sin(refAngle * deg2rad);
+	// Recalculate the angular spatial frequency of the reference wave
+	k = tau/wavLen;
 	// Update the canvases
 	refresh();
 }

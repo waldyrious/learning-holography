@@ -20,9 +20,9 @@ var diagramCanvas = document.getElementById( "diagram" ),
 var tau = Math.PI*2,
     deg2rad = tau/360;
 // Define properties that affect the hologram itself
-var wavLen = 50,
-    refWave = document.getElementById( "ref-wave" ).checked,
+var refWave = document.getElementById( "ref-wave" ).checked,
     refAngle = Number( document.getElementById( "angle-slider" ).value ),
+    wavLen = Number( document.getElementById( "wavlen-slider" ).value ) / 6 - 50,
     refPhase = Number( document.getElementById( "phase-slider" ).value ),
     // Setup object point locations.
     // Note that phase is set as zero only as a placeholder.
@@ -68,8 +68,9 @@ function refresh() {
 	  curves.clearRect( -cw/2, 0, cw,  ch );
 	// Get updated values from interactive controls
 	refWave = document.getElementById( "ref-wave" ).checked;
-	numWaves = points.length + refWave;
 	refAngle = Number( document.getElementById( "angle-slider" ).value );
+	wavLen = Number( document.getElementById( "wavlen-slider" ).value ) / 6 - 50;
+	numWaves = points.length + refWave;
 	// Check whether to display individual amplitude curves for each wave.
 	// This affects both the diagram and the curves canvases.
 	// Note: the curves canvas is filled in paintHologram().
@@ -99,6 +100,7 @@ function refresh() {
 	paintHologram();
 	// Update the interface labels with the current slider values
 	document.getElementById( "angle-value" ).textContent = ' ' + Math.round( refAngle * 10 ) / 10 + 'º';
+	document.getElementById( "wavlen-value" ).textContent = ' ' + Math.round( ( wavLen + 50 ) * 6 ) + 'nm';
 	document.getElementById( "phase-value" ).textContent = ' +' + Math.round( 100 * refPhase ) + '%';
 	// Schedule next call of refresh()
 	if ( animate ) {
