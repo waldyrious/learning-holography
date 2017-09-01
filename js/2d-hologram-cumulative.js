@@ -22,8 +22,8 @@ var tau = Math.PI*2,
 // Define properties that affect the hologram itself
 var wavLen = 50,
     refWave = document.getElementById( "ref-wave" ).checked,
-    refAngle = document.getElementById( "angle-slider" ).value,
-    refPhase = document.getElementById( "phase-slider" ).value,
+    refAngle = Number( document.getElementById( "angle-slider" ).value ),
+    refPhase = Number( document.getElementById( "phase-slider" ).value ),
     // Setup object point locations.
     // Note that phase is set as zero only as a placeholder.
     // The phase is dependent on the reference wave's phase,
@@ -69,7 +69,7 @@ function refresh() {
 	// Get updated values from interactive controls
 	refWave = document.getElementById( "ref-wave" ).checked;
 	numWaves = points.length + refWave;
-	refAngle = document.getElementById( "angle-slider" ).value;
+	refAngle = Number( document.getElementById( "angle-slider" ).value );
 	// Check whether to display individual amplitude curves for each wave.
 	// This affects both the diagram and the curves canvases.
 	// Note: the curves canvas is filled in paintHologram().

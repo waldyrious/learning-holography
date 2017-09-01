@@ -444,7 +444,7 @@ function removePoint() {
 // Update angle of reference wave
 function setRefAngle(){
 	// Get the current angle
-	refAngle = document.getElementById("angle-slider").value;
+	refAngle = Number( document.getElementById("angle-slider").value );
 	// Update the angle label with the current slider value
 	document.getElementById("angle-value").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
 	// Calculate length of a cycle of the reference wave
