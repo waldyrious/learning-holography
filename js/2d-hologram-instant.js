@@ -446,7 +446,7 @@ function setRefAngle(){
 	// Get the current angle
 	refAngle = Number( document.getElementById("angle-slider").value );
 	// Update the angle label with the current slider value
-	document.getElementById("angle-value").textContent = ' ' + Math.round(refAngle*10)/10 + 'º';
+	document.getElementById("angle-value").textContent = ' ' + Math.round(refAngle * 10) / 10 + 'º';
 	// Calculate length of a cycle of the reference wave
 	// in the direction the hologram is set up (horizontal)
 	horizCycleLength = wavLen / Math.sin( refAngle * deg2rad );
