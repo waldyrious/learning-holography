@@ -57,7 +57,7 @@ hologram.scale( 1, -1 );
   curves.scale( 1, -1 );
 
 /*============================================================================*/
-/*                         MASTER UPDATE FUNCTION                             */
+/*                           MAIN UPDATE FUNCTION                             */
 /*============================================================================*/
 
 // Update all canvases with content based on the new values of the various parameters
