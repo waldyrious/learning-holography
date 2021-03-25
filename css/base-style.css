@@ -1,5 +1,5 @@
-@import url("http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.css");
-@import url("http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.css");
+@import url("https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic");
 
 body {
   max-width: 42em;
@@ -34,7 +34,7 @@ input[type='range']::-moz-focus-outer {
 }
 
 /* Use Semantic Linefeeds:
- * http://rhodesmill.org/brandon/2012/one-sentence-per-line/
+ * https://rhodesmill.org/brandon/2012/one-sentence-per-line/
  */
 p {
   /*white-space: pre-line;*/

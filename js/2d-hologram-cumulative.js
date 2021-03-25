@@ -167,7 +167,7 @@ function drawPlanarWave() {
 // Draw a small box in the corner of the diagram canvas,
 // containing an arrow showing the propagation direction of the reference wave
 function drawPlanarWaveDirectionBox() {
-	
+
 	// Store current transformations and fill/stroke properties,
 	// to be restored to normal after we're done.
 	diagram.save();
@@ -287,7 +287,7 @@ function drawCircularWaves() {
 function paintHologram() {
 	var horizCycleLength = wavLen / Math.sin( refAngle * deg2rad ),
 	    // Count how many phase states we have already calculated hologram values for
-	    // adapted from http://stackoverflow.com/q/6265940/
+	    // adapted from https://stackoverflow.com/q/6265940/
 	    filledPhases = phaseSweep.filter( Number ).length,
 	    maxHologramValue = (filledPhases == phaseSteps) ? hologramValues.max() : 1,
 	    // Ratio we need to multiply the hologram to have the max increase be 1/phaseStep.
@@ -296,7 +296,7 @@ function paintHologram() {
 	for ( var holo_x = -hw/2; holo_x < hw/2; holo_x++ ) {
 		var perWaveAmplitude = [],
 		    totalAmplitude = 0,
-		    // holo_index is used for the hologramValues array.			
+		    // holo_index is used for the hologramValues array.
 		    // Its value is calculated to make it go from 0 to hw
 		    // rather than from -hw/2 to hw/2
 		    // Otherwise calculating its maximum would be cumbersome.

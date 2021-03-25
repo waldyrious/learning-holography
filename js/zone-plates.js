@@ -117,7 +117,7 @@ function initGL() {
 		"void main() {" +
 		"  const int x=0; const int y=1; const int z=2;" + // Aliases for intuitive indexing of 3D spatial vectors
 		"  const int R=0; const int G=1; const int B=2;" + // Aliases for intuitive indexing of 3D color vectors
-		"  const float tau = 6.283185307179586476925286766559;" + // One full turn, measured in radians. See http://tauday.com/tau-manifesto
+		"  const float tau = 6.283185307179586476925286766559;" + // One full turn, measured in radians. See https://tauday.com/tau-manifesto
 		"  vec3 holoP = vec3( gl_FragCoord.xy - u_CanvasSize / 2.0, 0.0 ) * u_PixelPitch;" + // 3D position of the current pixel, in meters, shifted so the origin is at the center of the canvas
 
 		//"  float dist = distance( holoP, u_sourcePos );" +

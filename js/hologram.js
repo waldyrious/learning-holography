@@ -8,15 +8,15 @@ var cm = 0.01; // 1 cm = 0.01 m
 var obj = [
 	{ x: 0.00*cm, y: 0.00*cm, z:-50*cm },
 	{ x: 0.04*cm, y: 0.00*cm, z:-50*cm },
-	{ x:-0.08*cm, y:-0.04*cm, z:-48*cm } 
+	{ x:-0.08*cm, y:-0.04*cm, z:-48*cm }
 ];
 // wavelength of the (laser) light: 630nm
-// 
+//
 //   - [[laser]]: red (635 nm), green (532 nm), blue-violet (445 nm)
-//   - visible spectrum colors by wavelength:  
+//   - visible spectrum colors by wavelength:
 // <pre>700  –  635   –    590   –    560   –   490  –   450   –    400
 //      |  red  |  orange  |  yellow  |  green  |  blue  |  purple  |</pre>
-//   - [wavelengths of commercially available lasers](http://upload.wikimedia.org/wikipedia/commons/4/48/Commercial_laser_lines.svg)
+//   - [wavelengths of commercially available lasers](https://upload.wikimedia.org/wikipedia/commons/4/48/Commercial_laser_lines.svg)
 //   - 632.816 nm = wavelength of a typical red Neon-Helium (NeHe) laser in air.
 var lambda = 633e-9;
 
@@ -33,7 +33,7 @@ var ref_z = Math.sqrt(1 - ref_x*ref_x - ref_y*ref_y); // z is the remaining to m
 var holo_z = 0;
 
 // aliasing artifacts:
-// 
+//
 // - [Aliasing Artifacts and Accidental Algorithmic Art](http://www.cgl.uwaterloo.ca/~csk/papers/kaplan_bridges2005a.pdf)
 // - [On the bathtub algorithm for dot-matrix holograms](http://bit-player.org/wp-content/extras/bph-publications/CompLang-1986-10-Hayes-holograms.pdf)
 // - Aliasing and over-modulation — Holographic Imaging, p.215
@@ -42,7 +42,7 @@ function draw(canvas, pixelSize, nextPixelSize) {
 	//console.log("now drawing " + canvas.id);
 	//var canvas = document.getElementById(canvasID);
 	if (canvas.getContext) { // test for browser support of the canvas API
-		// [Canvas context](http://wiki.whatwg.org/wiki/CanvasContexts) can be 2d or webgl
+		// [Canvas context](https://wiki.whatwg.org/wiki/CanvasContexts) can be 2d or webgl
 		var ctx = canvas.getContext('2d');
 		// To implement the interference phenomenon, we have to sum the waves together.
 		// We'll be repainting the canvas, one wave at a time,
@@ -52,7 +52,7 @@ function draw(canvas, pixelSize, nextPixelSize) {
 		// which implements the [additive color model](https://en.wikipedia.org/wiki/Additive_color).
 		// With "lighter", RGB values are summed, saturating at 255; for example:
 		// (100,100,100) + (0,100,200) = (100,200,255).
-		// See http://jsfiddle.net/esfmM/, http://jsfiddle.net/HKv9G/
+		// See https://jsfiddle.net/esfmM/, https://jsfiddle.net/HKv9G/
 		ctx.globalCompositeOperation = "lighter";
 		var start = new Date();
 		var hologramCenterX = canvas.width * pixelSize / 2;
@@ -76,7 +76,7 @@ function draw(canvas, pixelSize, nextPixelSize) {
 				//   by multiplying this distance by k (which, recall, is the
 				//   spatial angular frequency of the wave, i.e. "radians per meter").
 				// * But of course, the wave does not actually propagate
-				//   entirely in the x direction (we made sure of that when defining 
+				//   entirely in the x direction (we made sure of that when defining
 				//   its normal vector through ref_x and ref_y above).
 				//   Instead, for every wavelength it propagates in the direction
 				//   of its normal, it will only move in x by a small fraction of
@@ -91,7 +91,7 @@ function draw(canvas, pixelSize, nextPixelSize) {
 				//   happen at the center of the hologram. (maybe we should center stuff
 				//   so they're correctly placed around the origin, and instead tweak the display)
 				// * There's an alternative explanation, leading to the same result,
-				//   in http://waldir.github.io/learning-holography/pb-cgh-formulas.xhtml
+				//   in https://waldyrious.github.io/learning-holography/pb-cgh-formulas.xhtml
 				var ref_proj = (ref_x * (hpx + hologramCenterX) + ref_y * (hpy + hologramCenterY));
 				var sinThetaRefX = ref_x/Math.sqrt(ref_x*ref_x + ref_z*ref_z);
 				var sinThetaRefY = ref_y/Math.sqrt(ref_y*ref_y + ref_z*ref_z);
@@ -130,7 +130,7 @@ function draw(canvas, pixelSize, nextPixelSize) {
 						// because the canvas would be saturated (overexposed) by then.
 						// Therefore we divide each wave by the number of waves,
 						// so that the final result ends up normalized within the allowed range.
-						intensity /= obj.length; 
+						intensity /= obj.length;
 						// Convert range 0-1 to an integer in the range 0-255
 						var intRGB = Math.round(intensity * 255);
 						// fillStyle uses the same color syntax as css
@@ -172,8 +172,8 @@ function draw(canvas, pixelSize, nextPixelSize) {
 
 function run() {
 	// Pixel pitch of the holograms.
-	// Note: All browsers currently assume 96 DPI as the screen resolution.  
-	// See [Physical units on the web](https://docs.google.com/document/d/1CTMaSmFpCjhw90wNR_hl_uL2nKD2QPtPaBgnrT1X8I0/edit).  
+	// Note: All browsers currently assume 96 DPI as the screen resolution.
+	// See [Physical units on the web](https://docs.google.com/document/d/1CTMaSmFpCjhw90wNR_hl_uL2nKD2QPtPaBgnrT1X8I0/edit).
 	// Once real pixel size can be obtained, we can generate a real-size hologram
 	// but for now 96dpi is a good approximation
 	// 96 px = 1 in = 25.4 mm  -->  1 px = 0.26458(3) mm = 264.583 µm
